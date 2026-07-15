@@ -14,7 +14,7 @@
     <style>
         /* Style personnalisé pour l'ambiance Gaming Sombre */
         body {
-            background-color: #0f172a; /* Slate 900 */
+            background-color: #0b0f19; /* Arrière-plan plus sombre pour un meilleur contraste */
             color: #f8fafc; /* Slate 50 */
             -webkit-tap-highlight-color: transparent;
         }
@@ -22,87 +22,89 @@
 </head>
 <body class="flex flex-col h-screen justify-between overflow-hidden font-sans">
 
-    <header class="bg-slate-800 p-4 shadow-md border-b border-slate-700 flex justify-between items-center shrink-0">
-        <div class="flex items-center space-x-2">
-            <span class="text-2xl">⚔️</span>
+    <header class="bg-slate-900/90 backdrop-blur-md p-5 shadow-lg border-b border-slate-800 flex justify-between items-center shrink-0">
+        <div class="flex items-center space-x-3">
+            <span class="text-3xl">⚔️</span>
             <div>
-                <h1 class="text-sm font-bold text-emerald-400">MATH QUEST</h1>
-                <p class="text-xs text-slate-400">Niveau <span id="player-level">1</span></p>
+                <h1 class="text-base font-extrabold text-emerald-400 tracking-wider">MATH QUEST</h1>
+                <p class="text-sm text-slate-400 font-medium">Niveau <span id="player-level">1</span></p>
             </div>
         </div>
-        <div class="flex items-center space-x-2 bg-slate-900 px-3 py-1.5 rounded-full border border-slate-700">
-            <span class="text-red-500 text-xs font-bold">HP</span>
-            <div class="w-20 bg-slate-700 h-2.5 rounded-full overflow-hidden">
-                <div id="hp-bar" class="bg-red-500 h-full w-full transition-all duration-300"></div>
+        <div class="flex items-center space-x-3 bg-slate-950 px-4 py-2 rounded-full border border-slate-800 shadow-inner">
+            <span class="text-red-500 text-sm font-black tracking-wider">HP</span>
+            <div class="w-24 bg-slate-800 h-3 rounded-full overflow-hidden border border-slate-700">
+                <div id="hp-bar" class="bg-gradient-to-r from-red-600 to-rose-500 h-full w-full transition-all duration-300"></div>
             </div>
         </div>
     </header>
 
-    <main class="flex-1 overflow-y-auto p-4">
+    <main class="flex-1 overflow-y-auto p-5 space-y-6">
         
-        <section id="view-home" class="space-y-4">
-            <div class="bg-gradient-to-r from-emerald-900 to-slate-800 p-5 rounded-2xl border border-emerald-500/30 shadow-lg">
-                <h2 class="text-lg font-bold text-emerald-300">Prêt pour l'aventure ?</h2>
-                <p class="text-xs text-slate-300 mt-1">Explore les donjons du programme de 3ème et prépare ton entrée en Seconde.</p>
+        <section id="view-home" class="space-y-6">
+            <div class="bg-gradient-to-br from-emerald-950/80 via-emerald-900/40 to-slate-900/90 p-6 rounded-2xl border-2 border-emerald-500/40 shadow-xl backdrop-blur-sm">
+                <h2 class="text-xl font-black text-emerald-300 tracking-wide">Prêt pour l'aventure ?</h2>
+                <p class="text-sm leading-relaxed text-slate-200 mt-2">Explore les donjons du programme de 3ème et prépare ton entrée en Seconde.</p>
             </div>
 
-            <h3 class="text-sm font-semibold tracking-wider text-slate-400 uppercase pt-2">Les Donjons</h3>
-            
-            <div class="space-y-3">
-                <button onclick="startDungeon('Algèbre')" class="w-full bg-slate-800 hover:bg-slate-750 p-4 rounded-xl border border-slate-700 flex justify-between items-center active:scale-[0.98] transition-transform text-left">
-                    <div class="flex items-center space-x-3">
-                        <span class="text-3xl">💀</span>
-                        <div>
-                            <h4 class="font-bold text-sm text-slate-200">1. La Crypte de l'Algèbre</h4>
-                            <p class="text-xs text-slate-400 mt-0.5">Arithmétique & Calcul littéral</p>
-                        </div>
-                    </div>
-                    <span class="text-emerald-400 font-bold text-sm">Entrer →</span>
-                </button>
+            <div class="space-y-4">
+                <h3 class="text-sm font-bold tracking-widest text-slate-400 uppercase">Les Donjons</h3>
                 
-                <div class="w-full bg-slate-900 opacity-50 p-4 rounded-xl border border-dashed border-slate-800 flex justify-between items-center">
-                    <div class="flex items-center space-x-3">
-                        <span class="text-3xl">🏛️</span>
-                        <div>
-                            <h4 class="font-bold text-sm text-slate-400">2. Le Temple d'Hermès</h4>
-                            <p class="text-xs text-slate-500 mt-0.5">Statistiques & Fonctions</p>
+                <div class="space-y-4">
+                    <button onclick="startDungeon('Algèbre')" class="w-full bg-slate-900/80 hover:bg-slate-800 p-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/50 flex justify-between items-center active:scale-[0.97] transition-all duration-200 text-left shadow-md">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-4xl filter drop-shadow">💀</span>
+                            <div>
+                                <h4 class="font-extrabold text-base text-slate-100">1. La Crypte de l'Algèbre</h4>
+                                <p class="text-sm text-slate-400 mt-1">Arithmétique & Calcul littéral</p>
+                            </div>
                         </div>
+                        <span class="text-emerald-400 font-extrabold text-base shrink-0 ml-2">Entrer →</span>
+                    </button>
+                    
+                    <div class="w-full bg-slate-950/40 opacity-50 p-5 rounded-2xl border-2 border-dashed border-slate-900 flex justify-between items-center select-none">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-4xl opacity-60">🏛️</span>
+                            <div>
+                                <h4 class="font-extrabold text-base text-slate-500">2. Le Temple d'Hermès</h4>
+                                <p class="text-sm text-slate-600 mt-1">Statistiques & Fonctions</p>
+                            </div>
+                        </div>
+                        <span class="text-slate-600 text-sm font-bold">🔒 Verrouillé</span>
                     </div>
-                    <span class="text-slate-600 text-xs">🔒 Verrouillé</span>
                 </div>
             </div>
         </section>
 
-        <section id="view-game" class="hidden h-full flex flex-col justify-between py-2">
-            <div class="bg-slate-800/60 p-5 rounded-2xl border border-slate-700 text-center my-auto">
-                <span class="text-xs font-semibold tracking-widest text-emerald-400 uppercase">Question</span>
-                <p id="question-text" class="text-lg font-medium mt-2 text-slate-100">Combien font $2x \times 3x$ ?</p>
+        <section id="view-game" class="hidden h-full flex flex-col justify-between py-4">
+            <div class="bg-slate-900/80 p-6 rounded-2xl border-2 border-slate-800 text-center my-auto shadow-xl">
+                <span class="text-sm font-bold tracking-widest text-emerald-400 uppercase">Question</span>
+                <p id="question-text" class="text-2xl font-black mt-4 text-slate-50 leading-relaxed drop-shadow-sm">Combien font $2x \times 3x$ ?</p>
             </div>
 
-            <div id="options-container" class="space-y-2.5 mt-4">
-                </div>
+            <div id="options-container" class="space-y-4 mt-6">
+            </div>
         </section>
 
-        <section id="view-profile" class="hidden space-y-4">
-            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-center">
-                <div class="w-16 h-16 bg-emerald-500 rounded-full mx-auto flex items-center justify-center text-2xl font-bold text-slate-900">
+        <section id="view-profile" class="hidden space-y-6">
+            <div class="bg-slate-900/80 p-6 rounded-2xl border-2 border-slate-800 text-center shadow-xl">
+                <div class="w-20 h-20 bg-emerald-500 rounded-full mx-auto flex items-center justify-center text-3xl font-black text-slate-900 shadow-md">
                     N
                 </div>
-                <h3 class="font-bold mt-2">Aventurier</h3>
-                <p class="text-xs text-slate-400">En route vers la Seconde en 2026</p>
+                <h3 class="font-extrabold text-lg mt-3 text-slate-100">Aventurier</h3>
+                <p class="text-sm text-slate-400 mt-1">En route vers la Seconde en 2026</p>
             </div>
         </section>
 
     </main>
 
-    <nav class="bg-slate-900 border-t border-slate-800 py-2 px-6 flex justify-around items-center shrink-0">
-        <button onclick="switchView('home')" id="nav-home" class="flex flex-col items-center space-y-1 text-emerald-400">
-            <span class="text-xl">🗺️</span>
-            <span class="text-[10px] font-medium">Aventure</span>
+    <nav class="bg-slate-950 border-t border-slate-900 py-3.5 px-8 flex justify-around items-center shrink-0 shadow-2xl">
+        <button onclick="switchView('home')" id="nav-home" class="flex flex-col items-center space-y-1.5 text-emerald-400 transition-all">
+            <span class="text-2xl">🗺️</span>
+            <span class="text-xs font-bold tracking-wide">Aventure</span>
         </button>
-        <button onclick="switchView('profile')" id="nav-profile" class="flex flex-col items-center space-y-1 text-slate-400">
-            <span class="text-xl">🛡️</span>
-            <span class="text-[10px] font-medium">Profil</span>
+        <button onclick="switchView('profile')" id="nav-profile" class="flex flex-col items-center space-y-1.5 text-slate-500 hover:text-slate-300 transition-all">
+            <span class="text-2xl">🛡️</span>
+            <span class="text-xs font-bold tracking-wide">Profil</span>
         </button>
     </nav>
 
@@ -120,12 +122,12 @@
             document.getElementById('view-game').classList.add('hidden');
             document.getElementById('view-profile').classList.add('hidden');
             
-            document.getElementById('nav-home').className = "flex flex-col items-center space-y-1 text-slate-400";
-            document.getElementById('nav-profile').className = "flex flex-col items-center space-y-1 text-slate-400";
+            document.getElementById('nav-home').className = "flex flex-col items-center space-y-1.5 text-slate-500 hover:text-slate-300 transition-all";
+            document.getElementById('nav-profile').className = "flex flex-col items-center space-y-1.5 text-slate-500 hover:text-slate-300 transition-all";
 
             document.getElementById(`view-${viewName}`).classList.remove('hidden');
             if(viewName !== 'game') {
-                document.getElementById(`nav-${viewName}`).className = "flex flex-col items-center space-y-1 text-emerald-400";
+                document.getElementById(`nav-${viewName}`).className = "flex flex-col items-center space-y-1.5 text-emerald-400 transition-all";
             }
         }
 
@@ -143,8 +145,8 @@
             
             options.forEach(opt => {
                 const btn = document.createElement('button');
-                btn.className = "w-full bg-slate-800 hover:bg-slate-700 py-3.5 px-4 rounded-xl border border-slate-750 text-sm font-medium active:scale-[0.99] transition-transform text-left";
-                btn.innerText = opt;
+                btn.className = "w-full bg-slate-900/90 hover:bg-slate-800 py-4.5 px-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/40 text-base font-extrabold text-slate-200 active:scale-[0.97] transition-all duration-150 text-left shadow-md flex justify-between items-center";
+                btn.innerHTML = `<span>${opt}</span><span class="text-slate-500 text-xs">Sélectionner</span>`;
                 btn.onclick = () => checkAnswer(opt === "3x + 6");
                 container.appendChild(btn);
             });
