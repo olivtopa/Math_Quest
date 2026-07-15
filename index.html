@@ -209,9 +209,11 @@
             hp: 100,
             gold: 0,
             dungeonsCleared: 0,
-            currentDungeon: null,
-            currentQuestionIndex: 0
+            currentDungeon: null
         };
+
+        let currentQuestionIndex = 0;
+        let pendingCallback = null;
 
         // Charger les statistiques utilisateur depuis le localStorage s'il y en a
         if(localStorage.getItem('math_quest_save')) {
@@ -238,7 +240,7 @@
             if(gameState.dungeonsCleared >= 1) {
                 const card = document.getElementById('dungeon-temple-card');
                 card.className = "w-full bg-slate-900/80 p-5 rounded-2xl border-2 border-slate-800 flex justify-between items-center active:scale-[0.97] transition-all duration-200 text-left shadow-md cursor-pointer";
-                card.onclick = () => alert("Le Temple d'Hermès ouvrira bientôt ses portes !");
+                card.onclick = () => showCustomAlert("Temple d'Hermès", "Le Temple d'Hermès ouvrira bientôt ses portes pour de nouveaux défis !", "Fermer", "🏛️");
                 document.getElementById('temple-status').className = "text-amber-400 font-extrabold text-sm";
                 document.getElementById('temple-status').innerText = "Débloqué";
                 card.querySelector('h4').className = "font-extrabold text-base text-slate-100";
@@ -265,44 +267,67 @@
         // Lancement d'un donjon
         function startDungeon(name) {
             gameState.currentDungeon = name;
-            gameState.currentQuestionIndex = 0;
-            gameState.hp = 100; // Restaure les HP pour le donjon
+            currentQuestionIndex = 0;
+            gameState.hp = 100; // Soigne le joueur pour le donjon
             
             document.getElementById('options-container').classList.remove('hidden');
             document.getElementById('feedback-panel').classList.add('hidden');
             
             switchView('game');
-            loadQuestion();
+            showQuestion();
             updateDashboard();
         }
 
-        // Charger la question courante
-        function loadQuestion() {
-            const list = dungeonData[gameState.currentDungeon];
-            const q = list[gameState.currentQuestionIndex];
+        // Afficher la question courante
+        function showQuestion() {
+            const questions = dungeonData[gameState.currentDungeon];
             
-            document.getElementById('combat-wave-title').innerText = `MONSTRE ${gameState.currentQuestionIndex + 1}/${list.length}`;
-            document.getElementById('monster-title').innerText = q.title;
-            document.getElementById('question-text').innerText = q.question;
+            // Si toutes les questions du donjon sont validées
+            if (currentQuestionIndex >= questions.length) {
+                gameState.level += 1;
+                gameState.gold += 50; // Récompense d'or
+                gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 1);
+                gameState.hp = 100; // Soigne le joueur
+                saveGame();
+                
+                showCustomAlert(
+                    "🏆 VICTOIRE !", 
+                    "FÉLICITATIONS ! Tu as purifié la Crypte de l'Algèbre, gagné +1 Niveau et remporté 50 pièces d'or !", 
+                    "Retourner au campement", 
+                    "🏆",
+                    () => {
+                        switchView('home');
+                    }
+                );
+                return;
+            }
+
+            const currentQ = questions[currentQuestionIndex];
+            
+            // Mettre à jour l'entête
+            document.getElementById('combat-wave-title').innerText = `MONSTRE ${currentQuestionIndex + 1}/${questions.length}`;
+            
+            // Mise à jour des textes de l'interface (Gros caractères)
+            document.getElementById('question-text').innerHTML = `
+                <span class="block text-xs font-bold text-emerald-400 uppercase tracking-widest mb-2">${currentQ.title}</span>
+                <span class="text-slate-100 text-xl font-extrabold leading-relaxed block">${currentQ.question}</span>
+            `;
             
             const container = document.getElementById('options-container');
             container.innerHTML = '';
             
-            q.options.forEach(opt => {
+            // Génération des boutons de réponse larges
+            currentQ.options.forEach(opt => {
                 const btn = document.createElement('button');
-                btn.className = "w-full bg-slate-900/90 hover:bg-slate-800 py-4.5 px-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/40 text-base font-extrabold text-slate-200 active:scale-[0.97] transition-all duration-150 text-left shadow-md flex justify-between items-center";
-                btn.innerHTML = `<span>${opt}</span><span class="text-slate-500 text-xs">Sélectionner</span>`;
-                btn.onclick = () => checkAnswer(opt);
+                btn.className = "w-full bg-slate-900/90 hover:bg-slate-800 active:scale-[0.97] py-4.5 px-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/40 text-base font-extrabold text-slate-200 transition-all duration-150 text-left shadow-md flex justify-between items-center";
+                btn.innerHTML = `<span>${opt}</span><span class="text-slate-500 text-xs font-bold">Sélectionner</span>`;
+                btn.onclick = () => checkAnswer(opt, currentQ);
                 container.appendChild(btn);
             });
         }
 
-        function checkAnswer(selectedOption) {
-            const list = dungeonData[gameState.currentDungeon];
-            const q = list[gameState.currentQuestionIndex];
-            const isCorrect = (selectedOption === q.answer);
-            
-            // Masquer les choix de réponses et afficher le feedback
+        function checkAnswer(selectedOpt, questionObj) {
+            // Masquer les boutons et afficher la carte de feedback de combat
             document.getElementById('options-container').classList.add('hidden');
             const feedback = document.getElementById('feedback-panel');
             feedback.classList.remove('hidden');
@@ -313,21 +338,20 @@
             const expEl = document.getElementById('feedback-explanation');
             const btnEl = document.getElementById('feedback-next-btn');
             
-            expEl.innerText = q.explanation;
+            expEl.innerText = questionObj.explanation;
             
-            if(isCorrect) {
+            if (selectedOpt === questionObj.answer) {
                 feedback.className = "bg-slate-900 border-2 border-emerald-500/50 rounded-2xl p-6 shadow-2xl space-y-4 my-auto";
                 iconEl.innerText = "✨";
                 titleEl.className = "text-lg font-black tracking-wide text-emerald-400";
-                titleEl.innerText = "Coup critique ! Bonne réponse !";
-                msgEl.innerText = `Tu as vaincu ${q.title} ! Ton coup d'épée magique a terrassé la créature.`;
+                titleEl.innerText = "Coup critique !";
+                msgEl.innerText = "Bonne réponse ! Ta magie a frappé le monstre de plein fouet.";
                 
-                const isLast = (gameState.currentQuestionIndex === list.length - 1);
-                if(isLast) {
-                    btnEl.innerText = "Terminer le donjon 🏆";
-                } else {
-                    btnEl.innerText = "Avancer vers le prochain monstre →";
-                }
+                btnEl.innerText = "Continuer le combat →";
+                pendingCallback = () => {
+                    currentQuestionIndex++;
+                    showQuestion();
+                };
             } else {
                 gameState.hp = Math.max(0, gameState.hp - 25);
                 document.getElementById('hp-bar').style.width = `${gameState.hp}%`;
@@ -335,66 +359,64 @@
                 feedback.className = "bg-slate-900 border-2 border-rose-500/50 rounded-2xl p-6 shadow-2xl space-y-4 my-auto";
                 iconEl.innerText = "💥";
                 titleEl.className = "text-lg font-black tracking-wide text-rose-400";
-                titleEl.innerText = "Aïe ! Le monstre contre-attaque !";
-                msgEl.innerHTML = `Mauvaise réponse... Tu subis <span class="text-rose-400 font-bold">25 points de dégâts</span>. La bonne réponse était : <strong class="text-emerald-400">${q.answer}</strong>.`;
+                titleEl.innerText = "Défense brisée !";
+                msgEl.innerHTML = `Mauvaise réponse. Dommage ! Le monstre contre-attaque.`;
                 
-                if(gameState.hp <= 0) {
-                    btnEl.innerText = "Succomber et retourner au campement 💀";
+                if (gameState.hp <= 0) {
+                    btnEl.innerText = "Retourner au campement 💀";
+                    pendingCallback = () => {
+                        gameState.hp = 100;
+                        saveGame();
+                        switchView('home');
+                    };
                 } else {
-                    btnEl.innerText = "Se relever et continuer →";
+                    btnEl.innerText = "Continuer le combat →";
+                    pendingCallback = () => {
+                        // On continue le donjon (on passe à la question suivante pour garder le rythme)
+                        currentQuestionIndex++;
+                        showQuestion();
+                    };
                 }
             }
             saveGame();
         }
 
+        // Action sur clic du bouton Continuer du feedback
         function nextCombatStep() {
-            const list = dungeonData[gameState.currentDungeon];
-            
-            // Masquer le feedback et afficher les options pour la suite
             document.getElementById('feedback-panel').classList.add('hidden');
             document.getElementById('options-container').classList.remove('hidden');
-            
-            if(gameState.hp <= 0) {
-                // Le joueur est mort
-                gameState.hp = 100;
-                saveGame();
-                switchView('home');
-                return;
+            if (pendingCallback) {
+                pendingCallback();
+                pendingCallback = null;
             }
+        }
+
+        // Système d'alerte personnalisé (pour remplacer proprement alert() de façon esthétique)
+        function showCustomAlert(title, message, btnText, icon, callback) {
+            // Utilise l'écran de feedback en mode hors-combat
+            switchView('game');
+            document.getElementById('options-container').classList.add('hidden');
             
-            const listQ = dungeonData[gameState.currentDungeon];
-            const isCorrect = document.getElementById('feedback-title').classList.contains('text-emerald-400');
+            const feedback = document.getElementById('feedback-panel');
+            feedback.classList.remove('hidden');
+            feedback.className = "bg-slate-900 border-2 border-indigo-500/50 rounded-2xl p-6 shadow-2xl space-y-4 my-auto";
             
-            if(isCorrect) {
-                if(gameState.currentQuestionIndex === list.length - 1) {
-                    // Victoire complète du donjon !
-                    gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 1);
-                    gameState.gold += 50; // Or de récompense
-                    gameState.level += 1; // Niveau supérieur
-                    saveGame();
-                    alert("🎉 Félicitations Aventurier ! Tu as purifié la Crypte de l'Algèbre et remporté 50 pièces d'or !");
-                    switchView('home');
-                } else {
-                    // Passage à la question suivante
-                    gameState.currentQuestionIndex++;
-                    loadQuestion();
-                }
-            } else {
-                // En cas de mauvaise réponse, on reste sur la même question ou on passe à la suivante ?
-                // Classiquement dans les jeux éducatifs, on passe au monstre suivant pour ne pas bloquer,
-                // ou on régénère. Passons à la suivante pour le rythme de jeu !
-                if(gameState.currentQuestionIndex === list.length - 1) {
-                    // Fin du donjon avec peu de vie
-                    gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 1);
-                    gameState.gold += 20; // Récompense amoindrie car blessé
-                    saveGame();
-                    alert("⚔️ Donjon terminé de justesse ! Tu as purifié la Crypte de l'Algèbre et remporté 20 pièces d'or.");
-                    switchView('home');
-                } else {
-                    gameState.currentQuestionIndex++;
-                    loadQuestion();
-                }
-            }
+            document.getElementById('feedback-icon').innerText = icon || "🛡️";
+            const titleEl = document.getElementById('feedback-title');
+            titleEl.className = "text-lg font-black tracking-wide text-indigo-400";
+            titleEl.innerText = title;
+            
+            document.getElementById('feedback-message').innerText = message;
+            document.getElementById('feedback-explanation').innerText = "Que la force des mathématiques soit avec toi !";
+            
+            const btnEl = document.getElementById('feedback-next-btn');
+            btnEl.innerText = btnText || "Continuer";
+            
+            pendingCallback = () => {
+                feedback.classList.add('hidden');
+                document.getElementById('options-container').classList.remove('hidden');
+                if(callback) callback();
+            };
         }
 
         // Initialisation globale
