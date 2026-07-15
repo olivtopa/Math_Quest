@@ -61,7 +61,7 @@
                         <span class="text-emerald-400 font-extrabold text-base shrink-0 ml-2">Entrer →</span>
                     </button>
                     
-                    <div class="w-full bg-slate-950/40 opacity-50 p-5 rounded-2xl border-2 border-dashed border-slate-900 flex justify-between items-center select-none">
+                    <div id="dungeon-temple-card" class="w-full bg-slate-950/40 opacity-50 p-5 rounded-2xl border-2 border-dashed border-slate-900 flex justify-between items-center select-none">
                         <div class="flex items-center space-x-4">
                             <span class="text-4xl opacity-60">🏛️</span>
                             <div>
@@ -69,22 +69,48 @@
                                 <p class="text-sm text-slate-600 mt-1">Statistiques & Fonctions</p>
                             </div>
                         </div>
-                        <span class="text-slate-600 text-sm font-bold">🔒 Verrouillé</span>
+                        <span id="temple-status" class="text-slate-600 text-sm font-bold">🔒 Verrouillé</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="view-game" class="hidden h-full flex flex-col justify-between py-4">
-            <div class="bg-slate-900/80 p-6 rounded-2xl border-2 border-slate-800 text-center my-auto shadow-xl">
-                <span class="text-sm font-bold tracking-widest text-emerald-400 uppercase">Question</span>
-                <p id="question-text" class="text-2xl font-black mt-4 text-slate-50 leading-relaxed drop-shadow-sm">Combien font $2x \times 3x$ ?</p>
+        <!-- Vue du combat / jeu -->
+        <section id="view-game" class="hidden h-full flex flex-col justify-between py-2">
+            <!-- Entête de combat : Vague et points de vie du monstre symbolique -->
+            <div class="flex justify-between items-center px-1 mb-2">
+                <span id="combat-wave-title" class="text-sm font-black text-emerald-400 tracking-wider">MONSTRE 1/4</span>
+                <span id="monster-hp-heart" class="text-red-400 text-sm font-bold flex items-center gap-1">❤️ Monstre Actif</span>
             </div>
 
-            <div id="options-container" class="space-y-4 mt-6">
+            <!-- Énoncé de la question -->
+            <div class="bg-slate-900/80 p-6 rounded-2xl border-2 border-slate-800 text-center shadow-xl">
+                <h3 id="monster-title" class="text-sm font-bold tracking-widest text-emerald-500/80 uppercase">Le Gardien des Premiers</h3>
+                <p id="question-text" class="text-xl font-extrabold mt-3 text-slate-100 leading-relaxed drop-shadow-sm">Chargement du combat...</p>
+            </div>
+
+            <!-- Conteneur des choix de réponses -->
+            <div id="options-container" class="space-y-3 mt-4">
+            </div>
+
+            <!-- Écran de Feedback de Combat (Invisible par défaut) -->
+            <div id="feedback-panel" class="hidden bg-slate-900 border-2 rounded-2xl p-6 shadow-2xl space-y-4 my-auto">
+                <div class="flex items-center space-x-3">
+                    <span id="feedback-icon" class="text-3xl">✨</span>
+                    <h3 id="feedback-title" class="text-lg font-black tracking-wide">Coup critique !</h3>
+                </div>
+                <p id="feedback-message" class="text-sm text-slate-300 leading-relaxed"></p>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">Explication magique</span>
+                    <p id="feedback-explanation" class="text-sm text-slate-200 leading-relaxed"></p>
+                </div>
+                <button id="feedback-next-btn" onclick="nextCombatStep()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 py-4 px-5 rounded-2xl font-black text-base transition-all duration-150 active:scale-[0.98] shadow-lg shadow-emerald-500/20 text-center block">
+                    Continuer le combat →
+                </button>
             </div>
         </section>
 
+        <!-- Profil de l'aventurier -->
         <section id="view-profile" class="hidden space-y-6">
             <div class="bg-slate-900/80 p-6 rounded-2xl border-2 border-slate-800 text-center shadow-xl">
                 <div class="w-20 h-20 bg-emerald-500 rounded-full mx-auto flex items-center justify-center text-3xl font-black text-slate-900 shadow-md">
@@ -92,6 +118,16 @@
                 </div>
                 <h3 class="font-extrabold text-lg mt-3 text-slate-100">Aventurier</h3>
                 <p class="text-sm text-slate-400 mt-1">En route vers la Seconde en 2026</p>
+                <div class="mt-6 pt-6 border-t border-slate-800 flex justify-around text-center">
+                    <div>
+                        <span class="block text-2xl font-black text-emerald-400" id="profile-gold">0</span>
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Or Gagné</span>
+                    </div>
+                    <div>
+                        <span class="block text-2xl font-black text-indigo-400" id="profile-dungeons">0/1</span>
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Donjons</span>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -109,12 +145,107 @@
     </nav>
 
     <script>
+        // Les Données des Donjons
+        const dungeonData = {
+            "Algèbre": [
+                {
+                    id: 1,
+                    title: "Le Gardien des Premiers (Arithmétique)",
+                    question: "Le spectre bloque la porte ! Décompose 60 en produit de facteurs premiers pour trouver la combinaison :",
+                    options: [
+                        "2² × 3 × 5",
+                        "2 × 3 × 10",
+                        "4 × 3 × 5",
+                        "2³ × 3 × 5"
+                    ],
+                    answer: "2² × 3 × 5",
+                    explanation: "60 = 4 × 15 = 2² × 3 × 5. Les facteurs doivent tous être des nombres premiers (4 ne l'est pas) !"
+                },
+                {
+                    id: 2,
+                    title: "L'Énigme du Colosse (Calcul Littéral)",
+                    question: "Le Colosse de Pierre s'éveille ! Développe cette expression pour esquiver son coup : A = 3x(2x - 5)",
+                    options: [
+                        "6x² - 15x",
+                        "6x - 15",
+                        "6x² - 5",
+                        "5x² - 2"
+                    ],
+                    answer: "6x² - 15x",
+                    explanation: "On distribue 3x : 3x × 2x = 6x² et 3x × (-5) = -15x."
+                },
+                {
+                    id: 3,
+                    title: "Le Piège des Miroirs (Identités Remarquables)",
+                    question: "Le sol se dérobe ! Utilise une identité remarquable pour développer instantanément : (x + 4)²",
+                    options: [
+                        "x² + 16",
+                        "x² + 8x + 16",
+                        "x² + 4x + 16",
+                        "x² + 8x + 8"
+                    ],
+                    answer: "x² + 8x + 16",
+                    explanation: "Formule (a + b)² = a² + 2ab + b². Ici, x² + 2×x×4 + 4² = x² + 8x + 16."
+                },
+                {
+                    id: 4,
+                    title: "Le Maître des Clés (Équations-Produits)",
+                    question: "Pour sceller le donjon, résous l'équation-produit : (x - 3)(2x + 8) = 0. Quelles sont les deux solutions ?",
+                    options: [
+                        "x = 3 et x = -4",
+                        "x = -3 et x = 4",
+                        "x = 3 et x = 8",
+                        "x = 0 et x = 3"
+                    ],
+                    answer: "x = 3 et x = -4",
+                    explanation: "Un produit est nul si l'un de ses facteurs est nul. Soit x - 3 = 0 (donc x = 3), soit 2x + 8 = 0 (donc 2x = -8 -> x = -4)."
+                }
+            ]
+        };
+
         // État du jeu
         let gameState = {
             level: 1,
             hp: 100,
-            currentDungeon: null
+            gold: 0,
+            dungeonsCleared: 0,
+            currentDungeon: null,
+            currentQuestionIndex: 0
         };
+
+        // Charger les statistiques utilisateur depuis le localStorage s'il y en a
+        if(localStorage.getItem('math_quest_save')) {
+            try {
+                gameState = { ...gameState, ...JSON.parse(localStorage.getItem('math_quest_save')) };
+                updateDashboard();
+            } catch(e) {
+                console.error("Erreur lors de la lecture de la sauvegarde", e);
+            }
+        }
+
+        function saveGame() {
+            localStorage.setItem('math_quest_save', JSON.stringify(gameState));
+            updateDashboard();
+        }
+
+        function updateDashboard() {
+            document.getElementById('player-level').innerText = gameState.level;
+            document.getElementById('hp-bar').style.width = `${gameState.hp}%`;
+            document.getElementById('profile-gold').innerText = gameState.gold;
+            document.getElementById('profile-dungeons').innerText = `${gameState.dungeonsCleared}/1`;
+            
+            // Déverrouillage visuel (Temple d'Hermès débloqué si le premier donjon est fait)
+            if(gameState.dungeonsCleared >= 1) {
+                const card = document.getElementById('dungeon-temple-card');
+                card.className = "w-full bg-slate-900/80 p-5 rounded-2xl border-2 border-slate-800 flex justify-between items-center active:scale-[0.97] transition-all duration-200 text-left shadow-md cursor-pointer";
+                card.onclick = () => alert("Le Temple d'Hermès ouvrira bientôt ses portes !");
+                document.getElementById('temple-status').className = "text-amber-400 font-extrabold text-sm";
+                document.getElementById('temple-status').innerText = "Débloqué";
+                card.querySelector('h4').className = "font-extrabold text-base text-slate-100";
+                card.querySelector('p').className = "text-sm text-slate-400 mt-1";
+                card.querySelector('span').className = "text-4xl opacity-100 filter drop-shadow";
+            }
+        }
 
         // Navigation entre les écrans
         function switchView(viewName) {
@@ -131,50 +262,143 @@
             }
         }
 
-        // Lancement d'un donjon (Simulation d'une question)
+        // Lancement d'un donjon
         function startDungeon(name) {
             gameState.currentDungeon = name;
+            gameState.currentQuestionIndex = 0;
+            gameState.hp = 100; // Restaure les HP pour le donjon
+            
+            document.getElementById('options-container').classList.remove('hidden');
+            document.getElementById('feedback-panel').classList.add('hidden');
+            
             switchView('game');
+            loadQuestion();
+            updateDashboard();
+        }
+
+        // Charger la question courante
+        function loadQuestion() {
+            const list = dungeonData[gameState.currentDungeon];
+            const q = list[gameState.currentQuestionIndex];
             
-            // Exemple de question factice pour tester le squelette
-            document.getElementById('question-text').innerText = "Développer l'expression : 3(x + 2)";
+            document.getElementById('combat-wave-title').innerText = `MONSTRE ${gameState.currentQuestionIndex + 1}/${list.length}`;
+            document.getElementById('monster-title').innerText = q.title;
+            document.getElementById('question-text').innerText = q.question;
             
-            const options = ["3x + 2", "3x + 6", "5x", "3x - 6"];
             const container = document.getElementById('options-container');
             container.innerHTML = '';
             
-            options.forEach(opt => {
+            q.options.forEach(opt => {
                 const btn = document.createElement('button');
                 btn.className = "w-full bg-slate-900/90 hover:bg-slate-800 py-4.5 px-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/40 text-base font-extrabold text-slate-200 active:scale-[0.97] transition-all duration-150 text-left shadow-md flex justify-between items-center";
                 btn.innerHTML = `<span>${opt}</span><span class="text-slate-500 text-xs">Sélectionner</span>`;
-                btn.onclick = () => checkAnswer(opt === "3x + 6");
+                btn.onclick = () => checkAnswer(opt);
                 container.appendChild(btn);
             });
         }
 
-        function checkAnswer(isCorrect) {
+        function checkAnswer(selectedOption) {
+            const list = dungeonData[gameState.currentDungeon];
+            const q = list[gameState.currentQuestionIndex];
+            const isCorrect = (selectedOption === q.answer);
+            
+            // Masquer les choix de réponses et afficher le feedback
+            document.getElementById('options-container').classList.add('hidden');
+            const feedback = document.getElementById('feedback-panel');
+            feedback.classList.remove('hidden');
+            
+            const titleEl = document.getElementById('feedback-title');
+            const iconEl = document.getElementById('feedback-icon');
+            const msgEl = document.getElementById('feedback-message');
+            const expEl = document.getElementById('feedback-explanation');
+            const btnEl = document.getElementById('feedback-next-btn');
+            
+            expEl.innerText = q.explanation;
+            
             if(isCorrect) {
-                alert("✨ Coup critique ! Bonne réponse !");
-                switchView('home');
+                feedback.className = "bg-slate-900 border-2 border-emerald-500/50 rounded-2xl p-6 shadow-2xl space-y-4 my-auto";
+                iconEl.innerText = "✨";
+                titleEl.className = "text-lg font-black tracking-wide text-emerald-400";
+                titleEl.innerText = "Coup critique ! Bonne réponse !";
+                msgEl.innerText = `Tu as vaincu ${q.title} ! Ton coup d'épée magique a terrassé la créature.`;
+                
+                const isLast = (gameState.currentQuestionIndex === list.length - 1);
+                if(isLast) {
+                    btnEl.innerText = "Terminer le donjon 🏆";
+                } else {
+                    btnEl.innerText = "Avancer vers le prochain monstre →";
+                }
             } else {
                 gameState.hp = Math.max(0, gameState.hp - 25);
                 document.getElementById('hp-bar').style.width = `${gameState.hp}%`;
-                alert("💥 Aïe ! Le monstre t'inflige 25 dégâts.");
+                
+                feedback.className = "bg-slate-900 border-2 border-rose-500/50 rounded-2xl p-6 shadow-2xl space-y-4 my-auto";
+                iconEl.innerText = "💥";
+                titleEl.className = "text-lg font-black tracking-wide text-rose-400";
+                titleEl.innerText = "Aïe ! Le monstre contre-attaque !";
+                msgEl.innerHTML = `Mauvaise réponse... Tu subis <span class="text-rose-400 font-bold">25 points de dégâts</span>. La bonne réponse était : <strong class="text-emerald-400">${q.answer}</strong>.`;
+                
                 if(gameState.hp <= 0) {
-                    alert("💀 Tu as succombé... Réveille-toi au campement !");
-                    gameState.hp = 100;
-                    document.getElementById('hp-bar').style.width = `100%`;
+                    btnEl.innerText = "Succomber et retourner au campement 💀";
+                } else {
+                    btnEl.innerText = "Se relever et continuer →";
+                }
+            }
+            saveGame();
+        }
+
+        function nextCombatStep() {
+            const list = dungeonData[gameState.currentDungeon];
+            
+            // Masquer le feedback et afficher les options pour la suite
+            document.getElementById('feedback-panel').classList.add('hidden');
+            document.getElementById('options-container').classList.remove('hidden');
+            
+            if(gameState.hp <= 0) {
+                // Le joueur est mort
+                gameState.hp = 100;
+                saveGame();
+                switchView('home');
+                return;
+            }
+            
+            const listQ = dungeonData[gameState.currentDungeon];
+            const isCorrect = document.getElementById('feedback-title').classList.contains('text-emerald-400');
+            
+            if(isCorrect) {
+                if(gameState.currentQuestionIndex === list.length - 1) {
+                    // Victoire complète du donjon !
+                    gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 1);
+                    gameState.gold += 50; // Or de récompense
+                    gameState.level += 1; // Niveau supérieur
+                    saveGame();
+                    alert("🎉 Félicitations Aventurier ! Tu as purifié la Crypte de l'Algèbre et remporté 50 pièces d'or !");
                     switchView('home');
+                } else {
+                    // Passage à la question suivante
+                    gameState.currentQuestionIndex++;
+                    loadQuestion();
+                }
+            } else {
+                // En cas de mauvaise réponse, on reste sur la même question ou on passe à la suivante ?
+                // Classiquement dans les jeux éducatifs, on passe au monstre suivant pour ne pas bloquer,
+                // ou on régénère. Passons à la suivante pour le rythme de jeu !
+                if(gameState.currentQuestionIndex === list.length - 1) {
+                    // Fin du donjon avec peu de vie
+                    gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 1);
+                    gameState.gold += 20; // Récompense amoindrie car blessé
+                    saveGame();
+                    alert("⚔️ Donjon terminé de justesse ! Tu as purifié la Crypte de l'Algèbre et remporté 20 pièces d'or.");
+                    switchView('home');
+                } else {
+                    gameState.currentQuestionIndex++;
+                    loadQuestion();
                 }
             }
         }
 
-        // Enregistrement du Service Worker pour le mode PWA
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then(() => console.log('Service Worker enregistré avec succès.'))
-                .catch(err => console.log('Échec de l\'enregistrement du SW :', err));
-        }
+        // Initialisation globale
+        updateDashboard();
     </script>
 </body>
 </html>
