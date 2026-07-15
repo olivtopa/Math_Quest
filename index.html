@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Math Quest</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Math Quest">
+    <link rel="apple-touch-icon" href="icon.png">
+    
+    <style>
+        /* Style personnalisé pour l'ambiance Gaming Sombre */
+        body {
+            background-color: #0f172a; /* Slate 900 */
+            color: #f8fafc; /* Slate 50 */
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen justify-between overflow-hidden font-sans">
+
+    <header class="bg-slate-800 p-4 shadow-md border-b border-slate-700 flex justify-between items-center shrink-0">
+        <div class="flex items-center space-x-2">
+            <span class="text-2xl">⚔️</span>
+            <div>
+                <h1 class="text-sm font-bold text-emerald-400">MATH QUEST</h1>
+                <p class="text-xs text-slate-400">Niveau <span id="player-level">1</span></p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-2 bg-slate-900 px-3 py-1.5 rounded-full border border-slate-700">
+            <span class="text-red-500 text-xs font-bold">HP</span>
+            <div class="w-20 bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                <div id="hp-bar" class="bg-red-500 h-full w-full transition-all duration-300"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto p-4">
+        
+        <section id="view-home" class="space-y-4">
+            <div class="bg-gradient-to-r from-emerald-900 to-slate-800 p-5 rounded-2xl border border-emerald-500/30 shadow-lg">
+                <h2 class="text-lg font-bold text-emerald-300">Prêt pour l'aventure ?</h2>
+                <p class="text-xs text-slate-300 mt-1">Explore les donjons du programme de 3ème et prépare ton entrée en Seconde.</p>
+            </div>
+
+            <h3 class="text-sm font-semibold tracking-wider text-slate-400 uppercase pt-2">Les Donjons</h3>
+            
+            <div class="space-y-3">
+                <button onclick="startDungeon('Algèbre')" class="w-full bg-slate-800 hover:bg-slate-750 p-4 rounded-xl border border-slate-700 flex justify-between items-center active:scale-[0.98] transition-transform text-left">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-3xl">💀</span>
+                        <div>
+                            <h4 class="font-bold text-sm text-slate-200">1. La Crypte de l'Algèbre</h4>
+                            <p class="text-xs text-slate-400 mt-0.5">Arithmétique & Calcul littéral</p>
+                        </div>
+                    </div>
+                    <span class="text-emerald-400 font-bold text-sm">Entrer →</span>
+                </button>
+                
+                <div class="w-full bg-slate-900 opacity-50 p-4 rounded-xl border border-dashed border-slate-800 flex justify-between items-center">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-3xl">🏛️</span>
+                        <div>
+                            <h4 class="font-bold text-sm text-slate-400">2. Le Temple d'Hermès</h4>
+                            <p class="text-xs text-slate-500 mt-0.5">Statistiques & Fonctions</p>
+                        </div>
+                    </div>
+                    <span class="text-slate-600 text-xs">🔒 Verrouillé</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-game" class="hidden h-full flex flex-col justify-between py-2">
+            <div class="bg-slate-800/60 p-5 rounded-2xl border border-slate-700 text-center my-auto">
+                <span class="text-xs font-semibold tracking-widest text-emerald-400 uppercase">Question</span>
+                <p id="question-text" class="text-lg font-medium mt-2 text-slate-100">Combien font $2x \times 3x$ ?</p>
+            </div>
+
+            <div id="options-container" class="space-y-2.5 mt-4">
+                </div>
+        </section>
+
+        <section id="view-profile" class="hidden space-y-4">
+            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-center">
+                <div class="w-16 h-16 bg-emerald-500 rounded-full mx-auto flex items-center justify-center text-2xl font-bold text-slate-900">
+                    N
+                </div>
+                <h3 class="font-bold mt-2">Aventurier</h3>
+                <p class="text-xs text-slate-400">En route vers la Seconde en 2026</p>
+            </div>
+        </section>
+
+    </main>
+
+    <nav class="bg-slate-900 border-t border-slate-800 py-2 px-6 flex justify-around items-center shrink-0">
+        <button onclick="switchView('home')" id="nav-home" class="flex flex-col items-center space-y-1 text-emerald-400">
+            <span class="text-xl">🗺️</span>
+            <span class="text-[10px] font-medium">Aventure</span>
+        </button>
+        <button onclick="switchView('profile')" id="nav-profile" class="flex flex-col items-center space-y-1 text-slate-400">
+            <span class="text-xl">🛡️</span>
+            <span class="text-[10px] font-medium">Profil</span>
+        </button>
+    </nav>
+
+    <script>
+        // État du jeu
+        let gameState = {
+            level: 1,
+            hp: 100,
+            currentDungeon: null
+        };
+
+        // Navigation entre les écrans
+        function switchView(viewName) {
+            document.getElementById('view-home').classList.add('hidden');
+            document.getElementById('view-game').classList.add('hidden');
+            document.getElementById('view-profile').classList.add('hidden');
+            
+            document.getElementById('nav-home').className = "flex flex-col items-center space-y-1 text-slate-400";
+            document.getElementById('nav-profile').className = "flex flex-col items-center space-y-1 text-slate-400";
+
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            if(viewName !== 'game') {
+                document.getElementById(`nav-${viewName}`).className = "flex flex-col items-center space-y-1 text-emerald-400";
+            }
+        }
+
+        // Lancement d'un donjon (Simulation d'une question)
+        function startDungeon(name) {
+            gameState.currentDungeon = name;
+            switchView('game');
+            
+            // Exemple de question factice pour tester le squelette
+            document.getElementById('question-text').innerText = "Développer l'expression : 3(x + 2)";
+            
+            const options = ["3x + 2", "3x + 6", "5x", "3x - 6"];
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "w-full bg-slate-800 hover:bg-slate-700 py-3.5 px-4 rounded-xl border border-slate-750 text-sm font-medium active:scale-[0.99] transition-transform text-left";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(opt === "3x + 6");
+                container.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(isCorrect) {
+            if(isCorrect) {
+                alert("✨ Coup critique ! Bonne réponse !");
+                switchView('home');
+            } else {
+                gameState.hp = Math.max(0, gameState.hp - 25);
+                document.getElementById('hp-bar').style.width = `${gameState.hp}%`;
+                alert("💥 Aïe ! Le monstre t'inflige 25 dégâts.");
+                if(gameState.hp <= 0) {
+                    alert("💀 Tu as succombé... Réveille-toi au campement !");
+                    gameState.hp = 100;
+                    document.getElementById('hp-bar').style.width = `100%`;
+                    switchView('home');
+                }
+            }
+        }
+
+        // Enregistrement du Service Worker pour le mode PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('Service Worker enregistré avec succès.'))
+                .catch(err => console.log('Échec de l\'enregistrement du SW :', err));
+        }
+    </script>
+</body>
+</html>
