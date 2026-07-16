@@ -244,6 +244,44 @@
                     explanation: "Un produit est nul si l'un de ses facteurs est nul. Soit x - 3 = 0 (donc x = 3), soit 2x + 8 = 0 (donc 2x = -8 -> x = -4).",
                     image: "keymaster_monster.png"
                 }
+            ],
+            "Hermes": [
+                {
+                    id: 1,
+                    title: "Le Sphinx des Statistiques",
+                    image: "sphinx_monster.png",
+                    question: "Le Sphinx te propose un défi d'orientation. Voici les notes d'un aventurier : 8, 11, 12, 15, 19. Quelle est la note médiane de cette série ?",
+                    options: ["11", "12", "13", "15"],
+                    answer: "12",
+                    explanation: "La médiane est la valeur qui partage la série ordonnée en deux groupes d'effectifs égaux. Ici, la valeur centrale est bien 12 (il y a deux notes avant et deux notes après)."
+                },
+                {
+                    id: 2,
+                    title: "L'Oracle du Destin (Probabilités)",
+                    image: "oracle_monster.png",
+                    question: "L'Oracle lance un dé équilibré à 8 faces (numérotées de 1 à 8). Quelle est la probabilité d'obtenir un nombre premier ?",
+                    options: ["1/2 (soit 50%)", "3/8 (soit 37,5%)", "1/4 (soit 25%)", "5/8 (soit 62,5%)"],
+                    answer: "1/2 (soit 50%)",
+                    explanation: "Les nombres premiers entre 1 et 8 sont : 2, 3, 5 et 7. Il y a donc 4 cas favorables sur 8 au total, ce qui donne 4/8 = 1/2 (ou 50 % de chances)."
+                },
+                {
+                    id: 3,
+                    title: "Le Spectre des Images (Fonctions)",
+                    image: "spectre_images.png",
+                    question: "Un spectre t'attaque avec le sort f(x) = -3x + 7. Calcule l'image de 2 pour dissiper sa magie :",
+                    options: ["13", "1", "-1", "-5"],
+                    answer: "1",
+                    explanation: "Pour trouver l'image de 2, on remplace x par 2 dans la fonction : f(2) = -3 × 2 + 7 = -6 + 7 = 1."
+                },
+                {
+                    id: 4,
+                    title: "Le Gardien des Pentes (Fonctions Affines)",
+                    image: "pente_monster.png",
+                    question: "Pour franchir le gouffre, trouve la fonction affine qui correspond à une droite qui descend (coefficient directeur négatif) et qui coupe l'axe des ordonnées en 5 (ordonnée à l'origine égale à 5) :",
+                    options: ["g(x) = -2x + 5", "g(x) = 5x - 2", "g(x) = -5x - 2", "g(x) = 2x + 5"],
+                    answer: "g(x) = -2x + 5",
+                    explanation: "Une fonction affine est de la forme ax + b. Ici, le coefficient directeur 'a' doit être négatif (ex: -2) et l'ordonnée à l'origine 'b' doit être 5. La bonne formule est donc g(x) = -2x + 5."
+                }
             ]
         };
 
@@ -278,18 +316,28 @@
             document.getElementById('player-level').innerText = gameState.level;
             document.getElementById('hp-bar').style.width = `${gameState.hp}%`;
             document.getElementById('profile-gold').innerText = gameState.gold;
-            document.getElementById('profile-dungeons').innerText = `${gameState.dungeonsCleared}/1`;
+            document.getElementById('profile-dungeons').innerText = `${gameState.dungeonsCleared}/2`;
             
             // Déverrouillage visuel (Temple d'Hermès débloqué si le premier donjon est fait)
             if(gameState.dungeonsCleared >= 1) {
                 const card = document.getElementById('dungeon-temple-card');
                 card.className = "w-full bg-slate-900/80 p-5 rounded-2xl border-2 border-slate-800 flex justify-between items-center active:scale-[0.97] transition-all duration-200 text-left shadow-md cursor-pointer";
-                card.onclick = () => showCustomAlert("Temple d'Hermès", "Le Temple d'Hermès ouvrira bientôt ses portes pour de nouveaux défis !", "Fermer", "🏛️");
+                card.onclick = () => startDungeon('Hermes');
                 document.getElementById('temple-status').className = "text-amber-400 font-extrabold text-sm";
                 document.getElementById('temple-status').innerText = "Débloqué";
                 card.querySelector('h4').className = "font-extrabold text-base text-slate-100";
                 card.querySelector('p').className = "text-sm text-slate-400 mt-1";
                 card.querySelector('span').className = "text-4xl opacity-100 filter drop-shadow";
+            } else {
+                // Réinitialise l'état verrouillé au cas où la partie est réinitialisée
+                const card = document.getElementById('dungeon-temple-card');
+                card.className = "w-full bg-slate-950/40 opacity-50 p-5 rounded-2xl border-2 border-dashed border-slate-900 flex justify-between items-center select-none";
+                card.onclick = null;
+                document.getElementById('temple-status').className = "text-slate-600 text-sm font-bold";
+                document.getElementById('temple-status').innerText = "🔒 Verrouillé";
+                card.querySelector('h4').className = "font-extrabold text-base text-slate-500";
+                card.querySelector('p').className = "text-sm text-slate-600 mt-1";
+                card.querySelector('span').className = "text-4xl opacity-60";
             }
         }
 
@@ -340,16 +388,20 @@
             if (currentQuestionIndex >= questions.length) {
                 gameState.level += 1;
                 gameState.gold += 50; // Récompense d'or
-                gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 1);
+                
+                const clearedIndex = (gameState.currentDungeon === 'Hermes') ? 2 : 1;
+                gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, clearedIndex);
                 gameState.hp = 100; // Soigne le joueur
                 saveGame();
                 
                 // EFFET WOW MAJEUR : Explosion géante continue pour la fin du donjon !
                 triggerEpicVictoryConfetti();
                 
+                const dungeonFriendlyName = (gameState.currentDungeon === 'Hermes') ? "le Temple d'Hermès" : "la Crypte de l'Algèbre";
+                
                 showCustomAlert(
                     "🏆 VICTOIRE !", 
-                    "FÉLICITATIONS ! Tu as purifié la Crypte de l'Algèbre, gagné +1 Niveau et remporté 50 pièces d'or !", 
+                    `FÉLICITATIONS ! Tu as purifié ${dungeonFriendlyName}, gagné +1 Niveau et remporté 50 pièces d'or !`, 
                     "Retourner au campement", 
                     "🏆",
                     () => {
