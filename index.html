@@ -35,9 +35,9 @@
             </div>
         </div>
         <div class="flex items-center space-x-3 bg-slate-950 px-4 py-2 rounded-full border border-slate-800 shadow-inner">
-            <span class="text-red-500 text-sm font-black tracking-wider">HP</span>
+            <span id="hp-label" class="text-emerald-500 text-sm font-black tracking-wider">HP</span>
             <div class="w-24 bg-slate-800 h-3 rounded-full overflow-hidden border border-slate-700">
-                <div id="hp-bar" class="bg-gradient-to-r from-red-600 to-rose-500 h-full w-full transition-all duration-300"></div>
+                <div id="hp-bar" class="bg-gradient-to-r from-emerald-500 to-green-400 h-full w-full transition-all duration-300"></div>
             </div>
         </div>
     </header>
@@ -450,7 +450,18 @@
 
         function updateDashboard() {
             document.getElementById('player-level').innerText = gameState.level;
-            document.getElementById('hp-bar').style.width = `${gameState.hp}%`;
+            
+            const hpBar = document.getElementById('hp-bar');
+            const hpLabel = document.getElementById('hp-label');
+            hpBar.style.width = `${gameState.hp}%`;
+            if (gameState.hp <= 25) {
+                hpBar.className = "bg-gradient-to-r from-red-600 to-rose-500 h-full w-full transition-all duration-300";
+                hpLabel.className = "text-rose-500 text-sm font-black tracking-wider";
+            } else {
+                hpBar.className = "bg-gradient-to-r from-emerald-500 to-green-400 h-full w-full transition-all duration-300";
+                hpLabel.className = "text-emerald-500 text-sm font-black tracking-wider";
+            }
+
             document.getElementById('profile-gold').innerText = gameState.gold;
             document.getElementById('profile-dungeons').innerText = `${gameState.dungeonsCleared}/5`;
             
