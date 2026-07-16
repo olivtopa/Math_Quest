@@ -554,6 +554,10 @@
                     gameState.level = 4; // Passe niveau 4
                     gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 3);
                     rewardMessage = "<br><br>🔓 <strong>Tu as débloqué le Donjon 4 : La Forge des Mesures !</strong>";
+                } else if (gameState.currentDungeon === "Mesures" && gameState.level === 4) {
+                    gameState.level = 5; // Passe niveau 5
+                    gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 4);
+                    rewardMessage = "<br><br>🔓 <strong>Tu as débloqué l'ultime épreuve : La Tour de l'Algorithme !</strong>";
                 } else {
                     gameState.level += 1;
                     const clearedIndex = (gameState.currentDungeon === 'Mesures') ? 4 : (gameState.currentDungeon === 'Thales') ? 3 : (gameState.currentDungeon === 'Hermes') ? 2 : 1;
