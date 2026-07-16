@@ -208,8 +208,13 @@
             <div class="bg-slate-900/80 rounded-2xl border-2 border-slate-800 shadow-xl flex flex-col shrink-0 p-5">
                 <!-- Cadre de l'illustration (format carré parfait 1:1 pour afficher tout le dessin) -->
                 <div class="w-48 h-48 shrink-0 bg-slate-950 mx-auto rounded-xl overflow-hidden border-2 border-slate-800 shadow-2xl flex items-center justify-center relative">
-                    <img id="monster-image" src="" alt="Monstre" class="w-full h-full object-cover opacity-85 animate-pulse transition-all duration-300">
-                    <div id="slash-overlay" class="pointer-events-none"></div>
+                    <div id="monster-defeat-text" class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 opacity-0 transition-opacity duration-300 pointer-events-none z-0">
+                        <span class="text-3xl">🌟</span>
+                        <span class="text-sm font-black text-emerald-400 tracking-wider uppercase mt-2">Bravo !</span>
+                        <span class="text-xs font-bold text-slate-300 mt-1 leading-relaxed">Tu as réussi cette épreuve !</span>
+                    </div>
+                    <img id="monster-image" src="" alt="Monstre" class="w-full h-full object-cover opacity-85 animate-pulse transition-all duration-300 z-10">
+                    <div id="slash-overlay" class="pointer-events-none z-20"></div>
                 </div>
                 
                 <div class="pt-4 text-center">
@@ -782,6 +787,10 @@
             const slashOverlay = document.getElementById('slash-overlay');
             slashOverlay.className = "pointer-events-none";
             document.getElementById('monster-hp-heart').innerHTML = "❤️ Monstre Actif";
+            
+            const defeatText = document.getElementById('monster-defeat-text');
+            defeatText.classList.remove('opacity-100');
+            defeatText.classList.add('opacity-0');
 
             // Charger l'image du monstre
             monsterImg.src = currentQ.image;
@@ -833,6 +842,10 @@
                 setTimeout(() => {
                     monsterImg.classList.remove('animate-monster-hit');
                     monsterImg.classList.add('animate-monster-die');
+                    
+                    const defeatText = document.getElementById('monster-defeat-text');
+                    defeatText.classList.remove('opacity-0');
+                    defeatText.classList.add('opacity-100');
                 }, 400);
                 
                 // 3. Afficher le feedback final après 800ms
