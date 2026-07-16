@@ -26,7 +26,7 @@
 </head>
 <body class="flex flex-col h-dvh justify-between overflow-hidden font-sans">
 
-    <header class="bg-slate-900/90 backdrop-blur-md p-5 shadow-lg border-b border-slate-800 flex justify-between items-center shrink-0">
+    <header id="app-header" class="hidden bg-slate-900/90 backdrop-blur-md p-5 shadow-lg border-b border-slate-800 justify-between items-center shrink-0">
         <div class="flex items-center space-x-3">
             <span class="text-3xl">⚔️</span>
             <div>
@@ -44,7 +44,36 @@
 
     <main class="flex-1 overflow-y-auto p-5 space-y-6">
         
-        <section id="view-home" class="space-y-6">
+        <!-- Page de garde / Landing Page -->
+        <section id="view-landing" class="h-full flex flex-col justify-between py-6 text-center">
+            <div class="space-y-6 my-auto">
+                <div class="w-full h-56 bg-slate-950 rounded-2xl overflow-hidden border-2 border-emerald-500/30 shadow-xl relative">
+                    <img src="math_quest_banner.png" 
+                         alt="Math Quest Title Image" 
+                         class="w-full h-full object-cover opacity-80">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-transparent to-transparent"></div>
+                    <div class="absolute bottom-4 left-0 right-0">
+                        <span class="text-xs font-bold tracking-widest text-emerald-400 bg-slate-950/80 px-3 py-1 rounded-full uppercase">Édition Spéciale Seconde</span>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h1 class="text-3xl font-black tracking-widest text-emerald-400 drop-shadow-md">MATH QUEST</h1>
+                    <p class="text-slate-300 text-sm max-w-xs mx-auto leading-relaxed">
+                        Le destin de ton année de Seconde se joue ici. Purifie les donjons du programme de 3ème et réveille le héros qui est en toi !
+                    </p>
+                </div>
+            </div>
+
+            <div class="space-y-3 shrink-0">
+                <button onclick="startGame()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-lg p-5 rounded-2xl shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-transform">
+                    COMMENCER L'AVENTURE
+                </button>
+                <p class="text-xs text-slate-500">Aucune installation requise • Prêt pour iPhone</p>
+            </div>
+        </section>
+        
+        <section id="view-home" class="hidden space-y-6">
             <div class="bg-gradient-to-br from-emerald-950/80 via-emerald-900/40 to-slate-900/90 p-6 rounded-2xl border-2 border-emerald-500/40 shadow-xl backdrop-blur-sm">
                 <h2 class="text-xl font-black text-emerald-300 tracking-wide">Prêt pour l'aventure ?</h2>
                 <p class="text-sm leading-relaxed text-slate-200 mt-2">Explore les donjons du programme de 3ème et prépare ton entrée en Seconde.</p>
@@ -144,7 +173,7 @@
 
     </main>
 
-    <nav class="bg-slate-950 border-t border-slate-900 pt-3.5 px-8 flex justify-around items-center shrink-0 shadow-2xl">
+    <nav id="app-nav" class="hidden bg-slate-950 border-t border-slate-900 pt-3.5 px-8 justify-around items-center shrink-0 shadow-2xl">
         <button onclick="switchView('home')" id="nav-home" class="flex flex-col items-center space-y-1.5 text-emerald-400 transition-all">
             <span class="text-2xl">🗺️</span>
             <span class="text-xs font-bold tracking-wide">Aventure</span>
@@ -264,8 +293,18 @@
             }
         }
 
+        // Lancement initial depuis la Landing Page
+        function startGame() {
+            document.getElementById('app-header').classList.remove('hidden');
+            document.getElementById('app-header').classList.add('flex');
+            document.getElementById('app-nav').classList.remove('hidden');
+            document.getElementById('app-nav').classList.add('flex');
+            switchView('home');
+        }
+
         // Navigation entre les écrans
         function switchView(viewName) {
+            document.getElementById('view-landing').classList.add('hidden');
             document.getElementById('view-home').classList.add('hidden');
             document.getElementById('view-game').classList.add('hidden');
             document.getElementById('view-profile').classList.add('hidden');
@@ -274,7 +313,7 @@
             document.getElementById('nav-profile').className = "flex flex-col items-center space-y-1.5 text-slate-500 hover:text-slate-300 transition-all";
 
             document.getElementById(`view-${viewName}`).classList.remove('hidden');
-            if(viewName !== 'game') {
+            if(viewName !== 'game' && viewName !== 'landing') {
                 document.getElementById(`nav-${viewName}`).className = "flex flex-col items-center space-y-1.5 text-emerald-400 transition-all";
             }
         }
