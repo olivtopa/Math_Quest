@@ -98,6 +98,8 @@
                     </div>
                     <div id="dungeon-thales-container">
                     </div>
+                    <div id="dungeon-mesures-container">
+                    </div>
                 </div>
             </div>
         </section>
@@ -324,6 +326,49 @@
                     answer: "40 dm²",
                     explanation: "Dans une homothétie (ou un agrandissement/réduction) de rapport k, les aires sont multipliées par k². Ici, (-2)² = 4. L'aire est donc multipliée par 4 : 10 dm² × 4 = 40 dm². (Une aire est toujours positive, même si le rapport est négatif) !"
                 }
+            ],
+            "Mesures": [
+                {
+                    id: 1,
+                    title: "Le Creuset du Volcan (Volume de Pyramide)",
+                    image: "volcano_forge.png",
+                    question: "Pour contenir la lave magique, tu dois calculer le volume d'un creuset en forme de pyramide à base carrée. Le côté du carré de base mesure 6 cm et la hauteur de la pyramide est de 5 cm. Quel est son volume ?",
+                    options: ["60 cm³", "180 cm³", "30 cm³", "20 cm³"],
+                    answer: "60 cm³",
+                    explanation: "Le volume d'une pyramide est donné par la formule : V = (Aire de la base × Hauteur) / 3. Ici, l'aire de la base carrée est de 6 × 6 = 36 cm². Donc V = (36 × 5) / 3 = 180 / 3 = 60 cm³."
+                },
+                {
+                    id: 2,
+                    title: "La Sphère d'Énergie (Volume de la Boule)",
+                    image: "energy_orb.png",
+                    question: "Le noyau de la forge est une boule magique de rayon R = 3 cm. Quelle formule permet de calculer son volume exact ?",
+                    options: [
+                        "V = 4/3 × π × 3³ = 36π cm³", 
+                        "V = 4 × π × 3² = 36π cm³", 
+                        "V = π × 3² × 5 = 45π cm³", 
+                        "V = 1/3 × π × 3² × 5 = 15π cm³"
+                    ],
+                    answer: "V = 4/3 × π × 3³ = 36π cm³",
+                    explanation: "Le volume d'une boule de rayon R est donné par la formule V = (4/3) × π × R³. Pour R = 3, on a V = (4/3) × π × 27 = 36π cm³."
+                },
+                {
+                    id: 3,
+                    title: "La Balance des Fluides (Grandeurs Composées)",
+                    image: "alchemy_fluids.png",
+                    question: "Un fluide magique s'écoule à un débit constant de 15 litres par minute (L/min). Combien de temps faudra-t-il pour remplir un réservoir de 450 litres ?",
+                    options: ["30 minutes", "45 minutes", "15 minutes", "3 heures"],
+                    answer: "30 minutes",
+                    explanation: "Le temps nécessaire est égal au volume total divisé par le débit : t = Volume / Débit. Ici, t = 450 / 15 = 30 minutes."
+                },
+                {
+                    id: 4,
+                    title: "Le Souffle du Dragon (Agrandissements & Volumes)",
+                    image: "dragon_breath.png",
+                    question: "Le Dragon de la Forge souffle sur ton épée d'un volume initial de 8 cm³ pour l'agrandir à l'échelle k = 3. Quel sera le nouveau volume de ton épée agrandie ?",
+                    options: ["216 cm³", "72 cm³", "24 cm³", "124 cm³"],
+                    answer: "216 cm³",
+                    explanation: "Lors d'un agrandissement à l'échelle k, les volumes sont multipliés par k³. Ici, k³ = 3³ = 27. Le nouveau volume est donc : V = 8 cm³ × 27 = 216 cm³."
+                }
             ]
         };
 
@@ -357,7 +402,7 @@
             document.getElementById('player-level').innerText = gameState.level;
             document.getElementById('hp-bar').style.width = `${gameState.hp}%`;
             document.getElementById('profile-gold').innerText = gameState.gold;
-            document.getElementById('profile-dungeons').innerText = `${gameState.dungeonsCleared}/3`;
+            document.getElementById('profile-dungeons').innerText = `${gameState.dungeonsCleared}/4`;
             
             // Déverrouillage visuel (Temple d'Hermès débloqué si le premier donjon est fait)
             const container = document.getElementById('dungeon-hermes-container');
@@ -412,6 +457,36 @@
                             <div>
                                 <h4 class="font-extrabold text-base text-slate-500">3. La Cité de Thalès</h4>
                                 <p class="text-sm text-slate-600 mt-1">Requis : Niveau 3 (Termine le Donjon 2)</p>
+                            </div>
+                        </div>
+                        <span class="text-slate-600 text-sm font-bold">🔒 Verrouillé</span>
+                    </div>
+                `;
+            }
+
+            // Déverrouillage visuel (Forge des Mesures débloquée si le troisième donjon est fait)
+            const mesuresContainer = document.getElementById('dungeon-mesures-container');
+            if(gameState.level >= 4) {
+                mesuresContainer.innerHTML = `
+                    <button onclick="startDungeon('Mesures')" class="w-full bg-slate-900/80 hover:bg-slate-800 p-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/50 flex justify-between items-center active:scale-[0.97] transition-all duration-200 text-left shadow-md cursor-pointer">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-4xl filter drop-shadow">🌋</span>
+                            <div>
+                                <h4 class="font-extrabold text-base text-slate-100">4. La Forge des Mesures</h4>
+                                <p class="text-sm text-slate-400 mt-1">Espace & Volumes</p>
+                            </div>
+                        </div>
+                        <span class="text-amber-400 font-extrabold text-sm shrink-0 ml-2">Entrer →</span>
+                    </button>
+                `;
+            } else {
+                mesuresContainer.innerHTML = `
+                    <div class="w-full bg-slate-950/40 opacity-50 p-5 rounded-2xl border-2 border-dashed border-slate-900 flex justify-between items-center select-none">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-4xl opacity-60">🌋</span>
+                            <div>
+                                <h4 class="font-extrabold text-base text-slate-500">4. La Forge des Mesures</h4>
+                                <p class="text-sm text-slate-600 mt-1">Requis : Niveau 4 (Termine le Donjon 3)</p>
                             </div>
                         </div>
                         <span class="text-slate-600 text-sm font-bold">🔒 Verrouillé</span>
@@ -475,9 +550,13 @@
                     gameState.level = 3; // Passe niveau 3
                     gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 2);
                     rewardMessage = "<br><br>🔓 <strong>Tu as débloqué le Donjon 3 : La Cité de Thalès !</strong>";
+                } else if (gameState.currentDungeon === "Thales" && gameState.level === 3) {
+                    gameState.level = 4; // Passe niveau 4
+                    gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 3);
+                    rewardMessage = "<br><br>🔓 <strong>Tu as débloqué le Donjon 4 : La Forge des Mesures !</strong>";
                 } else {
                     gameState.level += 1;
-                    const clearedIndex = (gameState.currentDungeon === 'Thales') ? 3 : (gameState.currentDungeon === 'Hermes') ? 2 : 1;
+                    const clearedIndex = (gameState.currentDungeon === 'Mesures') ? 4 : (gameState.currentDungeon === 'Thales') ? 3 : (gameState.currentDungeon === 'Hermes') ? 2 : 1;
                     gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, clearedIndex);
                 }
                 
@@ -488,7 +567,7 @@
                 // EFFET WOW MAJEUR : Explosion géante continue pour la fin du donjon !
                 triggerEpicVictoryConfetti();
                 
-                const dungeonFriendlyName = (gameState.currentDungeon === 'Hermes') ? "le Temple d'Hermès" : (gameState.currentDungeon === 'Thales') ? "la Cité de Thalès" : "la Crypte de l'Algèbre";
+                const dungeonFriendlyName = (gameState.currentDungeon === 'Hermes') ? "le Temple d'Hermès" : (gameState.currentDungeon === 'Thales') ? "la Cité de Thalès" : (gameState.currentDungeon === 'Mesures') ? "la Forge des Mesures" : "la Crypte de l'Algèbre";
                 
                 showCustomAlert(
                     "🏆 VICTOIRE !", 
