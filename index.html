@@ -100,6 +100,8 @@
                     </div>
                     <div id="dungeon-mesures-container">
                     </div>
+                    <div id="dungeon-algorithme-container">
+                    </div>
                 </div>
             </div>
         </section>
@@ -369,6 +371,54 @@
                     answer: "216 cm³",
                     explanation: "Lors d'un agrandissement à l'échelle k, les volumes sont multipliés par k³. Ici, k³ = 3³ = 27. Le nouveau volume est donc : V = 8 cm³ × 27 = 216 cm³."
                 }
+            ],
+            "Algorithme": [
+                {
+                    id: 1,
+                    title: "Le Gardien des Variables",
+                    image: "variables_sentinel.png",
+                    question: "La sentinelle te présente un script : \n1. Choisir un nombre\n2. Le multiplier par 3\n3. Ajouter 5 au résultat.\nSi tu entres le nombre 4 dans cette machine, quel résultat obtiendras-tu ?",
+                    options: ["17", "27", "12", "9"],
+                    answer: "17",
+                    explanation: "On suit l'algorithme étape par étape : 4 × 3 = 12, puis 12 + 5 = 17. Simple et logique !"
+                },
+                {
+                    id: 2,
+                    title: "Le Spectre de la Boucle",
+                    image: "cyber_spectre.png",
+                    question: "Un script Scratch tourne en boucle : \n'Répéter 5 fois : Ajouter 10 à la variable Score'. Si le Score de départ est de 50, quel sera le Score final ?",
+                    options: ["100", "50", "150", "60"],
+                    answer: "100",
+                    explanation: "La boucle répète 5 fois l'action d'ajouter 10. On ajoute donc 5 × 10 = 50 au score initial. Score final : 50 + 50 = 100."
+                },
+                {
+                    id: 3,
+                    title: "L'Interrupteur Logique (Conditionnelles)",
+                    image: "logic_switch.png",
+                    question: "Pour déverrouiller la porte, tu analyses ce test : 'Si Niveau >= 5 Alors Ouvrir la porte Sinon Lancer l'alarme'. Si ton personnage est Niveau 4, que se passe-t-il ?",
+                    options: [
+                        "L'alarme se déclenche", 
+                        "La porte s'ouvre", 
+                        "Rien ne se passe", 
+                        "Le jeu plante"
+                    ],
+                    answer: "L'alarme se déclenche",
+                    explanation: "La condition 'Niveau >= 5' est fausse car ton niveau est de 4. C'est donc le bloc 'Sinon' qui s'exécute : l'alarme se déclenche !"
+                },
+                {
+                    id: 4,
+                    title: "Le Portail vers la Seconde (Initiation Python)",
+                    image: "python_portal.png",
+                    question: "Devant le portail temporel vers le lycée, tu aperçois une ligne de code Python : \nprint('Prêt pour la Seconde !')\nQuelle sera l'action de cette commande ?",
+                    options: [
+                        "Elle affiche le texte 'Prêt pour la Seconde !' à l'écran", 
+                        "Elle imprime le texte sur une feuille de papier", 
+                        "Elle supprime le texte de l'ordinateur", 
+                        "Elle pose une question à l'utilisateur"
+                    ],
+                    answer: "Elle affiche le texte 'Prêt pour la Seconde !' à l'écran",
+                    explanation: "En programmation (et particulièrement en Python), la fonction 'print()' sert à afficher (à l'écran) le message écrit entre les parenthèses !"
+                }
             ]
         };
 
@@ -402,7 +452,7 @@
             document.getElementById('player-level').innerText = gameState.level;
             document.getElementById('hp-bar').style.width = `${gameState.hp}%`;
             document.getElementById('profile-gold').innerText = gameState.gold;
-            document.getElementById('profile-dungeons').innerText = `${gameState.dungeonsCleared}/4`;
+            document.getElementById('profile-dungeons').innerText = `${gameState.dungeonsCleared}/5`;
             
             // Déverrouillage visuel (Temple d'Hermès débloqué si le premier donjon est fait)
             const container = document.getElementById('dungeon-hermes-container');
@@ -493,6 +543,36 @@
                     </div>
                 `;
             }
+
+            // Déverrouillage visuel (Tour de l'Algorithme débloquée si le quatrième donjon est fait)
+            const algorithmeContainer = document.getElementById('dungeon-algorithme-container');
+            if(gameState.level >= 5) {
+                algorithmeContainer.innerHTML = `
+                    <button onclick="startDungeon('Algorithme')" class="w-full bg-slate-900/80 hover:bg-slate-800 p-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/50 flex justify-between items-center active:scale-[0.97] transition-all duration-200 text-left shadow-md cursor-pointer">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-4xl filter drop-shadow">🗼</span>
+                            <div>
+                                <h4 class="font-extrabold text-base text-slate-100">5. La Tour de l'Algorithme</h4>
+                                <p class="text-sm text-slate-400 mt-1">Variables & Boucles logiques</p>
+                            </div>
+                        </div>
+                        <span class="text-emerald-400 font-extrabold text-base shrink-0 ml-2">Entrer →</span>
+                    </button>
+                `;
+            } else {
+                algorithmeContainer.innerHTML = `
+                    <div class="w-full bg-slate-950/40 opacity-50 p-5 rounded-2xl border-2 border-dashed border-slate-900 flex justify-between items-center select-none">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-4xl opacity-60">🗼</span>
+                            <div>
+                                <h4 class="font-extrabold text-base text-slate-500">5. La Tour de l'Algorithme</h4>
+                                <p class="text-sm text-slate-600 mt-1">Requis : Niveau 5 (Termine le Donjon 4)</p>
+                            </div>
+                        </div>
+                        <span class="text-slate-600 text-sm font-bold">🔒 Verrouillé</span>
+                    </div>
+                `;
+            }
         }
 
         // Lancement initial depuis la Landing Page
@@ -558,9 +638,13 @@
                     gameState.level = 5; // Passe niveau 5
                     gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 4);
                     rewardMessage = "<br><br>🔓 <strong>Tu as débloqué l'ultime épreuve : La Tour de l'Algorithme !</strong>";
+                } else if (gameState.currentDungeon === "Algorithme" && gameState.level === 5) {
+                    gameState.level = 6; // Niveau 6 max !
+                    gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 5);
+                    rewardMessage = "<br><br>🎓 <strong>FÉLICITATIONS ! Tu as purifié la Tour de l'Algorithme et terminé le programme de 3ème. Tu as obtenu ton Diplôme d'Entrée en Seconde !</strong>";
                 } else {
                     gameState.level += 1;
-                    const clearedIndex = (gameState.currentDungeon === 'Mesures') ? 4 : (gameState.currentDungeon === 'Thales') ? 3 : (gameState.currentDungeon === 'Hermes') ? 2 : 1;
+                    const clearedIndex = (gameState.currentDungeon === 'Algorithme') ? 5 : (gameState.currentDungeon === 'Mesures') ? 4 : (gameState.currentDungeon === 'Thales') ? 3 : (gameState.currentDungeon === 'Hermes') ? 2 : 1;
                     gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, clearedIndex);
                 }
                 
@@ -571,7 +655,7 @@
                 // EFFET WOW MAJEUR : Explosion géante continue pour la fin du donjon !
                 triggerEpicVictoryConfetti();
                 
-                const dungeonFriendlyName = (gameState.currentDungeon === 'Hermes') ? "le Temple d'Hermès" : (gameState.currentDungeon === 'Thales') ? "la Cité de Thalès" : (gameState.currentDungeon === 'Mesures') ? "la Forge des Mesures" : "la Crypte de l'Algèbre";
+                const dungeonFriendlyName = (gameState.currentDungeon === 'Hermes') ? "le Temple d'Hermès" : (gameState.currentDungeon === 'Thales') ? "la Cité de Thalès" : (gameState.currentDungeon === 'Mesures') ? "la Forge des Mesures" : (gameState.currentDungeon === 'Algorithme') ? "la Tour de l'Algorithme" : "la Crypte de l'Algèbre";
                 
                 showCustomAlert(
                     "🏆 VICTOIRE !", 
