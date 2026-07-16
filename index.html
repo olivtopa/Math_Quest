@@ -100,7 +100,7 @@
                     </div>
                     <div id="dungeon-mesures-container">
                     </div>
-                    <div id="dungeon-algorithme-container">
+                    <div id="dungeon-algo-container">
                     </div>
                 </div>
             </div>
@@ -545,7 +545,7 @@
             }
 
             // Déverrouillage visuel (Tour de l'Algorithme débloquée si le quatrième donjon est fait)
-            const algorithmeContainer = document.getElementById('dungeon-algorithme-container');
+            const algorithmeContainer = document.getElementById('dungeon-algo-container');
             if(gameState.level >= 5) {
                 algorithmeContainer.innerHTML = `
                     <button onclick="startDungeon('Algorithme')" class="w-full bg-slate-900/80 hover:bg-slate-800 p-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/50 flex justify-between items-center active:scale-[0.97] transition-all duration-200 text-left shadow-md cursor-pointer">
