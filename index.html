@@ -96,6 +96,8 @@
                     
                     <div id="dungeon-hermes-container">
                     </div>
+                    <div id="dungeon-thales-container">
+                    </div>
                 </div>
             </div>
         </section>
@@ -274,6 +276,54 @@
                     answer: "g(x) = -2x + 5",
                     explanation: "Une fonction affine est de la forme ax + b. Ici, le coefficient directeur 'a' doit être négatif (ex: -2) et l'ordonnée à l'origine 'b' doit être 5. La bonne formule est donc g(x) = -2x + 5."
                 }
+            ],
+            "Thales": [
+                {
+                    id: 1,
+                    title: "Le Gardien des Passerelles (Théorème de Thalès)",
+                    image: "bridge_guardian.png",
+                    question: "Pour franchir le gouffre, le Gardien te demande de calculer la longueur d'une poutre de soutien. On a deux triangles emboîtés en configuration de Thalès. Les droites de soutien sont parallèles. On sait que : AM/AB = AN/AC = MN/BC. Si AM = 3 cm, AB = 9 cm et BC = 12 cm, quelle est la longueur de la poutre MN ?",
+                    options: ["4 cm", "6 cm", "36 cm", "2,5 cm"],
+                    answer: "4 cm",
+                    explanation: "D'après le théorème de Thalès, le rapport de réduction est AM/AB = 3/9 = 1/3. La longueur de la poutre MN est donc le tiers de BC : MN = BC / 3 = 12 / 3 = 4 cm."
+                },
+                {
+                    id: 2,
+                    title: "L'Ombre du Sphinx (Réciproque de Thalès)",
+                    image: "sphinx_shadow.png",
+                    question: "Pour vérifier si un mur est parfaitement parallèle à la porte de la cité, tu mesures les segments depuis le sommet commun A. On te donne : AD = 4, AE = 5, AB = 12, AC = 15. Les droites (DE) et (BC) sont-elles parallèles ?",
+                    options: [
+                        "Oui, car AD/AB = AE/AC = 1/3", 
+                        "Non, car les rapports ne sont pas égaux", 
+                        "Oui, car AD × AE = AB × AC", 
+                        "On ne peut pas savoir"
+                    ],
+                    answer: "Oui, car AD/AB = AE/AC = 1/3",
+                    explanation: "On calcule les rapports : AD/AB = 4/12 = 1/3 et AE/AC = 5/15 = 1/3. Les rapports sont égaux et les points A, D, B et A, E, C sont alignés dans le même ordre. D'après la réciproque du théorème de Thalès, les droites sont bien parallèles."
+                },
+                {
+                    id: 3,
+                    title: "L'Archer du Donjon (Trigonométrie)",
+                    image: "archer_robot.png",
+                    question: "Un archer mécanique te vise depuis le haut d'un mur vertical de 8 mètres. Tu te trouves au sol à 6 mètres du pied du mur. Le triangle formé est rectangle. Quel rapport trigonométrique utiliseras-tu pour déterminer l'angle de visée de l'archer par rapport à la verticale ?",
+                    options: [
+                        "La Tangente (Côté opposé / Côté adjacent)", 
+                        "Le Cosinus (Côté adjacent / Hypoténuse)", 
+                        "Le Sinus (Côté opposé / Hypoténuse)", 
+                        "Le Théorème de Pythagore"
+                    ],
+                    answer: "La Tangente (Côté opposé / Côté adjacent)",
+                    explanation: "Pour trouver un angle quand on connaît les deux côtés de l'angle droit (le côté opposé et le côté adjacent), on utilise la Tangente (TOA : Tangente = Opposé / Adjacent)."
+                },
+                {
+                    id: 4,
+                    title: "Le Grand Miroir (Homothéties)",
+                    image: "magic_mirror.png",
+                    question: "Le miroir magique de la cité applique une homothétie de centre O et de rapport k = -2 à ton bouclier d'une aire de 10 dm². Quelle sera l'aire de l'image de ton bouclier après avoir traversé le portail ?",
+                    options: ["40 dm²", "-20 dm²", "20 dm²", "100 dm²"],
+                    answer: "40 dm²",
+                    explanation: "Dans une homothétie (ou un agrandissement/réduction) de rapport k, les aires sont multipliées par k². Ici, (-2)² = 4. L'aire est donc multipliée par 4 : 10 dm² × 4 = 40 dm². (Une aire est toujours positive, même si le rapport est négatif) !"
+                }
             ]
         };
 
@@ -307,7 +357,7 @@
             document.getElementById('player-level').innerText = gameState.level;
             document.getElementById('hp-bar').style.width = `${gameState.hp}%`;
             document.getElementById('profile-gold').innerText = gameState.gold;
-            document.getElementById('profile-dungeons').innerText = `${gameState.dungeonsCleared}/2`;
+            document.getElementById('profile-dungeons').innerText = `${gameState.dungeonsCleared}/3`;
             
             // Déverrouillage visuel (Temple d'Hermès débloqué si le premier donjon est fait)
             const container = document.getElementById('dungeon-hermes-container');
@@ -332,6 +382,36 @@
                             <div>
                                 <h4 class="font-extrabold text-base text-slate-500">2. Le Temple d'Hermès</h4>
                                 <p class="text-sm text-slate-600 mt-1">Requis : Niveau 2 (Termine le Donjon 1)</p>
+                            </div>
+                        </div>
+                        <span class="text-slate-600 text-sm font-bold">🔒 Verrouillé</span>
+                    </div>
+                `;
+            }
+
+            // Déverrouillage visuel (Cité de Thalès débloqué si le deuxième donjon est fait)
+            const thalesContainer = document.getElementById('dungeon-thales-container');
+            if(gameState.level >= 3) {
+                thalesContainer.innerHTML = `
+                    <button onclick="startDungeon('Thales')" class="w-full bg-slate-900/80 hover:bg-slate-800 p-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/50 flex justify-between items-center active:scale-[0.97] transition-all duration-200 text-left shadow-md cursor-pointer">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-4xl filter drop-shadow">🏛️</span>
+                            <div>
+                                <h4 class="font-extrabold text-base text-slate-100">3. La Cité de Thalès</h4>
+                                <p class="text-sm text-slate-400 mt-1">Géométrie & Transformations</p>
+                            </div>
+                        </div>
+                        <span class="text-amber-400 font-extrabold text-sm shrink-0 ml-2">Entrer →</span>
+                    </button>
+                `;
+            } else {
+                thalesContainer.innerHTML = `
+                    <div class="w-full bg-slate-950/40 opacity-50 p-5 rounded-2xl border-2 border-dashed border-slate-900 flex justify-between items-center select-none">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-4xl opacity-60">🏛️</span>
+                            <div>
+                                <h4 class="font-extrabold text-base text-slate-500">3. La Cité de Thalès</h4>
+                                <p class="text-sm text-slate-600 mt-1">Requis : Niveau 3 (Termine le Donjon 2)</p>
                             </div>
                         </div>
                         <span class="text-slate-600 text-sm font-bold">🔒 Verrouillé</span>
@@ -391,9 +471,13 @@
                     gameState.level = 2; // Passe niveau 2
                     gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 1);
                     rewardMessage = "<br><br>🔓 <strong>Tu as débloqué le Donjon 2 : Le Temple d'Hermès !</strong>";
+                } else if (gameState.currentDungeon === "Hermes" && gameState.level === 2) {
+                    gameState.level = 3; // Passe niveau 3
+                    gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 2);
+                    rewardMessage = "<br><br>🔓 <strong>Tu as débloqué le Donjon 3 : La Cité de Thalès !</strong>";
                 } else {
                     gameState.level += 1;
-                    const clearedIndex = (gameState.currentDungeon === 'Hermes') ? 2 : 1;
+                    const clearedIndex = (gameState.currentDungeon === 'Thales') ? 3 : (gameState.currentDungeon === 'Hermes') ? 2 : 1;
                     gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, clearedIndex);
                 }
                 
@@ -404,7 +488,7 @@
                 // EFFET WOW MAJEUR : Explosion géante continue pour la fin du donjon !
                 triggerEpicVictoryConfetti();
                 
-                const dungeonFriendlyName = (gameState.currentDungeon === 'Hermes') ? "le Temple d'Hermès" : "la Crypte de l'Algèbre";
+                const dungeonFriendlyName = (gameState.currentDungeon === 'Hermes') ? "le Temple d'Hermès" : (gameState.currentDungeon === 'Thales') ? "la Cité de Thalès" : "la Crypte de l'Algèbre";
                 
                 showCustomAlert(
                     "🏆 VICTOIRE !", 
