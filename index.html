@@ -641,7 +641,7 @@
                 } else if (gameState.currentDungeon === "Algorithme" && gameState.level === 5) {
                     gameState.level = 6; // Niveau 6 max !
                     gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 5);
-                    rewardMessage = "<br><br>🎓 <strong>FÉLICITATIONS ! Tu as purifié la Tour de l'Algorithme et terminé le programme de 3ème. Tu as obtenu ton Diplôme d'Entrée en Seconde !</strong>";
+                    rewardMessage = "<br><br>🎓 <strong>INCROYABLE ! Tu as purifié l'intégralité du royaume de Math Quest !</strong><br><br>Tu possèdes désormais des bases de 3ème en béton armé. Tu es officiellement paré et prêt à conquérir la Seconde ! 🚀";
                 } else {
                     gameState.level += 1;
                     const clearedIndex = (gameState.currentDungeon === 'Algorithme') ? 5 : (gameState.currentDungeon === 'Mesures') ? 4 : (gameState.currentDungeon === 'Thales') ? 3 : (gameState.currentDungeon === 'Hermes') ? 2 : 1;
