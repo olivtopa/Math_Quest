@@ -94,15 +94,7 @@
                         <span class="text-emerald-400 font-extrabold text-base shrink-0 ml-2">Entrer →</span>
                     </button>
                     
-                    <div id="dungeon-temple-card" class="w-full bg-slate-950/40 opacity-50 p-5 rounded-2xl border-2 border-dashed border-slate-900 flex justify-between items-center select-none">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-4xl opacity-60">🏛️</span>
-                            <div>
-                                <h4 class="font-extrabold text-base text-slate-500">2. Le Temple d'Hermès</h4>
-                                <p class="text-sm text-slate-600 mt-1">Statistiques & Fonctions</p>
-                            </div>
-                        </div>
-                        <span id="temple-status" class="text-slate-600 text-sm font-bold">🔒 Verrouillé</span>
+                    <div id="dungeon-hermes-container">
                     </div>
                 </div>
             </div>
@@ -319,25 +311,33 @@
             document.getElementById('profile-dungeons').innerText = `${gameState.dungeonsCleared}/2`;
             
             // Déverrouillage visuel (Temple d'Hermès débloqué si le premier donjon est fait)
+            const container = document.getElementById('dungeon-hermes-container');
             if(gameState.dungeonsCleared >= 1) {
-                const card = document.getElementById('dungeon-temple-card');
-                card.className = "w-full bg-slate-900/80 p-5 rounded-2xl border-2 border-slate-800 flex justify-between items-center active:scale-[0.97] transition-all duration-200 text-left shadow-md cursor-pointer";
-                card.onclick = () => startDungeon('Hermes');
-                document.getElementById('temple-status').className = "text-amber-400 font-extrabold text-sm";
-                document.getElementById('temple-status').innerText = "Débloqué";
-                card.querySelector('h4').className = "font-extrabold text-base text-slate-100";
-                card.querySelector('p').className = "text-sm text-slate-400 mt-1";
-                card.querySelector('span').className = "text-4xl opacity-100 filter drop-shadow";
+                container.innerHTML = `
+                    <button onclick="startDungeon('Hermes')" class="w-full bg-slate-900/80 hover:bg-slate-800 p-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/50 flex justify-between items-center active:scale-[0.97] transition-all duration-200 text-left shadow-md cursor-pointer">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-4xl filter drop-shadow">🏛️</span>
+                            <div>
+                                <h4 class="font-extrabold text-base text-slate-100">2. Le Temple d'Hermès</h4>
+                                <p class="text-sm text-slate-400 mt-1">Statistiques & Fonctions</p>
+                            </div>
+                        </div>
+                        <span class="text-amber-400 font-extrabold text-sm shrink-0 ml-2">Entrer →</span>
+                    </button>
+                `;
             } else {
-                // Réinitialise l'état verrouillé au cas où la partie est réinitialisée
-                const card = document.getElementById('dungeon-temple-card');
-                card.className = "w-full bg-slate-950/40 opacity-50 p-5 rounded-2xl border-2 border-dashed border-slate-900 flex justify-between items-center select-none";
-                card.onclick = null;
-                document.getElementById('temple-status').className = "text-slate-600 text-sm font-bold";
-                document.getElementById('temple-status').innerText = "🔒 Verrouillé";
-                card.querySelector('h4').className = "font-extrabold text-base text-slate-500";
-                card.querySelector('p').className = "text-sm text-slate-600 mt-1";
-                card.querySelector('span').className = "text-4xl opacity-60";
+                container.innerHTML = `
+                    <div class="w-full bg-slate-950/40 opacity-50 p-5 rounded-2xl border-2 border-dashed border-slate-900 flex justify-between items-center select-none">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-4xl opacity-60">🏛️</span>
+                            <div>
+                                <h4 class="font-extrabold text-base text-slate-500">2. Le Temple d'Hermès</h4>
+                                <p class="text-sm text-slate-600 mt-1">Statistiques & Fonctions</p>
+                            </div>
+                        </div>
+                        <span class="text-slate-600 text-sm font-bold">🔒 Verrouillé</span>
+                    </div>
+                `;
             }
         }
 
