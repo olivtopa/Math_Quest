@@ -290,17 +290,16 @@
         let pendingCallback = null;
 
         // Charger les statistiques utilisateur depuis le localStorage s'il y en a
-        if(localStorage.getItem('math_quest_save')) {
+        if(localStorage.getItem('math_quest_save_2026')) {
             try {
-                gameState = { ...gameState, ...JSON.parse(localStorage.getItem('math_quest_save')) };
-                updateDashboard();
+                gameState = { ...gameState, ...JSON.parse(localStorage.getItem('math_quest_save_2026')) };
             } catch(e) {
                 console.error("Erreur lors de la lecture de la sauvegarde", e);
             }
         }
 
         function saveGame() {
-            localStorage.setItem('math_quest_save', JSON.stringify(gameState));
+            localStorage.setItem('math_quest_save_2026', JSON.stringify(gameState));
             updateDashboard();
         }
 
@@ -312,7 +311,7 @@
             
             // Déverrouillage visuel (Temple d'Hermès débloqué si le premier donjon est fait)
             const container = document.getElementById('dungeon-hermes-container');
-            if(gameState.dungeonsCleared >= 1) {
+            if(gameState.level >= 2) {
                 container.innerHTML = `
                     <button onclick="startDungeon('Hermes')" class="w-full bg-slate-900/80 hover:bg-slate-800 p-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/50 flex justify-between items-center active:scale-[0.97] transition-all duration-200 text-left shadow-md cursor-pointer">
                         <div class="flex items-center space-x-4">
@@ -332,7 +331,7 @@
                             <span class="text-4xl opacity-60">🏛️</span>
                             <div>
                                 <h4 class="font-extrabold text-base text-slate-500">2. Le Temple d'Hermès</h4>
-                                <p class="text-sm text-slate-600 mt-1">Statistiques & Fonctions</p>
+                                <p class="text-sm text-slate-600 mt-1">Requis : Niveau 2 (Termine le Donjon 1)</p>
                             </div>
                         </div>
                         <span class="text-slate-600 text-sm font-bold">🔒 Verrouillé</span>
@@ -347,6 +346,7 @@
             document.getElementById('app-header').classList.add('flex');
             document.getElementById('app-nav').classList.remove('hidden');
             document.getElementById('app-nav').classList.add('flex');
+            updateDashboard(); // Met à jour l'affichage et l'état des donjons
             switchView('home');
         }
 
@@ -386,11 +386,18 @@
             
             // Si toutes les questions du donjon sont validées
             if (currentQuestionIndex >= questions.length) {
-                gameState.level += 1;
-                gameState.gold += 50; // Récompense d'or
+                let rewardMessage = "";
+                if (gameState.currentDungeon === "Algèbre" && gameState.level === 1) {
+                    gameState.level = 2; // Passe niveau 2
+                    gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 1);
+                    rewardMessage = "<br><br>🔓 <strong>Tu as débloqué le Donjon 2 : Le Temple d'Hermès !</strong>";
+                } else {
+                    gameState.level += 1;
+                    const clearedIndex = (gameState.currentDungeon === 'Hermes') ? 2 : 1;
+                    gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, clearedIndex);
+                }
                 
-                const clearedIndex = (gameState.currentDungeon === 'Hermes') ? 2 : 1;
-                gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, clearedIndex);
+                gameState.gold += 50; // Récompense d'or
                 gameState.hp = 100; // Soigne le joueur
                 saveGame();
                 
@@ -401,7 +408,7 @@
                 
                 showCustomAlert(
                     "🏆 VICTOIRE !", 
-                    `FÉLICITATIONS ! Tu as purifié ${dungeonFriendlyName}, gagné +1 Niveau et remporté 50 pièces d'or !`, 
+                    `FÉLICITATIONS ! Tu as purifié ${dungeonFriendlyName}, tu passes au Niveau ${gameState.level} et remportes 50 pièces d'or !${rewardMessage}`, 
                     "Retourner au campement", 
                     "🏆",
                     () => {
