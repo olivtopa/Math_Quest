@@ -380,49 +380,35 @@
             "Thales": [
                 {
                     id: 1,
-                    title: "Le Gardien des Passerelles (Théorème de Thalès)",
-                    image: "bridge_guardian.png",
-                    question: "Pour franchir le gouffre, le Gardien te demande de calculer la longueur d'une poutre de soutien. On a deux triangles emboîtés en configuration de Thalès. Les droites de soutien sont parallèles. On sait que : AM/AB = AN/AC = MN/BC. Si AM = 3 cm, AB = 9 cm et BC = 12 cm, quelle est la longueur de la poutre MN ?",
-                    options: ["4 cm", "6 cm", "36 cm", "2,5 cm"],
-                    answer: "4 cm",
-                    explanation: "D'après le théorème de Thalès, le rapport de réduction est AM/AB = 3/9 = 1/3. La longueur de la poutre MN est donc le tiers de BC : MN = BC / 3 = 12 / 3 = 4 cm."
+                    title: "La Configuration Triangle (Thalès direct)",
+                    image: "thales_triangle.png",
+                    question: "Regarde le schéma : les droites (BC) et (DE) sont parallèles. On te donne : AD = 3 cm, AB = 9 cm, et AE = 4 cm. Quelle est la longueur du segment [AC] ?",
+                    options: ["12 cm", "10 cm", "7 cm", "1,33 cm"],
+                    answer: "12 cm",
+                    explanation: "D'après Thalès, on a le petit côté sur le grand côté : AD/AB = AE/AC, soit 3/9 = 4/AC. En faisant un produit en croix : AC = (9 × 4) ÷ 3 = 36 ÷ 3 = 12 cm !"
                 },
                 {
                     id: 2,
-                    title: "L'Ombre du Sphinx (Réciproque de Thalès)",
-                    image: "sphinx_shadow.png",
-                    question: "Pour vérifier si un mur est parfaitement parallèle à la porte de la cité, tu mesures les segments depuis le sommet commun A. On te donne : AD = 4, AE = 5, AB = 12, AC = 15. Les droites (DE) et (BC) sont-elles parallèles ?",
-                    options: [
-                        "Oui, car AD/AB = AE/AC = 1/3", 
-                        "Non, car les rapports ne sont pas égaux", 
-                        "Oui, car AD × AE = AB × AC", 
-                        "On ne peut pas savoir"
-                    ],
-                    answer: "Oui, car AD/AB = AE/AC = 1/3",
-                    explanation: "On calcule les rapports : AD/AB = 4/12 = 1/3 et AE/AC = 5/15 = 1/3. Les rapports sont égaux et les points A, D, B et A, E, C sont alignés dans le même ordre. D'après la réciproque du théorème de Thalès, les droites sont bien parallèles."
+                    title: "La Configuration Papillon",
+                    image: "thales_butterfly.png",
+                    question: "Les droites bleues et rouges se croisent en un point central O. Les bases sont parallèles. Si le petit triangle a un côté de 2 cm et le grand triangle a le côté correspondant de 6 cm, par combien ont été multipliées toutes les longueurs du grand triangle ?",
+                    options: ["Par 3 (Agrandissement)", "Par 4", "Par 2", "Par 1,5"],
+                    answer: "Par 3 (Agrandissement)",
+                    explanation: "C'est le coefficient d'agrandissement ! On passe de 2 cm à 6 cm en multipliant par 3 ($6 \\div 2 = 3$). Toutes les longueurs du grand triangle sont 3 fois plus grandes."
                 },
                 {
                     id: 3,
-                    title: "L'Archer du Donjon (Trigonométrie)",
-                    image: "archer_robot.png",
-                    question: "Un archer mécanique te vise depuis le haut d'un mur vertical de 8 mètres. Tu te trouves au sol à 6 mètres du pied du mur. Le triangle formé est rectangle. Quel rapport trigonométrique utiliseras-tu pour déterminer l'angle de visée de l'archer par rapport à la verticale ?",
+                    title: "Le Piège de la Réciproque",
+                    image: "thales_reciproque.png",
+                    question: "Sur ton écran, les mesures affichées donnent des rapports différents des deux côtés de la figure croisée (par exemple 0,4 d'un côté et 0,5 de l'autre). Que peux-nous en conclure pour les deux droites principales ?",
                     options: [
-                        "La Tangente (Côté opposé / Côté adjacent)", 
-                        "Le Cosinus (Côté adjacent / Hypoténuse)", 
-                        "Le Sinus (Côté opposé / Hypoténuse)", 
-                        "Le Théorème de Pythagore"
+                        "Elles ne sont PAS parallèles (Contraposée)", 
+                        "Elles sont parfaitement parallèles", 
+                        "On ne peut rien en conclure", 
+                        "La figure est impossible"
                     ],
-                    answer: "La Tangente (Côté opposé / Côté adjacent)",
-                    explanation: "Pour trouver un angle quand on connaît les deux côtés de l'angle droit (le côté opposé et le côté adjacent), on utilise la Tangente (TOA : Tangente = Opposé / Adjacent)."
-                },
-                {
-                    id: 4,
-                    title: "Le Grand Miroir (Homothéties)",
-                    image: "magic_mirror.png",
-                    question: "Le miroir magique de la cité applique une homothétie de centre O et de rapport k = -2 à ton bouclier d'une aire de 10 dm². Quelle sera l'aire de l'image de ton bouclier après avoir traversé le portail ?",
-                    options: ["40 dm²", "-20 dm²", "20 dm²", "100 dm²"],
-                    answer: "40 dm²",
-                    explanation: "Dans une homothétie (ou un agrandissement/réduction) de rapport k, les aires sont multipliées par k². Ici, (-2)² = 4. L'aire est donc multipliée par 4 : 10 dm² × 4 = 40 dm². (Une aire est toujours positive, même si le rapport est négatif) !"
+                    answer: "Elles ne sont PAS parallèles (Contraposée)",
+                    explanation: "Si les rapports calculés ne sont pas égaux, le théorème de Thalès nous dit que les droites ne peuvent pas être parallèles. C'est la contraposée du théorème !"
                 }
             ],
             "Mesures": [
