@@ -793,8 +793,11 @@
             const container = document.getElementById('options-container');
             container.innerHTML = '';
             
+            // Mélanger les options pour éviter que la bonne réponse soit toujours dans la même position
+            const shuffledOptions = [...currentQ.options].sort(() => Math.random() - 0.5);
+            
             // Génération des boutons de réponse larges
-            currentQ.options.forEach(opt => {
+            shuffledOptions.forEach(opt => {
                 const btn = document.createElement('button');
                 btn.className = "w-full bg-slate-900/90 hover:bg-slate-800 active:scale-[0.97] py-4.5 px-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/40 text-base font-extrabold text-slate-200 transition-all duration-150 text-left shadow-md flex justify-between items-center";
                 btn.innerHTML = `<span>${opt}</span><span class="text-slate-500 text-xs font-bold">Sélectionner</span>`;
