@@ -1,4 +1,4 @@
-const CACHE_NAME = 'math-quest-v3';
+const CACHE_NAME = 'math-quest-v4';
 const ASSETS = [
   'index.html',
   'manifest.json',
