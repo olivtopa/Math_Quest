@@ -384,35 +384,44 @@
             "Thales": [
                 {
                     id: 1,
-                    title: "La Configuration Triangle (Thalès direct)",
+                    title: "Niveau 1 : Configuration Classique (Emboîtée)",
                     image: "thales_triangle.png",
-                    question: "Regarde le schéma : les droites (BC) et (DE) sont parallèles. On te donne : AD = 3 cm, AB = 9 cm, et AE = 4 cm. Quelle est la longueur du segment [AC] ?",
+                    question: "Dans la figure ci-dessous, les droites (BC) et (DE) sont parallèles. On te donne : AD = 3 cm, AB = 9 cm, et AE = 4 cm. Quelle est la longueur du segment [AC] ?",
                     options: ["12 cm", "10 cm", "7 cm", "1,33 cm"],
                     answer: "12 cm",
-                    explanation: "D'après Thalès, on a le petit côté sur le grand côté : AD/AB = AE/AC, soit 3/9 = 4/AC. En faisant un produit en croix : AC = (9 × 4) ÷ 3 = 36 ÷ 3 = 12 cm !"
+                    explanation: "D'après le théorème de Thalès, on compare les côtés correspondants du petit triangle ADE et du grand triangle ABC : AD/AB = AE/AC. Ce qui donne 3/9 = 4/AC. Par un produit en croix : AC = (9 × 4) ÷ 3 = 12 cm. Simple et direct !"
                 },
                 {
                     id: 2,
-                    title: "La Configuration Papillon",
+                    title: "Niveau 2 : Configuration Papillon (Sablier)",
                     image: "thales_butterfly.png",
-                    question: "Les droites bleues et rouges se croisent en un point central O. Les bases sont parallèles. Si le petit triangle a un côté de 2 cm et le grand triangle a le côté correspondant de 6 cm, par combien ont été multipliées toutes les longueurs du grand triangle ?",
-                    options: ["Par 3 (Agrandissement)", "Par 4", "Par 2", "Par 1,5"],
-                    answer: "Par 3 (Agrandissement)",
-                    explanation: "C'est le coefficient d'agrandissement ! On passe de 2 cm à 6 cm en multipliant par 3 ($6 \\div 2 = 3$). Toutes les longueurs du grand triangle sont 3 fois plus grandes."
+                    question: "Dans cette configuration 'papillon' croisée en O, les droites (AB) et (CD) sont parallèles. Le côté du petit triangle mesure 4 cm et le côté correspondant du grand triangle mesure 12 cm. Si un autre côté du petit triangle mesure 3 cm, quelle est la longueur du côté correspondant du grand triangle ?",
+                    options: ["9 cm", "8 cm", "6 cm", "12 cm"],
+                    answer: "9 cm",
+                    explanation: "L'échelle (le coefficient d'agrandissement) est facile à trouver ! On passe du petit au grand côté en multipliant par 3 (car 12 ÷ 4 = 3). Ainsi, pour l'autre côté, il suffit de faire 3 cm × 3 = 9 cm. Tu as trouvé l'échelle intuitivement !"
                 },
                 {
                     id: 3,
-                    title: "Le Piège de la Réciproque",
-                    image: "thales_reciproque.png",
-                    question: "Sur ton écran, les mesures affichées donnent des rapports différents des deux côtés de la figure croisée (par exemple 0,4 d'un côté et 0,5 de l'autre). Que peux-nous en conclure pour les deux droites principales ?",
+                    title: "Niveau 3 (Étape 1) : Éviter le piège !",
+                    image: "thales_triangle.png",
+                    question: "Attention, piège classique ! Sur la figure ci-dessous, un point M est sur le segment [AB] tel que AM = 3 cm et MB = 2 cm. Pour appliquer le théorème de Thalès, quelle est la longueur du côté complet [AB] du grand triangle ?",
                     options: [
-                        "Elles ne sont PAS parallèles (Contraposée)", 
-                        "Elles sont parfaitement parallèles", 
-                        "On ne peut rien en conclure", 
-                        "La figure est impossible"
+                        "AB = 5 cm (car AB = AM + MB)",
+                        "AB = 3 cm (la longueur AM)",
+                        "AB = 2 cm (la longueur MB)",
+                        "AB = 6 cm (car AB = AM × MB)"
                     ],
-                    answer: "Elles ne sont PAS parallèles (Contraposée)",
-                    explanation: "Si les rapports calculés ne sont pas égaux, le théorème de Thalès nous dit que les droites ne peuvent pas être parallèles. C'est la contraposée du théorème !"
+                    answer: "AB = 5 cm (car AB = AM + MB)",
+                    explanation: "C'est le piège le plus fréquent ! Le théorème de Thalès compare les côtés du petit triangle (AM) avec ceux du GRAND triangle (AB). On doit donc additionner les morceaux : AB = AM + MB = 3 + 2 = 5 cm. Garde bien cela en tête !"
+                },
+                {
+                    id: 4,
+                    title: "Niveau 3 (Étape 2) : Le calcul final !",
+                    image: "thales_triangle.png",
+                    question: "Bien évité ! Maintenant, faisons le calcul complet : avec AM = 3 cm, MB = 2 cm (donc AB = 5 cm), et AN = 6 cm, calcule la longueur de [AC] sachant que (MN) et (BC) sont parallèles.",
+                    options: ["10 cm", "9 cm", "4 cm", "15 cm"],
+                    answer: "10 cm",
+                    explanation: "D'après Thalès, on a AM/AB = AN/AC. En remplaçant par les valeurs : 3/5 = 6/AC. Le produit en croix donne AC = (5 × 6) ÷ 3 = 30 ÷ 3 = 10 cm. Le piège est totalement désamorcé !"
                 }
             ],
             "Mesures": [
