@@ -3,28 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Math Quest</title>
+    <title>Math Quest - Refonte Globale 3ème / Seconde</title>
+    <!-- Tailwind CSS v4 & Google Fonts -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Math Quest">
     <link rel="apple-touch-icon" href="icon.png">
+    
     <style>
-        /* Style personnalisé pour l'ambiance Gaming Sombre */
         body {
-            background-color: #0b0f19; /* Arrière-plan plus sombre pour un meilleur contraste */
-            color: #f8fafc; /* Slate 50 */
+            font-family: 'Outfit', sans-serif;
+            background-color: #080c14;
+            color: #f8fafc;
             -webkit-tap-highlight-color: transparent;
         }
-        /* Fix pour les iPhone avec encoche et barres de navigation mobiles */
+        .font-title {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        /* Custom Glassmorphism styles */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px border-slate-800/80;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.45);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 10px 20px -10px rgba(16, 185, 129, 0.15);
+        }
+        /* Tab navigation bottom padding */
         nav {
-            padding-bottom: calc(14px + env(safe-area-inset-bottom)) !important;
+            padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
         }
 
-        /* --- ANIMATIONS DE COMBAT --- */
-        /* Secousse + flash blanc/rouge du monstre */
+        /* --- ANIMATIONS --- */
         .animate-monster-hit {
             animation: monster-hit-keyframes 0.45s ease-in-out;
         }
@@ -37,7 +63,6 @@
             80% { transform: translate(-2px, -2px) scale(1); }
         }
 
-        /* Chute et disparition du monstre vaincu */
         .animate-monster-die {
             animation: monster-die-keyframes 0.75s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
         }
@@ -58,31 +83,16 @@
             opacity: 0;
             z-index: 10;
         }
-
-        /* Tranchant d'épée diagonal (Slash) */
         .animate-slash {
             animation: slash-keyframes 0.4s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
         }
         @keyframes slash-keyframes {
-            0% {
-                transform: translate(-100%, 100%) rotate(-45deg);
-                opacity: 0;
-            }
-            25% {
-                opacity: 1;
-            }
-            60% {
-                opacity: 1;
-                background-color: rgba(255, 255, 255, 0.95);
-                box-shadow: 0 0 30px 10px rgba(16, 185, 129, 0.8), 0 0 15px 3px rgba(255, 255, 255, 0.9);
-            }
-            100% {
-                transform: translate(100%, -100%) rotate(-45deg);
-                opacity: 0;
-            }
+            0% { transform: translate(-100%, 100%) rotate(-45deg); opacity: 0; }
+            25% { opacity: 1; }
+            60% { opacity: 1; background-color: rgba(255, 255, 255, 0.95); box-shadow: 0 0 30px 10px rgba(16, 185, 129, 0.8), 0 0 15px 3px rgba(255, 255, 255, 0.9); }
+            100% { transform: translate(100%, -100%) rotate(-45deg); opacity: 0; }
         }
 
-        /* Secousse de l'écran lors des dégâts reçus par le joueur */
         .animate-screen-shake {
             animation: screen-shake-keyframes 0.5s ease-in-out;
         }
@@ -95,7 +105,6 @@
             50% { transform: translate(-8px, 2px); }
         }
 
-        /* Flash de dégâts rouge sur tout l'écran */
         #damage-flash-overlay {
             position: fixed;
             inset: 0;
@@ -113,157 +122,410 @@
         }
     </style>
 </head>
-<body class="flex flex-col h-dvh justify-between overflow-hidden font-sans">
+<body class="flex flex-col h-dvh justify-between overflow-hidden">
     <div id="damage-flash-overlay"></div>
 
-    <header id="app-header" class="hidden bg-slate-900/90 backdrop-blur-md p-5 shadow-lg border-b border-slate-800 justify-between items-center shrink-0">
+    <!-- App Header -->
+    <header id="app-header" class="hidden bg-slate-950/90 backdrop-blur-md px-5 py-4 shadow-lg border-b border-slate-900 justify-between items-center shrink-0 z-30">
         <div class="flex items-center space-x-3">
-            <span class="text-3xl">⚔️</span>
+            <span class="text-2xl filter drop-shadow">⚔️</span>
             <div>
-                <h1 class="text-base font-extrabold text-emerald-400 tracking-wider">MATH QUEST</h1>
-                <p class="text-sm text-slate-400 font-medium">Niveau <span id="player-level">1</span></p>
+                <h1 class="text-sm font-black tracking-widest text-emerald-400 font-title">MATH QUEST</h1>
+                <p class="text-[10px] text-slate-400 uppercase font-semibold">Niveau <span id="player-level">1</span></p>
             </div>
         </div>
-        <div class="flex items-center space-x-3 bg-slate-950 px-4 py-2 rounded-full border border-slate-800 shadow-inner">
-            <span id="hp-label" class="text-emerald-500 text-sm font-black tracking-wider">HP</span>
-            <div class="w-24 bg-slate-800 h-3 rounded-full overflow-hidden border border-slate-700">
-                <div id="hp-bar" class="bg-gradient-to-r from-emerald-500 to-green-400 h-full transition-all duration-300" style="width: 100%;"></div>
+        <div class="flex items-center space-x-4">
+            <!-- Gold count -->
+            <div class="flex items-center space-x-1.5 bg-slate-900 px-3 py-1.5 rounded-full border border-slate-800">
+                <span class="text-amber-400 text-xs">🪙</span>
+                <span id="header-gold" class="text-xs font-bold text-slate-200">0</span>
+            </div>
+            <!-- HP bar -->
+            <div class="flex items-center space-x-2 bg-slate-900 px-3 py-1.5 rounded-full border border-slate-800">
+                <span id="hp-label" class="text-emerald-500 text-[10px] font-black tracking-wider uppercase">HP</span>
+                <div class="w-16 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700">
+                    <div id="hp-bar" class="bg-gradient-to-r from-emerald-500 to-emerald-400 h-full transition-all duration-300" style="width: 100%;"></div>
+                </div>
             </div>
         </div>
     </header>
 
-    <main class="flex-1 overflow-y-auto p-5 space-y-6">
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto p-4 space-y-6">
         
-        <!-- Page de garde / Landing Page -->
+        <!-- View: Landing Page -->
         <section id="view-landing" class="h-full flex flex-col justify-between py-6 text-center">
             <div class="space-y-6 my-auto">
-                <div class="w-full h-72 bg-slate-950 rounded-2xl overflow-hidden border-2 border-emerald-500/30 shadow-xl relative">
-                    <img src="math_quest_banner.png" 
-                         alt="Math Quest Title Image" 
-                         class="w-full h-full object-cover opacity-80">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-transparent to-transparent"></div>
+                <div class="w-full max-w-sm mx-auto h-64 bg-slate-950 rounded-3xl overflow-hidden border border-emerald-500/20 shadow-xl relative">
+                    <img src="math_quest_banner.png" alt="Math Quest Banner" class="w-full h-full object-cover opacity-80">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#080c14] via-transparent to-transparent"></div>
                     <div class="absolute bottom-4 left-0 right-0">
-                        <span class="text-xs font-bold tracking-widest text-emerald-400 bg-slate-950/80 px-3 py-1 rounded-full uppercase">Édition Spéciale Seconde</span>
+                        <span class="text-[10px] font-black tracking-widest text-emerald-400 bg-slate-950/80 px-3 py-1 rounded-full uppercase border border-emerald-500/10">Édition Spéciale Seconde</span>
                     </div>
                 </div>
 
                 <div class="space-y-3">
-                    <h1 class="text-3xl font-black tracking-widest text-emerald-400 drop-shadow-md">MATH QUEST</h1>
-                    <p class="text-slate-300 text-sm max-w-xs mx-auto leading-relaxed">
-                        Le destin de ton année de Seconde se joue ici. Purifie les donjons du programme de 3ème et réveille le héros qui est en toi !
+                    <h1 class="text-4xl font-black tracking-wider text-emerald-400 font-title drop-shadow-md">MATH QUEST</h1>
+                    <p class="text-slate-400 text-sm max-w-xs mx-auto leading-relaxed">
+                        Le jeu de rôle d'apprentissage ultime pour conquérir le programme de 3ème et briller en Seconde.
                     </p>
                 </div>
             </div>
 
-            <div class="space-y-3 shrink-0">
-                <button onclick="startGame()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-lg p-5 rounded-2xl shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-transform">
-                    COMMENCER L'AVENTURE
+            <div class="space-y-3 shrink-0 max-w-sm mx-auto w-full">
+                <button onclick="startGame()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-base py-4 rounded-2xl shadow-lg shadow-emerald-500/10 active:scale-[0.98] transition-transform cursor-pointer">
+                    COMMENCER L'AVENTURE ⚔️
                 </button>
-                <p class="text-xs text-slate-500">Aucune installation requise • Prêt pour iPhone</p>
+                <p class="text-[10px] text-slate-500 font-medium">Entrée en Seconde préparée • Révision active 2026</p>
             </div>
         </section>
-        
+
+        <!-- View: Home / Realms / Quests -->
         <section id="view-home" class="hidden space-y-6">
-            <div class="bg-gradient-to-br from-emerald-950/80 via-emerald-900/40 to-slate-900/90 p-6 rounded-2xl border-2 border-emerald-500/40 shadow-xl backdrop-blur-sm">
-                <h2 class="text-xl font-black text-emerald-300 tracking-wide">Prêt pour l'aventure ?</h2>
-                <p class="text-sm leading-relaxed text-slate-200 mt-2">Explore les donjons du programme de 3ème et prépare ton entrée en Seconde.</p>
+            <!-- Hero banner -->
+            <div class="bg-gradient-to-br from-emerald-950/50 via-slate-900/80 to-slate-950/90 p-5 rounded-2xl border border-emerald-500/20 shadow-lg relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl"></div>
+                <h2 class="text-lg font-black text-emerald-300 font-title">Royaumes du Savoir</h2>
+                <p class="text-xs text-slate-300 mt-1 leading-relaxed">Progresse étape par étape à travers les 4 piliers indispensables pour réussir ton entrée au lycée.</p>
             </div>
 
-            <div class="space-y-4">
-                <h3 class="text-sm font-bold tracking-widest text-slate-400 uppercase">Les Donjons</h3>
-                
-                <div class="space-y-4">
-                    <button onclick="startDungeon('Algèbre')" class="w-full bg-slate-900/80 hover:bg-slate-800 p-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/50 flex justify-between items-center active:scale-[0.97] transition-all duration-200 text-left shadow-md">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-4xl filter drop-shadow">💀</span>
-                            <div>
-                                <h4 class="font-extrabold text-base text-slate-100">1. La Crypte de l'Algèbre</h4>
-                                <p class="text-sm text-slate-400 mt-1">Arithmétique & Calcul littéral</p>
+            <!-- Realms and Quests -->
+            <div class="space-y-6">
+                <!-- Realm 1: Algèbre -->
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span>
+                        <h3 class="text-xs font-black text-violet-400 uppercase tracking-widest font-title">1. Citadelle de l'Algèbre</h3>
+                    </div>
+                    <div class="grid grid-cols-1 gap-3">
+                        <button onclick="startDungeon('Algèbre', 0)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-violet-500/40 flex justify-between items-center">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-3xl">🔑</span>
+                                <div>
+                                    <h4 class="font-extrabold text-sm text-slate-100">Décomposition de Nombres</h4>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Produit de facteurs premiers</p>
+                                </div>
                             </div>
-                        </div>
-                        <span class="text-emerald-400 font-extrabold text-base shrink-0 ml-2">Entrer →</span>
-                    </button>
-                    
-                    <div id="dungeon-hermes-container">
+                            <span class="text-violet-400 font-extrabold text-xs">Combattre →</span>
+                        </button>
+                        <button onclick="startDungeon('Algèbre', 1)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-violet-500/40 flex justify-between items-center">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-3xl">💥</span>
+                                <div>
+                                    <h4 class="font-extrabold text-sm text-slate-100">Calcul Littéral & Distribution</h4>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Développer des expressions simples</p>
+                                </div>
+                            </div>
+                            <span class="text-violet-400 font-extrabold text-xs">Combattre →</span>
+                        </button>
+                        <button id="quest-algo-3" onclick="startDungeon('Algèbre', 2)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-violet-500/40 flex justify-between items-center">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-3xl">🌀</span>
+                                <div>
+                                    <h4 class="font-extrabold text-sm text-slate-100">Identités Remarquables</h4>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Calcul rapide du second degré</p>
+                                </div>
+                            </div>
+                            <span class="text-violet-400 font-extrabold text-xs">Combattre →</span>
+                        </button>
+                        <button onclick="startDungeon('Algèbre', 3)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-violet-500/40 flex justify-between items-center">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-3xl">🔒</span>
+                                <div>
+                                    <h4 class="font-extrabold text-sm text-slate-100">Équations-Produits</h4>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Résoudre A(x) * B(x) = 0</p>
+                                </div>
+                            </div>
+                            <span class="text-violet-400 font-extrabold text-xs">Combattre →</span>
+                        </button>
                     </div>
-                    <div id="dungeon-thales-container">
+                </div>
+
+                <!-- Realm 2: Géométrie -->
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        <h3 class="text-xs font-black text-emerald-400 uppercase tracking-widest font-title">2. Arène de la Géométrie</h3>
                     </div>
-                    <div id="dungeon-mesures-container">
+                    <div id="dungeon-geometry-container" class="grid grid-cols-1 gap-3">
+                        <!-- Locked state if level < 2, updated in JS -->
                     </div>
-                    <div id="dungeon-algo-container">
+                </div>
+
+                <!-- Realm 3: Probas / Stats -->
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                        <h3 class="text-xs font-black text-amber-400 uppercase tracking-widest font-title">3. Sanctuaire des Probas-Stats</h3>
+                    </div>
+                    <div id="dungeon-stats-container" class="grid grid-cols-1 gap-3">
+                        <!-- Locked state if level < 3, updated in JS -->
+                    </div>
+                </div>
+
+                <!-- Realm 4: Algorithmique -->
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                        <h3 class="text-xs font-black text-blue-400 uppercase tracking-widest font-title">4. Guilde d'Algorithmique</h3>
+                    </div>
+                    <div id="dungeon-algo-container" class="grid grid-cols-1 gap-3">
+                        <!-- Locked state if level < 4, updated in JS -->
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Vue du combat / jeu -->
+        <!-- View: Combat / Gameplay -->
         <section id="view-game" class="hidden min-h-full flex flex-col justify-between py-2">
-            <!-- Entête de combat : Vague et points de vie du monstre symbolique -->
             <div class="flex justify-between items-center px-1 mb-2 shrink-0">
-                <span id="combat-wave-title" class="text-sm font-black text-emerald-400 tracking-wider">MONSTRE 1/4</span>
-                <span id="monster-hp-heart" class="text-red-400 text-sm font-bold flex items-center gap-1">❤️ Monstre Actif</span>
+                <span id="combat-wave-title" class="text-xs font-black text-emerald-400 tracking-wider uppercase font-title">MONSTRE 1/4</span>
+                <span id="monster-hp-heart" class="text-red-400 text-xs font-bold flex items-center gap-1 select-none">❤️ Monstre Actif</span>
             </div>
 
-            <!-- Énoncé de la question et illustration -->
-            <div class="bg-slate-900/80 rounded-2xl border-2 border-slate-800 shadow-xl flex flex-col shrink-0 p-5">
-                <!-- Cadre de l'illustration (format carré parfait 1:1 pour afficher tout le dessin) -->
-                <div onclick="zoomImage()" class="w-64 h-64 sm:w-80 sm:h-80 shrink-0 bg-slate-950 mx-auto rounded-xl overflow-hidden border-2 border-slate-800 hover:border-emerald-500/40 shadow-2xl flex items-center justify-center relative cursor-zoom-in group transition-all duration-200">
-                    <div id="monster-defeat-text" class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 opacity-0 transition-opacity duration-300 pointer-events-none z-0">
+            <!-- Question Panel -->
+            <div class="bg-slate-950/80 rounded-2xl border border-slate-800/80 shadow-2xl flex flex-col shrink-0 p-4 relative overflow-hidden">
+                <!-- Graphic panel (SVG drawing area or monster image depending on content) -->
+                <div id="combat-graphic-container" class="w-64 h-64 sm:w-72 sm:h-72 shrink-0 bg-slate-900/60 mx-auto rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center relative shadow-inner">
+                    <div id="monster-defeat-text" class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 opacity-0 transition-opacity duration-300 pointer-events-none z-20">
                         <span class="text-3xl">🌟</span>
-                        <span class="text-sm font-black text-emerald-400 tracking-wider uppercase mt-2">Bravo !</span>
-                        <span class="text-xs font-bold text-slate-300 mt-1 leading-relaxed">Tu as réussi cette épreuve !</span>
+                        <span class="text-sm font-black text-emerald-400 tracking-wider uppercase mt-2 font-title">Bravo !</span>
+                        <span class="text-xs font-bold text-slate-300 mt-1 leading-relaxed">Tu as vaincu l'épreuve !</span>
                     </div>
-                    <img id="monster-image" src="" alt="Monstre" class="w-full h-full object-cover opacity-85 animate-pulse transition-all duration-300 z-10">
-                    <div id="slash-overlay" class="pointer-events-none z-20"></div>
-                    <!-- Indicateur de zoom -->
-                    <div class="absolute bottom-2 right-2 bg-slate-950/80 text-emerald-400 text-[10px] font-black px-2 py-1 rounded-md border border-emerald-500/20 opacity-60 group-hover:opacity-100 transition-opacity z-20 flex items-center gap-1 select-none">
-                        <span>🔍</span> ZOOM
-                    </div>
+                    
+                    <img id="monster-image" src="" alt="Monstre" class="w-full h-full object-cover opacity-85 transition-all duration-300 z-10">
+                    <!-- SVG Overlay for dynamic geometry diagram overlays -->
+                    <svg id="combat-svg-overlay" class="absolute inset-0 w-full h-full pointer-events-none z-15 hidden"></svg>
+                    
+                    <div id="slash-overlay" class="pointer-events-none z-25"></div>
                 </div>
                 
                 <div class="pt-4 text-center">
-                    <span id="monster-title" class="text-xs font-bold tracking-widest text-emerald-400 uppercase"></span>
-                    <p id="question-text" class="text-xl font-extrabold mt-2 text-slate-100 leading-relaxed"></p>
+                    <span id="monster-title" class="text-xs font-bold tracking-widest text-emerald-400 uppercase font-title"></span>
+                    <p id="question-text" class="text-base font-extrabold mt-2 text-slate-100 leading-relaxed"></p>
                 </div>
             </div>
 
-            <!-- Conteneur des choix de réponses -->
+            <!-- Answer Options -->
             <div id="options-container" class="space-y-3 mt-4 shrink-0">
+                <!-- Answer buttons generated dynamically -->
             </div>
 
-            <!-- Écran de Feedback de Combat (Invisible par défaut) -->
-            <div id="feedback-panel" class="hidden bg-slate-900 border-2 rounded-2xl p-6 shadow-2xl space-y-4 my-auto">
+            <!-- Feedback Panel -->
+            <div id="feedback-panel" class="hidden bg-slate-900/90 border border-emerald-500/30 rounded-2xl p-5 shadow-2xl space-y-4 my-auto relative">
                 <div class="flex items-center space-x-3">
-                    <span id="feedback-icon" class="text-3xl">✨</span>
-                    <h3 id="feedback-title" class="text-lg font-black tracking-wide">Coup critique !</h3>
+                    <span id="feedback-icon" class="text-2xl">✨</span>
+                    <h3 id="feedback-title" class="text-sm font-black tracking-wide font-title text-emerald-400">Coup critique !</h3>
                 </div>
-                <p id="feedback-message" class="text-sm text-slate-300 leading-relaxed"></p>
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">Explication magique</span>
-                    <p id="feedback-explanation" class="text-sm text-slate-200 leading-relaxed"></p>
+                <p id="feedback-message" class="text-xs text-slate-300 leading-relaxed"></p>
+                
+                <!-- Visuelle Anti-Piège / Proof Sheet -->
+                <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800">
+                    <span class="text-[10px] font-black text-violet-400 uppercase tracking-widest block mb-2 font-title flex items-center gap-1">🛡️ Fiche Anti-Piège & Rigoureuse</span>
+                    <div id="feedback-explanation" class="text-xs text-slate-200 leading-relaxed space-y-1.5">
+                        <!-- Step by step proof layout -->
+                    </div>
                 </div>
-                <button id="feedback-next-btn" onclick="nextCombatStep()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 py-4 px-5 rounded-2xl font-black text-base transition-all duration-150 active:scale-[0.98] shadow-lg shadow-emerald-500/20 text-center block">
+                
+                <button id="feedback-next-btn" onclick="nextCombatStep()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 py-3.5 px-5 rounded-xl font-black text-sm transition-all duration-150 active:scale-[0.98] shadow-md shadow-emerald-500/10 text-center block cursor-pointer">
                     Continuer le combat →
                 </button>
             </div>
         </section>
 
-        <!-- Profil de l'aventurier -->
-        <section id="view-profile" class="hidden space-y-6">
-            <div class="bg-slate-900/80 p-6 rounded-2xl border-2 border-slate-800 text-center shadow-xl">
-                <div class="w-20 h-20 bg-emerald-500 rounded-full mx-auto flex items-center justify-center text-3xl font-black text-slate-900 shadow-md">
-                    N
-                </div>
-                <h3 class="font-extrabold text-lg mt-3 text-slate-100">Aventurier</h3>
-                <p class="text-sm text-slate-400 mt-1">En route vers la Seconde en 2026</p>
-                <div class="mt-6 pt-6 border-t border-slate-800 flex justify-around text-center">
-                    <div>
-                        <span class="block text-2xl font-black text-emerald-400" id="profile-gold">0</span>
-                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Or Gagné</span>
+        <!-- View: Rituel 45 Minutes -->
+        <section id="view-rituel" class="hidden space-y-6">
+            <div class="bg-gradient-to-br from-indigo-950/40 via-slate-900/80 to-slate-950/90 p-5 rounded-2xl border border-indigo-500/20 shadow-lg">
+                <h2 class="text-lg font-black text-indigo-300 font-title flex items-center gap-2">⏱️ Le Rituel Quotidien de 45 min</h2>
+                <p class="text-xs text-slate-300 mt-1 leading-relaxed">Une méthode scientifique prouvée pour ancrer les réflexes du Brevet et préparer la Seconde. Fais-la chaque jour !</p>
+            </div>
+
+            <!-- Stages grid -->
+            <div class="space-y-4">
+                <!-- Step 1: Flashcards -->
+                <div class="glass-card p-4 rounded-xl border border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="space-y-1">
+                        <span class="text-xs font-black text-indigo-400 uppercase tracking-wider font-title">Étape 1 (10 Min)</span>
+                        <h4 class="font-extrabold text-sm text-slate-100">Flashcards d'Apprentissage</h4>
+                        <p class="text-[11px] text-slate-400">Rappels actifs de formules clés, définitions et astuces.</p>
                     </div>
-                    <div>
-                        <span class="block text-2xl font-black text-indigo-400" id="profile-dungeons">0/1</span>
-                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Donjons</span>
+                    <button onclick="startRituelStage('flashcards')" class="w-full md:w-auto px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition-all cursor-pointer">
+                        Lancer (Flashcards) →
+                    </button>
+                </div>
+
+                <!-- Step 2: Speed calculations -->
+                <div class="glass-card p-4 rounded-xl border border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="space-y-1">
+                        <span class="text-xs font-black text-amber-400 uppercase tracking-wider font-title">Étape 2 (15 Min)</span>
+                        <h4 class="font-extrabold text-sm text-slate-100">Calcul Mental & Littéral Express</h4>
+                        <p class="text-[11px] text-slate-400">Time-attack : réponds à un maximum de calculs en 60 secondes.</p>
+                    </div>
+                    <button onclick="startRituelStage('mental')" class="w-full md:w-auto px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-slate-950 font-black text-xs rounded-xl transition-all cursor-pointer">
+                        Lancer (Calcul Express) →
+                    </button>
+                </div>
+
+                <!-- Step 3: Geometry problem solving -->
+                <div class="glass-card p-4 rounded-xl border border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="space-y-1">
+                        <span class="text-xs font-black text-emerald-400 uppercase tracking-wider font-title">Étape 3 (20 Min)</span>
+                        <h4 class="font-extrabold text-sm text-slate-100">Résolution Pratique & Géométrique</h4>
+                        <p class="text-[11px] text-slate-400">Calculer des longueurs de solides, de trigonométrie et de Thalès.</p>
+                    </div>
+                    <button onclick="startRituelStage('geometry')" class="w-full md:w-auto px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black text-xs rounded-xl transition-all cursor-pointer">
+                        Lancer (Géométrie) →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Rituel Gameplay Area (Dynamic overlay when active) -->
+            <div id="rituel-active-area" class="hidden fixed inset-0 bg-slate-950/98 z-40 flex flex-col justify-between p-5 overflow-y-auto">
+                <div class="flex justify-between items-center pb-4 border-b border-slate-900 shrink-0">
+                    <span id="rituel-title" class="text-xs font-black text-indigo-400 uppercase tracking-wider font-title">Rituel Actif</span>
+                    <span id="rituel-timer" class="text-xs font-bold text-rose-400 bg-rose-950/50 border border-rose-900 px-3 py-1 rounded-full">Temps : 60s</span>
+                </div>
+
+                <!-- Central gameplay card -->
+                <div class="my-auto py-6 max-w-sm mx-auto w-full">
+                    <div id="rituel-card-content" class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 text-center space-y-6 shadow-xl">
+                        <!-- Dynamic content filled by JS -->
+                    </div>
+                </div>
+
+                <!-- Footer button to cancel / close -->
+                <div class="pt-4 border-t border-slate-900 text-center shrink-0">
+                    <button onclick="stopRituel()" class="text-xs font-bold text-slate-500 hover:text-slate-300">Quitter le Rituel</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- View: Interactive Widgets -->
+        <section id="view-widgets" class="hidden space-y-6">
+            <div class="bg-gradient-to-br from-teal-950/40 via-slate-900/80 to-slate-950/90 p-5 rounded-2xl border border-teal-500/20 shadow-lg">
+                <h2 class="text-lg font-black text-teal-300 font-title">🔧 Widgets Interactifs & Laboratoire</h2>
+                <p class="text-xs text-slate-300 mt-1 leading-relaxed">Manipule en temps réel les concepts abstraits du collège pour forger des images mentales indestructibles.</p>
+            </div>
+
+            <!-- Widgets List / Selectors -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Widget 1: Graphique des Fonctions -->
+                <div class="glass-card p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-52">
+                    <div class="space-y-1">
+                        <span class="text-3xl">📉</span>
+                        <h4 class="font-extrabold text-sm text-slate-100">Labo des Fonctions ($ax + b$)</h4>
+                        <p class="text-[11px] text-slate-400 leading-relaxed">Glisse des curseurs pour observer en temps réel la droite se déplacer, monter ou descendre.</p>
+                    </div>
+                    <button onclick="openWidget('functions')" class="w-full mt-3 bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/30 text-teal-300 font-bold text-xs py-2 rounded-lg transition-all cursor-pointer">
+                        Ouvrir le Labo →
+                    </button>
+                </div>
+
+                <!-- Widget 2: Coupes dans l'Espace -->
+                <div class="glass-card p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-52">
+                    <div class="space-y-1">
+                        <span class="text-3xl">🧊</span>
+                        <h4 class="font-extrabold text-sm text-slate-100">Coupes de Solides 3D</h4>
+                        <p class="text-[11px] text-slate-400 leading-relaxed">Coupe virtuellement un cylindre ou un cône avec un plan parallèle à la base pour étudier la section.</p>
+                    </div>
+                    <button onclick="openWidget('solid-slice')" class="w-full mt-3 bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/30 text-teal-300 font-bold text-xs py-2 rounded-lg transition-all cursor-pointer">
+                        Ouvrir le Labo →
+                    </button>
+                </div>
+
+                <!-- Widget 3: Transformations -->
+                <div class="glass-card p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-52">
+                    <div class="space-y-1">
+                        <span class="text-3xl">🌀</span>
+                        <h4 class="font-extrabold text-sm text-slate-100">Animations de Transformations</h4>
+                        <p class="text-[11px] text-slate-400 leading-relaxed">Observe le glissement d'une translation, la rotation ou l'homothétie avec un facteur dynamique $k$.</p>
+                    </div>
+                    <button onclick="openWidget('transformations')" class="w-full mt-3 bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/30 text-teal-300 font-bold text-xs py-2 rounded-lg transition-all cursor-pointer">
+                        Ouvrir le Labo →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Widget Display Overlay -->
+            <div id="widget-display-overlay" class="hidden fixed inset-0 bg-slate-950/98 z-40 flex flex-col p-4 overflow-y-auto">
+                <div class="flex justify-between items-center pb-3 border-b border-slate-900 shrink-0">
+                    <span id="active-widget-title" class="text-xs font-black text-teal-400 uppercase tracking-widest font-title">Laboratoire</span>
+                    <button onclick="closeWidget()" class="text-slate-400 hover:text-white font-bold text-lg px-2 py-1">&times; Fermer</button>
+                </div>
+
+                <!-- Widget Workspace -->
+                <div id="widget-workspace" class="flex-1 flex flex-col md:flex-row gap-6 items-stretch justify-center py-4">
+                    <!-- Loaded dynamically via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- View: Profile -->
+        <section id="view-profile" class="hidden space-y-6">
+            <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-800 text-center shadow-xl relative overflow-hidden">
+                <div class="absolute -top-12 -left-12 w-28 h-28 bg-emerald-500/5 rounded-full blur-2xl"></div>
+                <div class="w-20 h-20 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-full mx-auto flex items-center justify-center text-3xl font-black text-slate-950 shadow-md font-title">
+                    ⚔️
+                </div>
+                <h3 class="font-extrabold text-lg mt-3 text-slate-100 font-title">Chevalier des Mathématiques</h3>
+                <p class="text-xs text-slate-400 mt-1">Sur le chemin de la réussite en Seconde</p>
+                
+                <div class="mt-6 pt-6 border-t border-slate-800/80 grid grid-cols-2 gap-4 text-center">
+                    <div class="bg-slate-950/50 p-3 rounded-xl border border-slate-800">
+                        <span class="block text-2xl font-black text-emerald-400 font-title" id="profile-gold">0</span>
+                        <span class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Or en poche</span>
+                    </div>
+                    <div class="bg-slate-950/50 p-3 rounded-xl border border-slate-800">
+                        <span class="block text-2xl font-black text-indigo-400 font-title" id="profile-level-badge">1</span>
+                        <span class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Niveau Atteint</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seconde readiness progress meter -->
+            <div class="bg-slate-900/40 p-5 rounded-xl border border-slate-800 space-y-3">
+                <h4 class="text-xs font-black uppercase text-slate-300 tracking-wider font-title">Indicateur de préparation Seconde</h4>
+                <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800 flex">
+                    <div id="readiness-bar" class="bg-gradient-to-r from-violet-500 to-indigo-500 h-full transition-all duration-300" style="width: 20%;"></div>
+                </div>
+                <div class="flex justify-between text-[10px] font-bold text-slate-500">
+                    <span>DÉBUTANT 3ÈME</span>
+                    <span id="readiness-percent">Prêt à 20%</span>
+                    <span>PRÊT POUR LA SECONDE 🚀</span>
+                </div>
+            </div>
+
+            <!-- Trophies/Achievements -->
+            <div class="space-y-3">
+                <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider font-title">Trophées Débloqués</h4>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-slate-950/40 p-4 rounded-xl border border-slate-800 flex items-center space-x-3 opacity-60" id="trophy-1">
+                        <span class="text-2xl">🥇</span>
+                        <div>
+                            <h5 class="text-xs font-bold text-slate-200">Premier Sang</h5>
+                            <p class="text-[9px] text-slate-500">Terminer le donjon 1</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-950/40 p-4 rounded-xl border border-slate-800 flex items-center space-x-3 opacity-60" id="trophy-2">
+                        <span class="text-2xl">⚡</span>
+                        <div>
+                            <h5 class="text-xs font-bold text-slate-200">Vitesse Absolue</h5>
+                            <p class="text-[9px] text-slate-500">Calcul mental > 5 correct</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-950/40 p-4 rounded-xl border border-slate-800 flex items-center space-x-3 opacity-60" id="trophy-3">
+                        <span class="text-2xl">📏</span>
+                        <div>
+                            <h5 class="text-xs font-bold text-slate-200">Géomètre d'Or</h5>
+                            <p class="text-[9px] text-slate-500">Donjon Thalès réussi</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-950/40 p-4 rounded-xl border border-slate-800 flex items-center space-x-3 opacity-60" id="trophy-4">
+                        <span class="text-2xl">🚀</span>
+                        <div>
+                            <h5 class="text-xs font-bold text-slate-200">Paré au Lycée</h5>
+                            <p class="text-[9px] text-slate-500">Atteindre le niveau 5</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -271,284 +533,66 @@
 
     </main>
 
-    <nav id="app-nav" class="hidden bg-slate-950 border-t border-slate-900 pt-3.5 px-8 justify-around items-center shrink-0 shadow-2xl">
-        <button onclick="switchView('home')" id="nav-home" class="flex flex-col items-center space-y-1.5 text-emerald-400 transition-all">
-            <span class="text-2xl">🗺️</span>
-            <span class="text-xs font-bold tracking-wide">Aventure</span>
+    <!-- Bottom Nav -->
+    <nav id="app-nav" class="hidden bg-slate-950 border-t border-slate-900 pt-3 px-6 justify-around items-center shrink-0 shadow-2xl z-30">
+        <button onclick="switchView('home')" id="nav-home" class="flex flex-col items-center space-y-1 text-emerald-400 transition-all cursor-pointer">
+            <span class="text-xl">🗺️</span>
+            <span class="text-[10px] font-bold tracking-wide">Aventure</span>
         </button>
-        <button onclick="switchView('profile')" id="nav-profile" class="flex flex-col items-center space-y-1.5 text-slate-500 hover:text-slate-300 transition-all">
-            <span class="text-2xl">🛡️</span>
-            <span class="text-xs font-bold tracking-wide">Profil</span>
+        <button onclick="switchView('rituel')" id="nav-rituel" class="flex flex-col items-center space-y-1 text-slate-500 hover:text-slate-300 transition-all cursor-pointer">
+            <span class="text-xl">⏱️</span>
+            <span class="text-[10px] font-bold tracking-wide">Rituel 45'</span>
+        </button>
+        <button onclick="switchView('widgets')" id="nav-widgets" class="flex flex-col items-center space-y-1 text-slate-500 hover:text-slate-300 transition-all cursor-pointer">
+            <span class="text-xl">🔧</span>
+            <span class="text-[10px] font-bold tracking-wide">Widgets</span>
+        </button>
+        <button onclick="switchView('profile')" id="nav-profile" class="flex flex-col items-center space-y-1 text-slate-500 hover:text-slate-300 transition-all cursor-pointer">
+            <span class="text-xl">🛡️</span>
+            <span class="text-[10px] font-bold tracking-wide">Profil</span>
         </button>
     </nav>
 
-    <script>
-        // Les Données des Donjons
-        const dungeonData = {
-            "Algèbre": [
-                {
-                    id: 1,
-                    title: "Le Gardien des Premiers (Arithmétique)",
-                    question: "Le spectre bloque la porte ! Décompose 90 en produit de facteurs premiers pour trouver la combinaison :",
-                    options: [
-                        "2 × 3² × 5",
-                        "2 × 5 × 9",
-                        "2² × 3 × 5",
-                        "2 × 3³ × 5"
-                    ],
-                    answer: "2 × 3² × 5",
-                    explanation: "90 = 9 × 10 = 3² × 2 × 5 = 2 × 3² × 5. Tous les facteurs doivent être des nombres premiers (9 ne l'est pas) !",
-                    image: "spectre_monster.png"
-                },
-                {
-                    id: 2,
-                    title: "L'Énigme du Colosse (Calcul Littéral)",
-                    question: "Le Colosse de Pierre s'éveille ! Développe cette expression pour esquiver son coup : A = 4x(3x - 2)",
-                    options: [
-                        "12x² - 8x",
-                        "12x - 8",
-                        "12x² - 2",
-                        "7x² - 6"
-                    ],
-                    answer: "12x² - 8x",
-                    explanation: "On distribue 4x : 4x × 3x = 12x² et 4x × (-2) = -8x.",
-                    image: "colossus_monster.png"
-                },
-                {
-                    id: 3,
-                    title: "Le Piège des Miroirs (Identités Remarquables)",
-                    question: "Le sol se dérobe ! Utilise une identité remarquable pour développer instantanément : (x + 5)²",
-                    options: [
-                        "x² + 25",
-                        "x² + 10x + 25",
-                        "x² + 5x + 25",
-                        "x² + 10x + 10"
-                    ],
-                    answer: "x² + 10x + 25",
-                    explanation: "Formule (a + b)² = a² + 2ab + b². Ici, (x + 5)² = x² + 2×x×5 + 5² = x² + 10x + 25.",
-                    image: "mirror_monster.png"
-                },
-                {
-                    id: 4,
-                    title: "Le Maître des Clés (Équations-Produits)",
-                    question: "Pour sceller le donjon, résous l'équation-produit : (x - 5)(3x + 12) = 0. Quelles sont les deux solutions ?",
-                    options: [
-                        "x = 5 et x = -4",
-                        "x = -5 et x = 4",
-                        "x = 5 et x = 12",
-                        "x = 0 et x = 5"
-                    ],
-                    answer: "x = 5 et x = -4",
-                    explanation: "Un produit est nul si l'un de ses facteurs est nul. Soit x - 5 = 0 (donc x = 5), soit 3x + 12 = 0 (donc 3x = -12 -> x = -4).",
-                    image: "keymaster_monster.png"
-                }
-            ],
-            "Hermes": [
-                {
-                    id: 1,
-                    title: "Le Sphinx des Statistiques",
-                    image: "sphinx_monster.png",
-                    question: "Le Sphinx te propose un défi d'orientation. Voici les notes d'un aventurier : 7, 9, 13, 16, 18. Quelle est la note médiane de cette série ?",
-                    options: ["9", "13", "14", "16"],
-                    answer: "13",
-                    explanation: "La médiane est la valeur qui partage la série ordonnée en deux groupes d'effectifs égaux. Ici, la valeur centrale est bien 13 (il y a deux notes avant et deux notes après)."
-                },
-                {
-                    id: 2,
-                    title: "L'Oracle du Destin (Probabilités)",
-                    image: "oracle_monster.png",
-                    question: "L'Oracle lance un dé équilibré à 8 faces (numérotées de 1 à 8). Quelle est la probabilité d'obtenir un multiple de 3 ?",
-                    options: ["1/4 (soit 25%)", "1/2 (soit 50%)", "3/8 (soit 37,5%)", "1/8 (soit 12,5%)"],
-                    answer: "1/4 (soit 25%)",
-                    explanation: "Les multiples de 3 entre 1 et 8 sont : 3 et 6. Il y a donc 2 cas favorables sur 8 au total, ce qui donne 2/8 = 1/4 (ou 25 % de chances)."
-                },
-                {
-                    id: 3,
-                    title: "Le Spectre des Images (Fonctions)",
-                    image: "spectre_images.png",
-                    question: "Un spectre t'attaque avec le sort f(x) = -2x + 9. Calcule l'image de 3 pour dissiper sa magie :",
-                    options: ["15", "3", "-3", "9"],
-                    answer: "3",
-                    explanation: "Pour trouver l'image de 3, on remplace x par 3 dans la fonction : f(3) = -2 × 3 + 9 = -6 + 9 = 3."
-                },
-                {
-                    id: 4,
-                    title: "Le Gardien des Pentes (Fonctions Affines)",
-                    image: "pente_monster.png",
-                    question: "Pour franchir le gouffre, trouve la fonction affine qui correspond à une droite qui descend (coefficient directeur négatif) et qui coupe l'axe des ordonnées en 6 (ordonnée à l'origine égale à 6) :",
-                    options: ["g(x) = -3x + 6", "g(x) = 6x - 3", "g(x) = -6x - 3", "g(x) = 3x + 6"],
-                    answer: "g(x) = -3x + 6",
-                    explanation: "Une fonction affine est de la forme ax + b. Ici, le coefficient directeur 'a' doit être négatif (ex: -3) et l'ordonnée à l'origine 'b' doit être 6. La bonne formule est donc g(x) = -3x + 6."
-                }
-            ],
-            "Thales": [
-                {
-                    id: 1,
-                    title: "Niveau 1 : Configuration Classique (Emboîtée)",
-                    image: "thales_triangle.png",
-                    question: "Dans la figure ci-dessous, les droites (BC) et (DE) sont parallèles. On te donne : AD = 3 cm, AB = 12 cm, et AE = 2 cm. Quelle est la longueur du segment [AC] ?",
-                    options: ["8 cm", "6 cm", "9 cm", "1,5 cm"],
-                    answer: "8 cm",
-                    explanation: "D'après le théorème de Thalès, on compare les côtés correspondants du petit triangle ADE et du grand triangle ABC : AD/AB = AE/AC. Ce qui donne 3/12 = 2/AC. Par un produit en croix : AC = (12 × 2) ÷ 3 = 8 cm. Simple et direct !"
-                },
-                {
-                    id: 2,
-                    title: "Niveau 2 : Configuration Papillon (Sablier)",
-                    image: "thales_butterfly.png",
-                    question: "Dans cette configuration 'papillon' croisée en O, les droites (AB) et (CD) sont parallèles. Le côté du petit triangle mesure 3 cm et le côté correspondant du grand triangle mesure 6 cm. Si un autre côté du petit triangle mesure 5 cm, quelle est la longueur du côté correspondant du grand triangle ?",
-                    options: ["10 cm", "8 cm", "7,5 cm", "12 cm"],
-                    answer: "10 cm",
-                    explanation: "L'échelle (le coefficient d'agrandissement) est facile à trouver ! On passe du petit au grand côté en multipliant par 2 (car 6 ÷ 3 = 2). Ainsi, pour l'autre côté, il suffit de faire 5 cm × 2 = 10 cm. Tu as trouvé l'échelle intuitivement !"
-                },
-                {
-                    id: 3,
-                    title: "Niveau 3 (Étape 1) : Éviter le piège !",
-                    image: "thales_triangle.png",
-                    question: "Attention, piège classique ! Sur la figure ci-dessous, un point M est sur le segment [AB] tel que AM = 4 cm et MB = 3 cm. Pour appliquer le théorème de Thalès, quelle est la longueur du côté complet [AB] du grand triangle ?",
-                    options: [
-                        "AB = 7 cm (car AB = AM + MB)",
-                        "AB = 4 cm (la longueur AM)",
-                        "AB = 3 cm (la longueur MB)",
-                        "AB = 12 cm (car AB = AM × MB)"
-                    ],
-                    answer: "AB = 7 cm (car AB = AM + MB)",
-                    explanation: "C'est le piège le plus fréquent ! Le théorème de Thalès compare les côtés du petit triangle (AM) avec ceux du GRAND triangle (AB). On doit donc additionner les morceaux : AB = AM + MB = 4 + 3 = 7 cm. Garde bien cela en tête !"
-                },
-                {
-                    id: 4,
-                    title: "Niveau 3 (Étape 2) : Le calcul final !",
-                    image: "thales_triangle.png",
-                    question: "Bien évité ! Maintenant, faisons le calcul complet : avec AM = 4 cm, MB = 3 cm (donc AB = 7 cm), et AN = 8 cm, calcule la longueur de [AC] sachant que (MN) et (BC) sont parallèles.",
-                    options: ["14 cm", "11 cm", "6 cm", "12 cm"],
-                    answer: "14 cm",
-                    explanation: "D'après Thalès, on a AM/AB = AN/AC. En remplaçant par les valeurs : 4/7 = 8/AC. Le produit en croix donne AC = (7 × 8) ÷ 4 = 56 ÷ 4 = 14 cm. Le piège est totalement désamorcé !"
-                },
-                {
-                    id: 5,
-                    title: "Niveau 4 : La Réciproque de Thalès",
-                    image: "thales_reciproque.png",
-                    question: "Regarde le schéma. Les rapports de longueurs mesurées donnent : d'une part AM/AB = 0,6 et d'autre part AN/AC = 0,6. Les points A, M, B et A, N, C étant alignés dans le même ordre, que peux-tu en conclure ?",
-                    options: [
-                        "Les droites (MN) et (BC) sont parallèles (Réciproque)",
-                        "Les droites (MN) et (BC) ne sont pas parallèles",
-                        "On ne peut rien en conclure",
-                        "Les triangles sont de formes totalement différentes"
-                    ],
-                    answer: "Les droites (MN) et (BC) sont parallèles (Réciproque)",
-                    explanation: "Puisque les rapports des longueurs sont strictement égaux (0,6 des deux côtés) et que les points sont alignés dans le même ordre, la réciproque du théorème de Thalès permet d'affirmer que les droites (MN) et (BC) sont parallèles !"
-                }
-            ],
-            "Mesures": [
-                {
-                    id: 1,
-                    title: "Le Creuset du Volcan (Volume de Pyramide)",
-                    image: "volcano_forge.png",
-                    question: "Pour contenir la lave magique, tu dois calculer le volume d'un creuset en forme de pyramide à base carrée. Le côté du carré de base mesure 6 cm et la hauteur de la pyramide est de 5 cm. Quel est son volume ?",
-                    options: ["60 cm³", "180 cm³", "30 cm³", "20 cm³"],
-                    answer: "60 cm³",
-                    explanation: "Le volume d'une pyramide est donné par la formule : V = (Aire de la base × Hauteur) / 3. Ici, l'aire de la base carrée est de 6 × 6 = 36 cm². Donc V = (36 × 5) / 3 = 180 / 3 = 60 cm³."
-                },
-                {
-                    id: 2,
-                    title: "La Sphère d'Énergie (Volume de la Boule)",
-                    image: "energy_orb.png",
-                    question: "Le noyau de la forge est une boule magique de rayon R = 3 cm. Quelle formule permet de calculer son volume exact ?",
-                    options: [
-                        "V = 4/3 × π × 3³ = 36π cm³", 
-                        "V = 4 × π × 3² = 36π cm³", 
-                        "V = π × 3² × 5 = 45π cm³", 
-                        "V = 1/3 × π × 3² × 5 = 15π cm³"
-                    ],
-                    answer: "V = 4/3 × π × 3³ = 36π cm³",
-                    explanation: "Le volume d'une boule de rayon R est donné par la formule V = (4/3) × π × R³. Pour R = 3, on a V = (4/3) × π × 27 = 36π cm³."
-                },
-                {
-                    id: 3,
-                    title: "La Balance des Fluides (Grandeurs Composées)",
-                    image: "alchemy_fluids.png",
-                    question: "Un fluide magique s'écoule à un débit constant de 15 litres par minute (L/min). Combien de temps faudra-t-il pour remplir un réservoir de 450 litres ?",
-                    options: ["30 minutes", "45 minutes", "15 minutes", "3 heures"],
-                    answer: "30 minutes",
-                    explanation: "Le temps nécessaire est égal au volume total divisé par le débit : t = Volume / Débit. Ici, t = 450 / 15 = 30 minutes."
-                },
-                {
-                    id: 4,
-                    title: "Le Souffle du Dragon (Agrandissements & Volumes)",
-                    image: "dragon_breath.png",
-                    question: "Le Dragon de la Forge souffle sur ton épée d'un volume initial de 8 cm³ pour l'agrandir à l'échelle k = 3. Quel sera le nouveau volume de ton épée agrandie ?",
-                    options: ["216 cm³", "72 cm³", "24 cm³", "124 cm³"],
-                    answer: "216 cm³",
-                    explanation: "Lors d'un agrandissement à l'échelle k, les volumes sont multipliés par k³. Ici, k³ = 3³ = 27. Le nouveau volume est donc : V = 8 cm³ × 27 = 216 cm³."
-                }
-            ],
-            "Algorithme": [
-                {
-                    id: 1,
-                    title: "Le Gardien des Variables",
-                    image: "variables_sentinel.png",
-                    question: "La sentinelle te présente un script : \n1. Choisir un nombre\n2. Le multiplier par 3\n3. Ajouter 5 au résultat.\nSi tu entres le nombre 4 dans cette machine, quel résultat obtiendras-tu ?",
-                    options: ["17", "27", "12", "9"],
-                    answer: "17",
-                    explanation: "On suit l'algorithme étape par étape : 4 × 3 = 12, puis 12 + 5 = 17. Simple et logique !"
-                },
-                {
-                    id: 2,
-                    title: "Le Spectre de la Boucle",
-                    image: "cyber_spectre.png",
-                    question: "Un script Scratch tourne en boucle : \n'Répéter 5 fois : Ajouter 10 à la variable Score'. Si le Score de départ est de 50, quel sera le Score final ?",
-                    options: ["100", "50", "150", "60"],
-                    answer: "100",
-                    explanation: "La boucle répète 5 fois l'action d'ajouter 10. On ajoute donc 5 × 10 = 50 au score initial. Score final : 50 + 50 = 100."
-                },
-                {
-                    id: 3,
-                    title: "L'Interrupteur Logique (Conditionnelles)",
-                    image: "logic_switch.png",
-                    question: "Pour déverrouiller la porte, tu analyses ce test : 'Si Niveau >= 5 Alors Ouvrir la porte Sinon Lancer l'alarme'. Si ton personnage est Niveau 4, que se passe-t-il ?",
-                    options: [
-                        "L'alarme se déclenche", 
-                        "La porte s'ouvre", 
-                        "Rien ne se passe", 
-                        "Le jeu plante"
-                    ],
-                    answer: "L'alarme se déclenche",
-                    explanation: "La condition 'Niveau >= 5' est fausse car ton niveau est de 4. C'est donc le bloc 'Sinon' qui s'exécute : l'alarme se déclenche !"
-                },
-                {
-                    id: 4,
-                    title: "Le Portail vers la Seconde (Initiation Python)",
-                    image: "python_portal.png",
-                    question: "Devant le portail temporel vers le lycée, tu aperçois une ligne de code Python : \nprint('Prêt pour la Seconde !')\nQuelle sera l'action de cette commande ?",
-                    options: [
-                        "Elle affiche le texte 'Prêt pour la Seconde !' à l'écran", 
-                        "Elle imprime le texte sur une feuille de papier", 
-                        "Elle supprime le texte de l'ordinateur", 
-                        "Elle pose une question à l'utilisateur"
-                    ],
-                    answer: "Elle affiche le texte 'Prêt pour la Seconde !' à l'écran",
-                    explanation: "En programmation (et particulièrement en Python), la fonction 'print()' sert à afficher (à l'écran) le message écrit entre les parenthèses !"
-                }
-            ]
-        };
+    <!-- Image Zoom Modal -->
+    <div id="zoom-modal" class="hidden fixed inset-0 bg-slate-950/95 z-[100] flex flex-col items-center justify-center p-4" onclick="closeZoom()">
+        <button class="absolute top-4 right-4 text-slate-400 hover:text-white text-4xl font-bold bg-slate-900/80 w-12 h-12 rounded-full flex items-center justify-center border border-slate-800">&times;</button>
+        <div class="w-full max-w-2xl aspect-square bg-slate-900 rounded-3xl p-3 border border-slate-800 shadow-2xl flex items-center justify-center overflow-hidden" onclick="event.stopPropagation()">
+            <img id="zoomed-image" src="" alt="Schéma Agrandi" class="max-w-full max-h-full object-contain rounded-2xl">
+        </div>
+        <p class="text-slate-400 text-xs mt-4 font-semibold tracking-wide text-center">Clique n'importe où pour fermer le zoom</p>
+    </div>
 
-        // État du jeu
+    <!-- JavaScript Game Engine -->
+    <script>
+        // Global Game State
         let gameState = {
             level: 1,
             hp: 100,
             gold: 0,
             dungeonsCleared: 0,
-            currentDungeon: null
+            highScores: {
+                mental: 0
+            }
         };
 
-        let currentQuestionIndex = 0;
+        // Active context variables
+        let currentActiveDungeon = null;
+        let currentQuestIndex = 0;
+        let currentQuestionObj = null;
         let pendingCallback = null;
 
-        // Charger les statistiques utilisateur depuis le localStorage s'il y en a
-        if(localStorage.getItem('math_quest_save_2026')) {
+        // Rituel state variables
+        let rituelTimerInterval = null;
+        let rituelTimeLeft = 60;
+        let rituelScore = 0;
+        let activeRituelStage = null;
+
+        // Load Save State
+        if (localStorage.getItem('math_quest_save_2026')) {
             try {
                 gameState = { ...gameState, ...JSON.parse(localStorage.getItem('math_quest_save_2026')) };
             } catch(e) {
-                console.error("Erreur lors de la lecture de la sauvegarde", e);
+                console.error("Impossible de charger la sauvegarde", e);
             }
         }
 
@@ -557,280 +601,564 @@
             updateDashboard();
         }
 
-        function updateDashboard() {
-            document.getElementById('player-level').innerText = gameState.level;
-            
-            const hpBar = document.getElementById('hp-bar');
-            const hpLabel = document.getElementById('hp-label');
-            hpBar.style.width = `${gameState.hp}%`;
-            if (gameState.hp <= 25) {
-                hpBar.className = "bg-gradient-to-r from-red-600 to-rose-500 h-full transition-all duration-300";
-                hpLabel.className = "text-rose-500 text-sm font-black tracking-wider";
-            } else {
-                hpBar.className = "bg-gradient-to-r from-emerald-500 to-green-400 h-full transition-all duration-300";
-                hpLabel.className = "text-emerald-500 text-sm font-black tracking-wider";
-            }
+        // NAVIGATION SWITCHER
+        function switchView(viewName) {
+            document.getElementById('view-landing').classList.add('hidden');
+            document.getElementById('view-home').classList.add('hidden');
+            document.getElementById('view-game').classList.add('hidden');
+            document.getElementById('view-rituel').classList.add('hidden');
+            document.getElementById('view-widgets').classList.add('hidden');
+            document.getElementById('view-profile').classList.add('hidden');
 
-            document.getElementById('profile-gold').innerText = gameState.gold;
-            document.getElementById('profile-dungeons').innerText = `${gameState.dungeonsCleared}/5`;
-            
-            // Déverrouillage visuel (Temple d'Hermès débloqué si le premier donjon est fait)
-            const container = document.getElementById('dungeon-hermes-container');
-            if(gameState.level >= 2) {
-                container.innerHTML = `
-                    <button onclick="startDungeon('Hermes')" class="w-full bg-slate-900/80 hover:bg-slate-800 p-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/50 flex justify-between items-center active:scale-[0.97] transition-all duration-200 text-left shadow-md cursor-pointer">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-4xl filter drop-shadow">🏛️</span>
-                            <div>
-                                <h4 class="font-extrabold text-base text-slate-100">2. Le Temple d'Hermès</h4>
-                                <p class="text-sm text-slate-400 mt-1">Statistiques & Fonctions</p>
-                            </div>
-                        </div>
-                        <span class="text-emerald-400 font-extrabold text-base shrink-0 ml-2">Entrer →</span>
-                    </button>
-                `;
-            } else {
-                container.innerHTML = `
-                    <div class="w-full bg-slate-950/40 opacity-50 p-5 rounded-2xl border-2 border-dashed border-slate-900 flex justify-between items-center select-none">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-4xl opacity-60">🏛️</span>
-                            <div>
-                                <h4 class="font-extrabold text-base text-slate-500">2. Le Temple d'Hermès</h4>
-                                <p class="text-sm text-slate-600 mt-1">Requis : Niveau 2 (Termine le Donjon 1)</p>
-                            </div>
-                        </div>
-                        <span class="text-slate-600 text-sm font-bold">🔒 Verrouillé</span>
-                    </div>
-                `;
-            }
+            // Reset nav colors
+            const navs = ['home', 'rituel', 'widgets', 'profile'];
+            navs.forEach(nav => {
+                const el = document.getElementById(`nav-${nav}`);
+                if (el) {
+                    el.className = "flex flex-col items-center space-y-1 text-slate-500 hover:text-slate-300 transition-all cursor-pointer";
+                }
+            });
 
-            // Déverrouillage visuel (Cité de Thalès débloqué si le deuxième donjon est fait)
-            const thalesContainer = document.getElementById('dungeon-thales-container');
-            if(gameState.level >= 3) {
-                thalesContainer.innerHTML = `
-                    <button onclick="startDungeon('Thales')" class="w-full bg-slate-900/80 hover:bg-slate-800 p-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/50 flex justify-between items-center active:scale-[0.97] transition-all duration-200 text-left shadow-md cursor-pointer">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-4xl filter drop-shadow">🗼</span>
-                            <div>
-                                <h4 class="font-extrabold text-base text-slate-100">3. La Cité de Thalès</h4>
-                                <p class="text-sm text-slate-400 mt-1">Thalès, Trigonométrie & Homothéties</p>
-                            </div>
-                        </div>
-                        <span class="text-emerald-400 font-extrabold text-base shrink-0 ml-2">Entrer →</span>
-                    </button>
-                `;
-            } else {
-                thalesContainer.innerHTML = `
-                    <div class="w-full bg-slate-950/40 opacity-50 p-5 rounded-2xl border-2 border-dashed border-slate-900 flex justify-between items-center select-none">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-4xl opacity-60">🗼</span>
-                            <div>
-                                <h4 class="font-extrabold text-base text-slate-500">3. La Cité de Thalès</h4>
-                                <p class="text-sm text-slate-600 mt-1">Requis : Niveau 3 (Termine le Donjon 2)</p>
-                            </div>
-                        </div>
-                        <span class="text-slate-600 text-sm font-bold">🔒 Verrouillé</span>
-                    </div>
-                `;
+            // Activate target view
+            const activeSection = document.getElementById(`view-${viewName}`);
+            if (activeSection) {
+                activeSection.classList.remove('hidden');
             }
-
-            // Déverrouillage visuel (Forge des Mesures débloquée si le troisième donjon est fait)
-            const mesuresContainer = document.getElementById('dungeon-mesures-container');
-            if(gameState.level >= 4) {
-                mesuresContainer.innerHTML = `
-                    <button onclick="startDungeon('Mesures')" class="w-full bg-slate-900/80 hover:bg-slate-800 p-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/50 flex justify-between items-center active:scale-[0.97] transition-all duration-200 text-left shadow-md cursor-pointer">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-4xl filter drop-shadow">🌋</span>
-                            <div>
-                                <h4 class="font-extrabold text-base text-slate-100">4. La Forge des Mesures</h4>
-                                <p class="text-sm text-slate-400 mt-1">Aires, Volumes & Échelles</p>
-                            </div>
-                        </div>
-                        <span class="text-emerald-400 font-extrabold text-base shrink-0 ml-2">Entrer →</span>
-                    </button>
-                `;
-            } else {
-                mesuresContainer.innerHTML = `
-                    <div class="w-full bg-slate-950/40 opacity-50 p-5 rounded-2xl border-2 border-dashed border-slate-900 flex justify-between items-center select-none">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-4xl opacity-60">🌋</span>
-                            <div>
-                                <h4 class="font-extrabold text-base text-slate-500">4. La Forge des Mesures</h4>
-                                <p class="text-sm text-slate-600 mt-1">Requis : Niveau 4 (Termine le Donjon 3)</p>
-                            </div>
-                        </div>
-                        <span class="text-slate-600 text-sm font-bold">🔒 Verrouillé</span>
-                    </div>
-                `;
-            }
-
-            // Déverrouillage visuel (Tour de l'Algorithme débloquée si le quatrième donjon est fait)
-            const algorithmeContainer = document.getElementById('dungeon-algo-container');
-            if(gameState.level >= 5) {
-                algorithmeContainer.innerHTML = `
-                    <button onclick="startDungeon('Algorithme')" class="w-full bg-slate-900/80 hover:bg-slate-800 p-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/50 flex justify-between items-center active:scale-[0.97] transition-all duration-200 text-left shadow-md cursor-pointer">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-4xl filter drop-shadow">💻</span>
-                            <div>
-                                <h4 class="font-extrabold text-base text-slate-100">5. La Tour de l'Algorithme</h4>
-                                <p class="text-sm text-slate-400 mt-1">Variables, Boucles & Logique</p>
-                            </div>
-                        </div>
-                        <span class="text-emerald-400 font-extrabold text-base shrink-0 ml-2">Entrer →</span>
-                    </button>
-                `;
-            } else {
-                algorithmeContainer.innerHTML = `
-                    <div class="w-full bg-slate-950/40 opacity-50 p-5 rounded-2xl border-2 border-dashed border-slate-900 flex justify-between items-center select-none">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-4xl opacity-60">💻</span>
-                            <div>
-                                <h4 class="font-extrabold text-base text-slate-500">5. La Tour de l'Algorithme</h4>
-                                <p class="text-sm text-slate-600 mt-1">Requis : Niveau 5 (Termine le Donjon 4)</p>
-                            </div>
-                        </div>
-                        <span class="text-slate-600 text-sm font-bold">🔒 Verrouillé</span>
-                    </div>
-                `;
+            const activeNav = document.getElementById(`nav-${viewName}`);
+            if (activeNav) {
+                activeNav.className = "flex flex-col items-center space-y-1 text-emerald-400 transition-all cursor-pointer";
             }
         }
 
-        // Lancement initial depuis la Landing Page
         function startGame() {
             document.getElementById('app-header').classList.remove('hidden');
             document.getElementById('app-header').classList.add('flex');
             document.getElementById('app-nav').classList.remove('hidden');
             document.getElementById('app-nav').classList.add('flex');
-            updateDashboard(); // Met à jour l'affichage et l'état des donjons
+            saveGame();
             switchView('home');
         }
 
-        // Navigation entre les écrans
-        function switchView(viewName) {
-            document.getElementById('view-landing').classList.add('hidden');
-            document.getElementById('view-home').classList.add('hidden');
-            document.getElementById('view-game').classList.add('hidden');
-            document.getElementById('view-profile').classList.add('hidden');
-            
-            document.getElementById('nav-home').className = "flex flex-col items-center space-y-1.5 text-slate-500 hover:text-slate-300 transition-all";
-            document.getElementById('nav-profile').className = "flex flex-col items-center space-y-1.5 text-slate-500 hover:text-slate-300 transition-all";
+        // UPDATE DASHBOARD UI
+        function updateDashboard() {
+            document.getElementById('player-level').innerText = gameState.level;
+            document.getElementById('header-gold').innerText = gameState.gold;
+            document.getElementById('profile-gold').innerText = gameState.gold;
+            document.getElementById('profile-level-badge').innerText = gameState.level;
 
-            document.getElementById(`view-${viewName}`).classList.remove('hidden');
-            if(viewName !== 'game' && viewName !== 'landing') {
-                document.getElementById(`nav-${viewName}`).className = "flex flex-col items-center space-y-1.5 text-emerald-400 transition-all";
+            // Health Bar
+            const hpBar = document.getElementById('hp-bar');
+            const hpLabel = document.getElementById('hp-label');
+            if (hpBar) {
+                hpBar.style.width = `${gameState.hp}%`;
+                if (gameState.hp <= 25) {
+                    hpBar.className = "bg-gradient-to-r from-red-600 to-rose-500 h-full transition-all duration-300";
+                    hpLabel.className = "text-rose-500 text-[10px] font-black tracking-wider";
+                } else {
+                    hpBar.className = "bg-gradient-to-r from-emerald-500 to-emerald-400 h-full transition-all duration-300";
+                    hpLabel.className = "text-emerald-500 text-[10px] font-black tracking-wider";
+                }
+            }
+
+            // Seconde readiness computation
+            const readinessPct = Math.min(100, Math.max(20, (gameState.level - 1) * 20));
+            document.getElementById('readiness-bar').style.width = `${readinessPct}%`;
+            document.getElementById('readiness-percent').innerText = `Prêt à ${readinessPct}%`;
+
+            // Trophies checks
+            if (gameState.level >= 2) {
+                document.getElementById('trophy-1').classList.remove('opacity-60');
+                document.getElementById('trophy-1').classList.add('border-emerald-500/30', 'bg-emerald-950/20');
+            }
+            if (gameState.highScores.mental >= 5) {
+                document.getElementById('trophy-2').classList.remove('opacity-60');
+                document.getElementById('trophy-2').classList.add('border-amber-500/30', 'bg-amber-950/20');
+            }
+            if (gameState.level >= 4) {
+                document.getElementById('trophy-3').classList.remove('opacity-60');
+                document.getElementById('trophy-3').classList.add('border-emerald-500/30', 'bg-emerald-950/20');
+            }
+            if (gameState.level >= 5) {
+                document.getElementById('trophy-4').classList.remove('opacity-60');
+                document.getElementById('trophy-4').classList.add('border-indigo-500/30', 'bg-indigo-950/20');
+            }
+
+            // Realm 2 unlocking (requires Level >= 2)
+            const r2Container = document.getElementById('dungeon-geometry-container');
+            if (gameState.level >= 2) {
+                r2Container.innerHTML = `
+                    <button onclick="startDungeon('Géométrie', 0)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-emerald-500/40 flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">📐</span>
+                            <div>
+                                <h4 class="font-extrabold text-sm text-slate-100">Théorème de Pythagore</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Calculer l'hypoténuse ou un côté</p>
+                            </div>
+                        </div>
+                        <span class="text-emerald-400 font-extrabold text-xs">Combattre →</span>
+                    </button>
+                    <button onclick="startDungeon('Géométrie', 1)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-emerald-500/40 flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">🗼</span>
+                            <div>
+                                <h4 class="font-extrabold text-sm text-slate-100">Théorème de Thalès</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Triangles emboîtés et papillon</p>
+                            </div>
+                        </div>
+                        <span class="text-emerald-400 font-extrabold text-xs">Combattre →</span>
+                    </button>
+                    <button onclick="startDungeon('Géométrie', 2)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-emerald-500/40 flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">🔗</span>
+                            <div>
+                                <h4 class="font-extrabold text-sm text-slate-100">La Réciproque de Thalès</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Démontrer que des droites sont parallèles</p>
+                            </div>
+                        </div>
+                        <span class="text-emerald-400 font-extrabold text-xs">Combattre →</span>
+                    </button>
+                `;
+            } else {
+                r2Container.innerHTML = `
+                    <div class="w-full bg-slate-950/40 opacity-40 p-4 rounded-xl border border-dashed border-slate-900 flex justify-between items-center select-none">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">🔒</span>
+                            <div>
+                                <h4 class="font-extrabold text-sm text-slate-500">Donjons Géométriques</h4>
+                                <p class="text-[11px] text-slate-600 mt-0.5">Requis : Niveau 2 (Terminer l'Algèbre)</p>
+                            </div>
+                        </div>
+                        <span class="text-slate-600 text-xs font-bold">Verrouillé</span>
+                    </div>
+                `;
+            }
+
+            // Realm 3 unlocking (requires Level >= 3)
+            const r3Container = document.getElementById('dungeon-stats-container');
+            if (gameState.level >= 3) {
+                r3Container.innerHTML = `
+                    <button onclick="startDungeon('ProbasStats', 0)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-amber-500/40 flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">📊</span>
+                            <div>
+                                <h4 class="font-extrabold text-sm text-slate-100">Statistiques & Médiane</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Trier des données et trouver le milieu</p>
+                            </div>
+                        </div>
+                        <span class="text-amber-400 font-extrabold text-xs">Combattre →</span>
+                    </button>
+                    <button onclick="startDungeon('ProbasStats', 1)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-amber-500/40 flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">🎲</span>
+                            <div>
+                                <h4 class="font-extrabold text-sm text-slate-100">Probabilités Express</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Calculer les ratios de hasard</p>
+                            </div>
+                        </div>
+                        <span class="text-amber-400 font-extrabold text-xs">Combattre →</span>
+                    </button>
+                `;
+            } else {
+                r3Container.innerHTML = `
+                    <div class="w-full bg-slate-950/40 opacity-40 p-4 rounded-xl border border-dashed border-slate-900 flex justify-between items-center select-none">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">🔒</span>
+                            <div>
+                                <h4 class="font-extrabold text-sm text-slate-500">Donjons Statistiques</h4>
+                                <p class="text-[11px] text-slate-600 mt-0.5">Requis : Niveau 3 (Terminer la Géométrie)</p>
+                            </div>
+                        </div>
+                        <span class="text-slate-600 text-xs font-bold">Verrouillé</span>
+                    </div>
+                `;
+            }
+
+            // Realm 4 unlocking (requires Level >= 4)
+            const r4Container = document.getElementById('dungeon-algo-container');
+            if (gameState.level >= 4) {
+                r4Container.innerHTML = `
+                    <button onclick="startDungeon('Algo', 0)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-blue-500/40 flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">💻</span>
+                            <div>
+                                <h4 class="font-extrabold text-sm text-slate-100">Logique d'Algorithmes</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Boucles Scratch et conditions Python</p>
+                            </div>
+                        </div>
+                        <span class="text-blue-400 font-extrabold text-xs">Combattre →</span>
+                    </button>
+                `;
+            } else {
+                r4Container.innerHTML = `
+                    <div class="w-full bg-slate-950/40 opacity-40 p-4 rounded-xl border border-dashed border-slate-900 flex justify-between items-center select-none">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">🔒</span>
+                            <div>
+                                <h4 class="font-extrabold text-sm text-slate-500">Donjons d'Algorithmique</h4>
+                                <p class="text-[11px] text-slate-600 mt-0.5">Requis : Niveau 4 (Terminer les Statistiques)</p>
+                            </div>
+                        </div>
+                        <span class="text-slate-600 text-xs font-bold">Verrouillé</span>
+                    </div>
+                `;
             }
         }
 
-        // Lancement d'un donjon
-        function startDungeon(name) {
-            gameState.currentDungeon = name;
-            currentQuestionIndex = 0;
-            gameState.hp = 100; // Soigne le joueur pour le donjon
-            
+
+        // DYNAMIC MATHEMATICAL QUESTION GENERATOR (Dynamic Engine)
+        // Prevents answer memorization by generating equations, geometries and logic on the fly.
+        function generateDynamicQuestion(realm, questIndex) {
+            let q = {
+                title: "",
+                question: "",
+                options: [],
+                answer: "",
+                explanation: "",
+                image: "spectre_monster.png", // fallback image
+                drawOverlay: null // JS function to draw SVG elements
+            };
+
+            if (realm === "Algèbre") {
+                if (questIndex === 0) {
+                    // Prime factorization
+                    let primes = [2, 3, 5, 7];
+                    let p1 = primes[Math.floor(Math.random() * 3)];
+                    let p2 = primes[Math.floor(Math.random() * 3)];
+                    let p3 = primes[Math.floor(Math.random() * 4)];
+                    let val = p1 * p1 * p2 * p3;
+                    if (val > 150) val = 60; // Keep it clean
+                    
+                    // compute standard factors
+                    let factors = [p1, p1, p2, p3].sort((a,b)=>a-b);
+                    let formula = "";
+                    let counts = {};
+                    factors.forEach(f => counts[f] = (counts[f] || 0) + 1);
+                    formula = Object.keys(counts).map(k => counts[k] > 1 ? `${k}²` : k).join(" × ");
+
+                    q.title = "Décomposition Primaire";
+                    q.question = `Décompose le nombre ${val} en produit de facteurs premiers :`;
+                    q.answer = formula;
+                    q.options = [
+                        formula,
+                        `${val/2} × 2`,
+                        factors.join(" × "),
+                        `2² × 3 × 5 × 7`
+                    ].filter((v, i, self) => self.indexOf(v) === i).slice(0, 4);
+                    // Shuffle
+                    q.options.sort(() => Math.random() - 0.5);
+                    if (q.options.indexOf(q.answer) === -1) q.options[0] = q.answer;
+
+                    q.explanation = `
+                        <div><strong>Données :</strong> Le nombre entier ${val}.</div>
+                        <div><strong>Propriété :</strong> Tout nombre entier peut s'écrire de façon unique sous la forme d'un produit de nombres premiers.</div>
+                        <div><strong>Conclusion :</strong> ${val} = ${factors.join(" × ")} = ${formula}. Remarque que tous les facteurs de la bonne formule sont bien des nombres premiers !</div>
+                    `;
+                    q.image = "spectre_monster.png";
+                } 
+                else if (questIndex === 1) {
+                    // Distribution: ax(bx - c)
+                    let a = Math.floor(Math.random() * 4) + 2;
+                    let b = Math.floor(Math.random() * 3) + 2;
+                    let c = Math.floor(Math.random() * 5) + 2;
+                    let correct = `${a*b}x² - ${a*c}x`;
+
+                    q.title = "Calcul Littéral";
+                    q.question = `Développe l'expression suivante : A = ${a}x(${b}x - ${c})`;
+                    q.answer = correct;
+                    q.options = [
+                        correct,
+                        `${a*b}x - ${a*c}`,
+                        `${a*b}x² - ${c}`,
+                        `${a+b}x² - ${a+c}x`
+                    ];
+                    q.options.sort(() => Math.random() - 0.5);
+                    q.explanation = `
+                        <div><strong>Données :</strong> L'expression ${a}x(${b}x - ${c}).</div>
+                        <div><strong>Propriété :</strong> Simple distributivité : k(a - b) = k×a - k×b.</div>
+                        <div><strong>Conclusion :</strong> On multiplie ${a}x par chaque terme : ${a}x × ${b}x = ${a*b}x² et ${a}x × (-${c}) = -${a*c}x. Le résultat est bien ${correct}.</div>
+                    `;
+                    q.image = "colossus_monster.png";
+                }
+                else if (questIndex === 2) {
+                    // (x + a)^2
+                    let a = Math.floor(Math.random() * 6) + 2;
+                    let correct = `x² + ${2*a}x + ${a*a}`;
+
+                    q.title = "Identités Remarquables";
+                    q.question = `Développe l'expression : B = (x + ${a})²`;
+                    q.answer = correct;
+                    q.options = [
+                        correct,
+                        `x² + ${a*a}`,
+                        `x² + ${a}x + ${a*a}`,
+                        `x² + ${2*a}x + ${2*a}`
+                    ];
+                    q.options.sort(() => Math.random() - 0.5);
+                    q.explanation = `
+                        <div><strong>Données :</strong> L'expression (x + ${a})².</div>
+                        <div><strong>Propriété :</strong> L'identité remarquable (a + b)² = a² + 2ab + b².</div>
+                        <div><strong>Conclusion :</strong> Ici, a = x et b = ${a}. Donc B = x² + 2×x×${a} + ${a}² = ${correct}. Attention au double produit !</div>
+                    `;
+                    q.image = "mirror_monster.png";
+                }
+                else if (questIndex === 3) {
+                    // (x - a)(bx + c) = 0
+                    let a = Math.floor(Math.random() * 5) + 2;
+                    let b = Math.floor(Math.random() * 3) + 2;
+                    let c = b * (Math.floor(Math.random() * 3) + 1); // ensure integer division
+                    let sol1 = a;
+                    let sol2 = -c/b;
+                    let correct = `x = ${sol1} et x = ${sol2}`;
+
+                    q.title = "Équations-Produits";
+                    q.question = `Résous l'équation suivante : (x - ${a})(${b}x + ${c}) = 0. Quelles sont les solutions ?`;
+                    q.answer = correct;
+                    q.options = [
+                        correct,
+                        `x = -${a} et x = ${sol2}`,
+                        `x = ${sol1} et x = ${c}`,
+                        `x = 0 et x = ${sol1}`
+                    ];
+                    q.options.sort(() => Math.random() - 0.5);
+                    q.explanation = `
+                        <div><strong>Données :</strong> L'équation (x - ${a})(${b}x + ${c}) = 0.</div>
+                        <div><strong>Propriété :</strong> Un produit de facteurs est nul si et seulement si au moins l'un des facteurs est nul.</div>
+                        <div><strong>Conclusion :</strong> Soit x - ${a} = 0 (donc x = ${sol1}), soit ${b}x + ${c} = 0 (donc ${b}x = -${c} → x = -${c}/${b} = ${sol2}). Les solutions sont bien ${correct}.</div>
+                    `;
+                    q.image = "keymaster_monster.png";
+                }
+            }
+            else if (realm === "Géométrie") {
+                if (questIndex === 0) {
+                    // Pythagorean Theorem
+                    let isHyp = Math.random() > 0.5;
+                    if (isHyp) {
+                        q.title = "Pythagore (Calcul d'Hypoténuse)";
+                        q.question = "Dans le triangle ABC rectangle en A, on donne AB = 3 cm et AC = 4 cm. Quelle est la longueur de l'hypoténuse [BC] ?";
+                        q.answer = "5 cm";
+                        q.options = ["5 cm", "7 cm", "25 cm", "3,5 cm"];
+                        q.explanation = `
+                            <div><strong>Données :</strong> Triangle ABC rectangle en A, AB = 3 cm et AC = 4 cm.</div>
+                            <div><strong>Propriété :</strong> D'après le théorème de Pythagore, BC² = AB² + AC².</div>
+                            <div><strong>Conclusion :</strong> BC² = 3² + 4² = 9 + 16 = 25. Donc BC = √25 = 5 cm.</div>
+                        `;
+                    } else {
+                        q.title = "Pythagore (Calcul d'un côté)";
+                        q.question = "Dans le triangle DEF rectangle en D, on donne l'hypoténuse EF = 10 cm et DF = 6 cm. Calcule la longueur de [DE] :";
+                        q.answer = "8 cm";
+                        q.options = ["8 cm", "4 cm", "16 cm", "64 cm"];
+                        q.explanation = `
+                            <div><strong>Données :</strong> Triangle DEF rectangle en D, EF = 10 cm, DF = 6 cm.</div>
+                            <div><strong>Propriété :</strong> D'après le théorème de Pythagore, EF² = DE² + DF². Donc DE² = EF² - DF².</div>
+                            <div><strong>Conclusion :</strong> DE² = 10² - 6² = 100 - 36 = 64. Donc DE = √64 = 8 cm.</div>
+                        `;
+                    }
+                    q.image = ""; // Draw custom right triangle SVG
+                    q.drawOverlay = (svg) => {
+                        svg.innerHTML = `
+                            <polygon points="50,220 230,220 50,50" fill="none" stroke="#10b981" stroke-width="4"/>
+                            <rect x="50" y="200" width="20" height="20" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <text x="35" y="235" fill="#fff" font-weight="bold">A / D</text>
+                            <text x="240" y="230" fill="#fff" font-weight="bold">B / E</text>
+                            <text x="35" y="45" fill="#fff" font-weight="bold">C / F</text>
+                        `;
+                    };
+                }
+                else if (questIndex === 1) {
+                    // Thales theorem
+                    q.title = "Théorème de Thalès";
+                    q.question = "Dans la configuration de Thalès ci-dessous, les droites (BC) et (DE) sont parallèles. On a AD = 3 cm, AB = 12 cm, et AE = 2 cm. Quelle est la longueur de [AC] ?";
+                    q.answer = "8 cm";
+                    q.options = ["8 cm", "6 cm", "9 cm", "1,5 cm"];
+                    q.options.sort(() => Math.random() - 0.5);
+                    q.explanation = `
+                        <div><strong>Données :</strong> Droites (BC) // (DE). Points A,D,B et A,E,C alignés. AD=3 cm, AB=12 cm, AE=2 cm.</div>
+                        <div><strong>Propriété :</strong> D'après le théorème de Thalès : AD/AB = AE/AC.</div>
+                        <div><strong>Conclusion :</strong> 3/12 = 2/AC. En faisant un produit en croix : AC = (12 × 2) ÷ 3 = 8 cm. Le segment [AC] mesure bien 8 cm !</div>
+                    `;
+                    q.image = "";
+                    q.drawOverlay = (svg) => {
+                        svg.innerHTML = `
+                            <polygon points="40,240 260,240 150,40" fill="none" stroke="#10b981" stroke-width="3"/>
+                            <line x1="85" y1="160" x2="215" y2="160" stroke="#ef4444" stroke-width="3"/>
+                            <text x="145" y="30" fill="#fff" font-weight="bold">A</text>
+                            <text x="65" y="165" fill="#fff" font-weight="bold">D</text>
+                            <text x="225" y="165" fill="#fff" font-weight="bold">E</text>
+                            <text x="25" y="250" fill="#fff" font-weight="bold">B</text>
+                            <text x="265" y="250" fill="#fff" font-weight="bold">C</text>
+                        `;
+                    };
+                }
+                else if (questIndex === 2) {
+                    // Thales converse
+                    q.title = "Réciproque de Thalès";
+                    q.question = "Les rapports calculés sur la figure donnent AM/AB = 0,75 et AN/AC = 0,75. Les points A, M, B et A, N, C sont alignés dans le même ordre. Que permet d'affirmer la réciproque ?";
+                    q.answer = "Les droites (MN) et (BC) sont parallèles";
+                    q.options = [
+                        "Les droites (MN) et (BC) sont parallèles",
+                        "Les droites (MN) et (BC) se croisent à angle droit",
+                        "Les droites ne sont pas parallèles",
+                        "On ne peut rien en conclure"
+                    ];
+                    q.options.sort(() => Math.random() - 0.5);
+                    q.explanation = `
+                        <div><strong>Données :</strong> Les rapports de longueurs AM/AB et AN/AC sont tous deux égaux à 0,75. Les points sont alignés dans le même ordre.</div>
+                        <div><strong>Propriété :</strong> Si les rapports des côtés correspondants sont égaux et les points alignés dans le même ordre, alors la réciproque du théorème de Thalès s'applique.</div>
+                        <div><strong>Conclusion :</strong> Les droites (MN) et (BC) sont donc parfaitement parallèles !</div>
+                    `;
+                    q.image = "";
+                    q.drawOverlay = (svg) => {
+                        svg.innerHTML = `
+                            <polygon points="40,240 260,240 150,40" fill="none" stroke="#10b981" stroke-width="3"/>
+                            <line x1="85" y1="160" x2="215" y2="160" stroke="#ef4444" stroke-width="3"/>
+                            <text x="145" y="30" fill="#fff" font-weight="bold">A</text>
+                            <text x="65" y="165" fill="#fff" font-weight="bold">M</text>
+                            <text x="225" y="165" fill="#fff" font-weight="bold">N</text>
+                            <text x="25" y="250" fill="#fff" font-weight="bold">B</text>
+                            <text x="265" y="250" fill="#fff" font-weight="bold">C</text>
+                        `;
+                    };
+                }
+            }
+            else if (realm === "ProbasStats") {
+                if (questIndex === 0) {
+                    // Median stats
+                    let start = Math.floor(Math.random() * 5) + 3;
+                    let step = Math.floor(Math.random() * 3) + 2;
+                    let list = [start, start + step, start + 2*step, start + 3*step, start + 4*step];
+                    // Shuffle it to make student sort
+                    let shuffled = [...list].sort(() => Math.random() - 0.5);
+                    let correct = list[2]; // middle element
+
+                    q.title = "Statistiques (Médiane)";
+                    q.question = `Calcule la médiane de la série de notes suivantes : ${shuffled.join(", ")}`;
+                    q.answer = String(correct);
+                    q.options = [String(correct), String(list[1]), String(list[3]), String(list[4])];
+                    q.options.sort(() => Math.random() - 0.5);
+                    q.explanation = `
+                        <div><strong>Données :</strong> La série brute de notes : ${shuffled.join(", ")}.</div>
+                        <div><strong>Propriété :</strong> Pour trouver la médiane, on range impérativement les valeurs dans l'ordre croissant : ${list.join(", ")}.</div>
+                        <div><strong>Conclusion :</strong> L'effectif total est de 5 (impair). La médiane est la valeur centrale (3ème position), soit bien ${correct}.</div>
+                    `;
+                    q.image = "pente_monster.png";
+                }
+                else if (questIndex === 1) {
+                    // Probability of multiples
+                    let sides = 8;
+                    let mult = Math.random() > 0.5 ? 3 : 4;
+                    let list = [];
+                    for(let i=1; i<=sides; i++) {
+                        if (i % mult === 0) list.push(i);
+                    }
+                    let correctPct = (list.length / sides) * 100;
+                    let correctAns = `${list.length}/${sides} (soit ${correctPct}%)`;
+
+                    q.title = "Probabilités";
+                    q.question = `L'Oracle lance un dé équilibré à ${sides} faces. Quelle est la probabilité d'obtenir un multiple de ${mult} ?`;
+                    q.answer = correctAns;
+                    q.options = [
+                        correctAns,
+                        `1/${sides} (soit ${100/sides}%)`,
+                        `1/2 (soit 50%)`,
+                        `3/${sides} (soit ${(3/sides)*100}%)`
+                    ];
+                    q.options.sort(() => Math.random() - 0.5);
+                    q.explanation = `
+                        <div><strong>Données :</strong> Un dé à 8 faces (issues possibles : 1,2,3,4,5,6,7,8).</div>
+                        <div><strong>Propriété :</strong> La probabilité est égale au nombre d'issues favorables divisé par le nombre total d'issues.</div>
+                        <div><strong>Conclusion :</strong> Les multiples de ${mult} compris entre 1 et 8 sont : ${list.join(", ")} (${list.length} issues). Donc la probabilité est de ${list.length}/${sides} = ${correctAns}.</div>
+                    `;
+                    q.image = "oracle_monster.png";
+                }
+            }
+            else if (realm === "Algo") {
+                if (questIndex === 0) {
+                    // Scratch loop logic
+                    let startVal = Math.floor(Math.random() * 3) * 10 + 20; // 20, 30, 40
+                    let loopCount = Math.floor(Math.random() * 3) + 3; // 3, 4, 5
+                    let increment = Math.floor(Math.random() * 2) * 5 + 5; // 5, 10
+                    let correct = startVal + (loopCount * increment);
+
+                    q.title = "Algorithmique";
+                    q.question = `Dans un script Scratch, on a : 'Mettre Score à ${startVal}' puis 'Répéter ${loopCount} fois : Ajouter ${increment} à Score'. Quel sera le score final ?`;
+                    q.answer = String(correct);
+                    q.options = [String(correct), String(startVal + increment), String(startVal + loopCount), String(correct - increment)];
+                    q.options.sort(() => Math.random() - 0.5);
+                    q.explanation = `
+                        <div><strong>Données :</strong> Score initial = ${startVal}. Une boucle répétant ${loopCount} fois une addition de ${increment}.</div>
+                        <div><strong>Propriété :</strong> La structure de boucle 'Répéter N fois' multiplie l'action intérieure : ${loopCount} × ${increment} = ${loopCount*increment} ajoutés.</div>
+                        <div><strong>Conclusion :</strong> Score final = ${startVal} + ${loopCount*increment} = ${correct}.</div>
+                    `;
+                    q.image = "cyber_spectre.png";
+                }
+            }
+
+            return q;
+        }
+
+        // START A DUNGEON
+        function startDungeon(realmName, questIdx) {
+            currentActiveDungeon = realmName;
+            currentQuestIndex = questIdx;
+            gameState.hp = 100;
+
             document.getElementById('options-container').classList.remove('hidden');
             document.getElementById('feedback-panel').classList.add('hidden');
-            
+
             switchView('game');
-            showQuestion();
+            loadQuestStep();
             updateDashboard();
         }
 
-        // Afficher la question courante
-        function showQuestion() {
-            const questions = dungeonData[gameState.currentDungeon];
+        // LOAD CURRENT QUEST QUESTION
+        function loadQuestStep() {
+            // Generate question dynamically
+            currentQuestionObj = generateDynamicQuestion(currentActiveDungeon, currentQuestIndex);
+
+            // Update combat wave UI header
+            document.getElementById('combat-wave-title').innerText = `ÉPREUVE ${currentQuestIndex + 1}`;
             
-            // Si toutes les questions du donjon sont validées
-            if (currentQuestionIndex >= questions.length) {
-                let rewardMessage = "";
-                if (gameState.currentDungeon === "Algèbre" && gameState.level === 1) {
-                    gameState.level = 2; // Passe niveau 2
-                    gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 1);
-                    rewardMessage = "<br><br>🔓 <strong>Tu as débloqué le Donjon 2 : Le Temple d'Hermès !</strong>";
-                } else if (gameState.currentDungeon === "Hermes" && gameState.level === 2) {
-                    gameState.level = 3; // Passe niveau 3
-                    gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 2);
-                    rewardMessage = "<br><br>🔓 <strong>Tu as débloqué le Donjon 3 : La Cité de Thalès !</strong>";
-                } else if (gameState.currentDungeon === "Thales" && gameState.level === 3) {
-                    gameState.level = 4; // Passe niveau 4
-                    gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 3);
-                    rewardMessage = "<br><br>🔓 <strong>Tu as débloqué le Donjon 4 : La Forge des Mesures !</strong>";
-                } else if (gameState.currentDungeon === "Mesures" && gameState.level === 4) {
-                    gameState.level = 5; // Passe niveau 5
-                    gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 4);
-                    rewardMessage = "<br><br>🔓 <strong>Tu as débloqué l'ultime épreuve : La Tour de l'Algorithme !</strong>";
-                } else if (gameState.currentDungeon === "Algorithme" && gameState.level === 5) {
-                    gameState.level = 6; // Niveau 6 max !
-                    gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, 5);
-                    rewardMessage = "<br><br>🎓 <strong>INCROYABLE ! Tu as purifié l'intégralité du royaume de Math Quest !</strong><br><br>Tu possèdes désormais des bases de 3ème en béton armé. Tu es officiellement paré et prêt à conquérir la Seconde ! 🚀";
-                } else {
-                    gameState.level += 1;
-                    const clearedIndex = (gameState.currentDungeon === 'Algorithme') ? 5 : (gameState.currentDungeon === 'Mesures') ? 4 : (gameState.currentDungeon === 'Thales') ? 3 : (gameState.currentDungeon === 'Hermes') ? 2 : 1;
-                    gameState.dungeonsCleared = Math.max(gameState.dungeonsCleared, clearedIndex);
-                }
-                
-                gameState.gold += 50; // Récompense d'or
-                gameState.hp = 100; // Soigne le joueur
-                saveGame();
-                
-                // EFFET WOW MAJEUR : Explosion géante continue pour la fin du donjon !
-                triggerEpicVictoryConfetti();
-                
-                const dungeonFriendlyName = (gameState.currentDungeon === 'Hermes') ? "le Temple d'Hermès" : (gameState.currentDungeon === 'Thales') ? "la Cité de Thalès" : (gameState.currentDungeon === 'Mesures') ? "la Forge des Mesures" : (gameState.currentDungeon === 'Algorithme') ? "la Tour de l'Algorithme" : "la Crypte de l'Algèbre";
-                
-                showCustomAlert(
-                    "🏆 VICTOIRE !", 
-                    `FÉLICITATIONS ! Tu as purifié ${dungeonFriendlyName}, tu passes au Niveau ${gameState.level} et remportes 50 pièces d'or !${rewardMessage}`, 
-                    "Retourner au campement", 
-                    "🏆",
-                    () => {
-                        switchView('home');
-                    }
-                );
-                return;
+            // Monster assets config
+            const monsterImg = document.getElementById('monster-image');
+            const svgOverlay = document.getElementById('combat-svg-overlay');
+            const slashOverlay = document.getElementById('slash-overlay');
+            
+            monsterImg.className = "w-full h-full object-cover opacity-85 transition-all duration-300";
+            slashOverlay.className = "pointer-events-none";
+            document.getElementById('monster-hp-heart').innerHTML = "❤️ Actif";
+            
+            document.getElementById('monster-defeat-text').classList.remove('opacity-100');
+            document.getElementById('monster-defeat-text').classList.add('opacity-0');
+
+            // Draw custom SVG or display static monster image
+            if (currentQuestionObj.drawOverlay) {
+                monsterImg.classList.add('hidden');
+                svgOverlay.classList.remove('hidden');
+                currentQuestionObj.drawOverlay(svgOverlay);
+            } else {
+                svgOverlay.classList.add('hidden');
+                monsterImg.classList.remove('hidden');
+                monsterImg.src = currentQuestionObj.image || "spectre_monster.png";
             }
 
-            const currentQ = questions[currentQuestionIndex];
-            
-            // Mettre à jour l'entête
-            document.getElementById('combat-wave-title').innerText = `MONSTRE ${currentQuestionIndex + 1}/${questions.length}`;
-            
-            // Réinitialiser les animations du monstre
-            const monsterImg = document.getElementById('monster-image');
-            monsterImg.className = "w-full h-full object-cover opacity-85 animate-pulse transition-all duration-300";
-            const slashOverlay = document.getElementById('slash-overlay');
-            slashOverlay.className = "pointer-events-none";
-            document.getElementById('monster-hp-heart').innerHTML = "❤️ Monstre Actif";
-            
-            const defeatText = document.getElementById('monster-defeat-text');
-            defeatText.classList.remove('opacity-100');
-            defeatText.classList.add('opacity-0');
+            document.getElementById('monster-title').innerText = currentQuestionObj.title;
+            document.getElementById('question-text').innerText = currentQuestionObj.question;
 
-            // Charger l'image du monstre
-            monsterImg.src = currentQ.image;
-            monsterImg.alt = currentQ.title;
-            
-            // Mettre à jour le titre et la question
-            document.getElementById('monster-title').innerText = currentQ.title;
-            document.getElementById('question-text').innerText = currentQ.question;
-            
+            // Load answer buttons
             const container = document.getElementById('options-container');
             container.innerHTML = '';
-            
-            // Mélanger les options pour éviter que la bonne réponse soit toujours dans la même position
-            const shuffledOptions = [...currentQ.options].sort(() => Math.random() - 0.5);
-            
-            // Génération des boutons de réponse larges
-            shuffledOptions.forEach(opt => {
+
+            currentQuestionObj.options.forEach(opt => {
                 const btn = document.createElement('button');
-                btn.className = "w-full bg-slate-900/90 hover:bg-slate-800 active:scale-[0.97] py-4.5 px-5 rounded-2xl border-2 border-slate-800 hover:border-emerald-500/40 text-base font-extrabold text-slate-200 transition-all duration-150 text-left shadow-md flex justify-between items-center";
-                btn.innerHTML = `<span>${opt}</span><span class="text-slate-500 text-xs font-bold">Sélectionner</span>`;
-                btn.onclick = () => checkAnswer(opt, currentQ);
+                btn.className = "w-full bg-slate-900/90 hover:bg-slate-800 active:scale-[0.97] py-4 px-5 rounded-2xl border border-slate-800 hover:border-emerald-500/40 text-sm font-extrabold text-slate-200 transition-all duration-150 text-left shadow-md flex justify-between items-center cursor-pointer";
+                btn.innerHTML = `<span>${opt}</span><span class="text-emerald-400 text-xs font-bold font-title">Choisir</span>`;
+                btn.onclick = () => checkCombatAnswer(opt);
                 container.appendChild(btn);
             });
         }
 
-        function checkAnswer(selectedOpt, questionObj) {
-            // Masquer les boutons (le panneau de feedback apparaîtra après l'animation)
+        // CHECK COMBAT ANSWER
+        function checkCombatAnswer(selectedOpt) {
             document.getElementById('options-container').classList.add('hidden');
             
             const feedback = document.getElementById('feedback-panel');
@@ -839,172 +1167,419 @@
             const msgEl = document.getElementById('feedback-message');
             const expEl = document.getElementById('feedback-explanation');
             const btnEl = document.getElementById('feedback-next-btn');
-            
-            expEl.innerText = questionObj.explanation;
-            
-            if (selectedOpt === questionObj.answer) {
-                // --- SÉQUENCE VICTOIRE MONSTRE (CORRECTE) ---
+
+            expEl.innerHTML = currentQuestionObj.explanation;
+
+            if (selectedOpt === currentQuestionObj.answer) {
+                // Correct answer animation triggers
                 const monsterImg = document.getElementById('monster-image');
+                const svgOverlay = document.getElementById('combat-svg-overlay');
                 const slashOverlay = document.getElementById('slash-overlay');
-                
-                document.getElementById('monster-hp-heart').innerHTML = "💀 Monstre Vaincu";
-                
-                // 1. Déclencher le flash + coup
-                monsterImg.classList.remove('animate-pulse');
-                monsterImg.classList.add('animate-monster-hit');
+
+                document.getElementById('monster-hp-heart').innerHTML = "💀 Vaincu";
+
+                if (monsterImg.classList.contains('hidden')) {
+                    svgOverlay.classList.add('animate-monster-hit');
+                } else {
+                    monsterImg.classList.add('animate-monster-hit');
+                }
                 slashOverlay.classList.add('animate-slash');
-                
-                // 2. Déclencher la mort après 400ms (fin du slash/coup)
+
                 setTimeout(() => {
-                    monsterImg.classList.remove('animate-monster-hit');
-                    monsterImg.classList.add('animate-monster-die');
-                    
-                    const defeatText = document.getElementById('monster-defeat-text');
-                    defeatText.classList.remove('opacity-0');
-                    defeatText.classList.add('opacity-100');
+                    if (monsterImg.classList.contains('hidden')) {
+                        svgOverlay.classList.remove('animate-monster-hit');
+                    } else {
+                        monsterImg.classList.remove('animate-monster-hit');
+                        monsterImg.classList.add('animate-monster-die');
+                    }
+                    document.getElementById('monster-defeat-text').classList.remove('opacity-0');
+                    document.getElementById('monster-defeat-text').classList.add('opacity-100');
                 }, 400);
-                
-                // 3. Afficher le feedback final après 800ms
+
                 setTimeout(() => {
-                    // Petite explosion de confettis magiques émeraude et or !
                     confetti({
-                        particleCount: 80,
-                        spread: 60,
-                        origin: { y: 0.7 },
-                        colors: ['#10b981', '#34d399', '#fbbf24'] // Émeraude et Or
+                        particleCount: 60,
+                        spread: 40,
+                        origin: { y: 0.8 },
+                        colors: ['#10b981', '#a7f3d0', '#f59e0b']
                     });
-                    
-                    feedback.className = "bg-slate-900 border-2 border-emerald-500/50 rounded-2xl p-6 shadow-2xl space-y-4 my-auto";
+
+                    feedback.className = "bg-slate-900 border border-emerald-500/50 rounded-2xl p-5 shadow-2xl space-y-4 my-auto";
                     iconEl.innerText = "✨";
-                    titleEl.className = "text-lg font-black tracking-wide text-emerald-400";
+                    titleEl.className = "text-sm font-black tracking-wide text-emerald-400 font-title";
                     titleEl.innerText = "Coup critique !";
-                    msgEl.innerText = "Bonne réponse ! Ta magie a frappé le monstre de plein fouet.";
-                    
-                    btnEl.innerText = "Continuer le combat →";
+                    msgEl.innerText = "Parfait ! La formule et la démonstration sont validées.";
+
+                    btnEl.innerText = "Réclamer le butin et continuer →";
                     pendingCallback = () => {
-                        currentQuestionIndex++;
-                        showQuestion();
+                        gameState.gold += 15;
+                        if (gameState.level <= currentQuestIndex + 1) {
+                            gameState.level = currentQuestIndex + 2;
+                        }
+                        saveGame();
+                        switchView('home');
                     };
-                    
                     feedback.classList.remove('hidden');
-                    saveGame();
                 }, 800);
-                
             } else {
-                // --- SÉQUENCE DÉGÂTS JOUEUR (INCORRECTE) ---
+                // Incorrect answer animations
                 const viewGame = document.getElementById('view-game');
-                
-                // 1. Secousse de l'écran de combat et flash rouge
                 viewGame.classList.add('animate-screen-shake');
                 document.getElementById('damage-flash-overlay').classList.add('animate-damage-flash');
-                
-                // Réduire les HP immédiatement sur le dashboard
                 gameState.hp = Math.max(0, gameState.hp - 25);
-                document.getElementById('hp-bar').style.width = `${gameState.hp}%`;
-                
-                // 2. Afficher le feedback de défaite après 500ms
+
                 setTimeout(() => {
                     viewGame.classList.remove('animate-screen-shake');
                     document.getElementById('damage-flash-overlay').classList.remove('animate-damage-flash');
-                    
-                    feedback.className = "bg-slate-900 border-2 border-rose-500/50 rounded-2xl p-6 shadow-2xl space-y-4 my-auto";
+
+                    feedback.className = "bg-slate-900 border border-rose-500/50 rounded-2xl p-5 shadow-2xl space-y-4 my-auto";
                     iconEl.innerText = "💥";
-                    titleEl.className = "text-lg font-black tracking-wide text-rose-400";
-                    titleEl.innerText = "Défense brisée !";
-                    msgEl.innerHTML = `Mauvaise réponse. Dommage ! Le monstre contre-attaque.`;
-                    
+                    titleEl.className = "text-sm font-black tracking-wide text-rose-400 font-title";
+                    titleEl.innerText = "Contre-attaque subie !";
+                    msgEl.innerText = "Mauvaise réponse. Dommage ! Étudie attentivement la fiche anti-piège ci-dessous.";
+
                     if (gameState.hp <= 0) {
-                        btnEl.innerText = "Retourner au campement 💀";
+                        btnEl.innerText = "Fuir au campement (K.O.) 💀";
                         pendingCallback = () => {
                             gameState.hp = 100;
                             saveGame();
                             switchView('home');
                         };
                     } else {
-                        btnEl.innerText = "Continuer le combat →";
+                        btnEl.innerText = "Retenter l'épreuve →";
                         pendingCallback = () => {
-                            currentQuestionIndex++;
-                            showQuestion();
+                            loadQuestStep();
+                            document.getElementById('options-container').classList.remove('hidden');
+                            feedback.classList.add('hidden');
                         };
                     }
-                    
                     feedback.classList.remove('hidden');
                     saveGame();
                 }, 500);
             }
         }
 
-        // Action sur clic du bouton Continuer du feedback
         function nextCombatStep() {
             document.getElementById('feedback-panel').classList.add('hidden');
-            document.getElementById('options-container').classList.remove('hidden');
             if (pendingCallback) {
                 const cb = pendingCallback;
-                pendingCallback = null; // Réinitialisé avant l'exécution pour préserver les futurs callbacks synchrones
+                pendingCallback = null;
                 cb();
             }
         }
 
-        // Système d'alerte personnalisé (pour remplacer proprement alert() de façon esthétique)
-        function showCustomAlert(title, message, btnText, icon, callback) {
-            // Utilise l'écran de feedback en mode hors-combat
-            switchView('game');
-            document.getElementById('options-container').classList.add('hidden');
+
+        // RITUEL 45' SYSTEM
+        function startRituelStage(stage) {
+            activeRituelStage = stage;
+            rituelTimeLeft = 60;
+            rituelScore = 0;
+            document.getElementById('rituel-active-area').classList.remove('hidden');
             
-            const feedback = document.getElementById('feedback-panel');
-            feedback.classList.remove('hidden');
-            feedback.className = "bg-slate-900 border-2 border-indigo-500/50 rounded-2xl p-6 shadow-2xl space-y-4 my-auto";
-            
-            document.getElementById('feedback-icon').innerText = icon || "🛡️";
-            const titleEl = document.getElementById('feedback-title');
-            titleEl.className = "text-lg font-black tracking-wide text-indigo-400";
-            titleEl.innerText = title;
-            
-            document.getElementById('feedback-message').innerText = message;
-            document.getElementById('feedback-explanation').innerText = "Que la force des mathématiques soit avec toi !";
-            
-            const btnEl = document.getElementById('feedback-next-btn');
-            btnEl.innerText = btnText || "Continuer";
-            
-            pendingCallback = () => {
-                feedback.classList.add('hidden');
-                document.getElementById('options-container').classList.remove('hidden');
-                if(callback) callback();
-            };
+            // Start countdown
+            if(rituelTimerInterval) clearInterval(rituelTimerInterval);
+            rituelTimerInterval = setInterval(() => {
+                rituelTimeLeft--;
+                document.getElementById('rituel-timer').innerText = `Temps : ${rituelTimeLeft}s`;
+                if(rituelTimeLeft <= 0) {
+                    endRituelStage();
+                }
+            }, 1000);
+
+            loadRituelCard();
         }
 
-        // Fonction pour l'effet de fin de donjon (Feu d'artifice continu pendant 2 secondes)
-        function triggerEpicVictoryConfetti() {
-            var duration = 2 * 1000;
-            var end = Date.now() + duration;
+        function loadRituelCard() {
+            const container = document.getElementById('rituel-card-content');
+            container.innerHTML = '';
 
-            (function frame() {
-              confetti({
-                particleCount: 5,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0 }
-              });
-              confetti({
-                particleCount: 5,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1 }
-              });
+            if (activeRituelStage === 'flashcards') {
+                document.getElementById('rituel-title').innerText = "RITUEL : FLASHCARDS (MÉMORISATION)";
+                let cardPool = [
+                    { q: "Quelle est l'identité remarquable pour (a-b)² ?", a: "a² - 2ab + b²" },
+                    { q: "D'après Pythagore, quel est le plus long côté ?", a: "L'hypoténuse (opposé à l'angle droit)" },
+                    { q: "Que vaut la somme des angles d'un triangle ?", a: "180 degrés" },
+                    { q: "Comment s'appelle l'agrandissement d'une figure géométrique ?", a: "Une homothétie" }
+                ];
+                let item = cardPool[Math.floor(Math.random() * cardPool.length)];
 
-              if (Date.now() < end) {
-                requestAnimationFrame(frame);
-              }
-            }());
+                container.innerHTML = `
+                    <h3 class="text-sm font-black text-slate-400 uppercase tracking-widest font-title">Question Flash</h3>
+                    <p class="text-lg font-extrabold text-slate-100">${item.q}</p>
+                    <div id="flashcard-answer-area" class="pt-4">
+                        <button onclick="revealFlashcardAnswer('${item.a}')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs py-2 px-4 rounded-lg cursor-pointer">Révéler la réponse</button>
+                    </div>
+                `;
+            }
+            else if (activeRituelStage === 'mental') {
+                document.getElementById('rituel-title').innerText = "RITUEL : CALCUL MENTAL EXPRESS";
+                // Generate quick calculations
+                let n1 = Math.floor(Math.random() * 8) + 3;
+                let n2 = Math.floor(Math.random() * 8) + 3;
+                let isMult = Math.random() > 0.5;
+                let question = "";
+                let correct = 0;
+
+                if (isMult) {
+                    question = `${n1} × ${n2}`;
+                    correct = n1 * n2;
+                } else {
+                    question = `${n1*n2} ÷ ${n1}`;
+                    correct = n2;
+                }
+
+                container.innerHTML = `
+                    <h3 class="text-sm font-black text-slate-400 uppercase tracking-widest font-title">Calcule Rapidement</h3>
+                    <p class="text-2xl font-black text-slate-100 font-title">${question} = ?</p>
+                    <div class="grid grid-cols-2 gap-3 pt-4">
+                        <button onclick="submitMentalAns(${correct}, ${correct})" class="bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold py-2.5 rounded-xl border border-slate-700 cursor-pointer">${correct}</button>
+                        <button onclick="submitMentalAns(${correct+4}, ${correct})" class="bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold py-2.5 rounded-xl border border-slate-700 cursor-pointer">${correct+4}</button>
+                        <button onclick="submitMentalAns(${correct-3}, ${correct})" class="bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold py-2.5 rounded-xl border border-slate-700 cursor-pointer">${correct-3}</button>
+                        <button onclick="submitMentalAns(${correct+2}, ${correct})" class="bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold py-2.5 rounded-xl border border-slate-700 cursor-pointer">${correct+2}</button>
+                    </div>
+                `;
+            }
+            else if (activeRituelStage === 'geometry') {
+                document.getElementById('rituel-title').innerText = "RITUEL : RÉSOLUTION GÉOMÉTRIQUE";
+                // Simple trig question
+                container.innerHTML = `
+                    <h3 class="text-sm font-black text-slate-400 uppercase tracking-widest font-title">Trigonométrie</h3>
+                    <p class="text-sm font-extrabold text-slate-200">Dans un triangle rectangle, quelle formule définit le Cosinus d'un angle ?</p>
+                    <div class="space-y-2 pt-4">
+                        <button onclick="submitGeomAns(true)" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 rounded-xl border border-slate-700 cursor-pointer">Adjacent / Hypoténuse</button>
+                        <button onclick="submitGeomAns(false)" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 rounded-xl border border-slate-700 cursor-pointer">Opposé / Hypoténuse</button>
+                        <button onclick="submitGeomAns(false)" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 rounded-xl border border-slate-700 cursor-pointer">Opposé / Adjacent</button>
+                    </div>
+                `;
+            }
         }
 
+        function revealFlashcardAnswer(ans) {
+            document.getElementById('flashcard-answer-area').innerHTML = `
+                <p class="text-xs text-emerald-400 font-bold mb-3">${ans}</p>
+                <div class="flex justify-center space-x-3">
+                    <button onclick="rituelScore++; loadRituelCard();" class="bg-emerald-600 text-slate-950 font-bold text-xs py-1.5 px-3 rounded-lg cursor-pointer">Compris 👍</button>
+                    <button onclick="loadRituelCard();" class="bg-slate-700 text-slate-300 font-bold text-xs py-1.5 px-3 rounded-lg cursor-pointer">À revoir 👎</button>
+                </div>
+            `;
+        }
+
+        function submitMentalAns(val, correct) {
+            if(val === correct) {
+                rituelScore++;
+                confetti({ particleCount: 15, spread: 20, origin: { y: 0.6 } });
+            }
+            loadRituelCard();
+        }
+
+        function submitGeomAns(isCorrect) {
+            if(isCorrect) {
+                rituelScore += 2;
+                confetti({ particleCount: 20, spread: 30, origin: { y: 0.6 } });
+            }
+            loadRituelCard();
+        }
+
+        function endRituelStage() {
+            clearInterval(rituelTimerInterval);
+            const container = document.getElementById('rituel-card-content');
+            
+            // Save state if mental high score
+            if (activeRituelStage === 'mental') {
+                gameState.highScores.mental = Math.max(gameState.highScores.mental, rituelScore);
+            }
+            gameState.gold += rituelScore * 5;
+            saveGame();
+
+            container.innerHTML = `
+                <span class="text-4xl">🏆</span>
+                <h3 class="text-lg font-black text-emerald-400 font-title">Session Terminée !</h3>
+                <p class="text-xs text-slate-300">Tu as obtenu un score de <strong>${rituelScore}</strong> points et as récolté <strong>${rituelScore*5} pièces d'or</strong> !</p>
+                <button onclick="stopRituel()" class="w-full bg-emerald-500 text-slate-950 font-black py-2.5 rounded-xl cursor-pointer">Retourner au rituel</button>
+            `;
+        }
+
+        function stopRituel() {
+            clearInterval(rituelTimerInterval);
+            document.getElementById('rituel-active-area').classList.add('hidden');
+        }
+
+
+        // INTERACTIVE WIDGETS SYSTEM
+        function openWidget(widgetId) {
+            document.getElementById('widget-display-overlay').classList.remove('hidden');
+            const ws = document.getElementById('widget-workspace');
+            ws.innerHTML = '';
+
+            if (widgetId === 'functions') {
+                document.getElementById('active-widget-title').innerText = "LABORATOIRE : FONCTION AFFINE Y = AX + B";
+                ws.innerHTML = `
+                    <div class="flex-1 flex flex-col justify-between max-w-sm mx-auto p-4 bg-slate-900 rounded-2xl border border-slate-800">
+                        <div class="relative w-full aspect-square bg-slate-950 rounded-xl overflow-hidden border border-slate-800">
+                            <!-- Coordinate Grid -->
+                            <svg id="func-grid-svg" class="w-full h-full" viewBox="0 0 300 300">
+                                <!-- Grid Lines -->
+                                <path d="M 0 150 L 300 150 M 150 0 L 150 300" stroke="#334155" stroke-width="2"/>
+                                <path d="M 30 0 L 30 300 M 60 0 L 60 300 M 90 0 L 90 300 M 120 0 L 120 300 M 180 0 L 180 300 M 210 0 L 210 300 M 240 0 L 240 300 M 270 0 L 270 300
+                                         M 0 30 L 300 30 M 0 60 L 300 60 M 0 90 L 300 90 M 0 120 L 300 120 M 0 180 L 300 180 M 0 210 L 300 210 M 0 240 L 300 240 M 0 270 L 300 270" stroke="#1e293b" stroke-width="1"/>
+                                <!-- Plot line -->
+                                <line id="func-line" x1="0" y1="150" x2="300" y2="150" stroke="#10b981" stroke-width="4"/>
+                            </svg>
+                        </div>
+                        <div class="space-y-4 pt-4 text-center">
+                            <p class="text-base font-black text-slate-100 font-title">Équation : <span id="func-eq-txt" class="text-teal-400">y = 0x + 0</span></p>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span class="text-slate-400">Pente a : <span id="func-a-val" class="text-teal-300">0</span></span>
+                                    <input type="range" id="func-a-slider" min="-3" max="3" step="0.5" value="0" class="w-32 accent-teal-400">
+                                </div>
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span class="text-slate-400">Ordonnée b : <span id="func-b-val" class="text-teal-300">0</span></span>
+                                    <input type="range" id="func-b-slider" min="-50" max="50" step="10" value="0" class="w-32 accent-teal-400">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Add dynamic listener logic
+                const aSlider = document.getElementById('func-a-slider');
+                const bSlider = document.getElementById('func-b-slider');
+                
+                const updateFuncLine = () => {
+                    const a = parseFloat(aSlider.value);
+                    const b = parseFloat(bSlider.value);
+                    document.getElementById('func-a-val').innerText = a;
+                    document.getElementById('func-b-val').innerText = b / 10;
+                    document.getElementById('func-eq-txt').innerText = `y = ${a}x + ${b / 10}`;
+
+                    // compute line coordinates
+                    // svg coordinates: middle is (150, 150). x axis maps -5 to +5. y axis maps -5 to +5.
+                    // y_svg = 150 - (a * x_math + b_math) * 30
+                    let x1_math = -5;
+                    let y1_math = a * x1_math + (b / 10);
+                    let x2_math = 5;
+                    let y2_math = a * x2_math + (b / 10);
+
+                    let x1_svg = 0;
+                    let y1_svg = 150 - (y1_math * 30);
+                    let x2_svg = 300;
+                    let y2_svg = 150 - (y2_math * 30);
+
+                    const line = document.getElementById('func-line');
+                    line.setAttribute('x1', x1_svg);
+                    line.setAttribute('y1', y1_svg);
+                    line.setAttribute('x2', x2_svg);
+                    line.setAttribute('y2', y2_svg);
+                };
+
+                aSlider.oninput = updateFuncLine;
+                bSlider.oninput = updateFuncLine;
+                updateFuncLine();
+            }
+            else if (widgetId === 'solid-slice') {
+                document.getElementById('active-widget-title').innerText = "LABORATOIRE : COUPE DE SOLIDE (CÔNE DE RÉVOLUTION)";
+                ws.innerHTML = `
+                    <div class="flex-1 flex flex-col justify-between max-w-sm mx-auto p-4 bg-slate-900 rounded-2xl border border-slate-800">
+                        <div class="relative w-full aspect-square bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+                            <svg id="cone-svg" class="w-64 h-64" viewBox="0 0 200 200">
+                                <!-- Cone structure -->
+                                <polygon points="100,20 40,160 160,160" fill="rgba(16, 185, 129, 0.1)" stroke="#334155" stroke-width="2"/>
+                                <ellipse cx="100" cy="160" rx="60" ry="15" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="2"/>
+                                <!-- Height cut plane -->
+                                <line id="cone-plane" x1="20" y1="90" x2="180" y2="90" stroke="#ef4444" stroke-dasharray="4" stroke-width="3"/>
+                                <!-- Cross section ellipse -->
+                                <ellipse id="cone-section" cx="100" cy="90" rx="30" ry="7.5" fill="rgba(239, 68, 68, 0.3)" stroke="#ef4444" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="space-y-4 pt-4 text-center">
+                            <p class="text-xs font-bold text-slate-300">Déplace le plan de coupe (slider) :</p>
+                            <input type="range" id="cone-slider" min="20" max="160" value="90" class="w-full accent-teal-400">
+                            <div class="bg-slate-950/80 p-3 rounded-lg border border-slate-800">
+                                <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest block font-title">Section obtenue</span>
+                                <p class="text-xs text-slate-300 mt-1">C'est un <strong>cercle</strong> (réduction du cercle de base).</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                const coneSlider = document.getElementById('cone-slider');
+                coneSlider.oninput = () => {
+                    const y = parseInt(coneSlider.value);
+                    document.getElementById('cone-plane').setAttribute('y1', y);
+                    document.getElementById('cone-plane').setAttribute('y2', y);
+                    
+                    const section = document.getElementById('cone-section');
+                    section.setAttribute('cy', y);
+                    // Radius decreases as we go up (toward y=20)
+                    // base is at y=160 (radius 60), apex is at y=20 (radius 0)
+                    const factor = (y - 20) / (160 - 20);
+                    const rx = 60 * factor;
+                    const ry = 15 * factor;
+                    section.setAttribute('rx', rx);
+                    section.setAttribute('ry', ry);
+                };
+            }
+            else if (widgetId === 'transformations') {
+                document.getElementById('active-widget-title').innerText = "LABORATOIRE : HOMOTHÉTIE GÉOMÉTRIQUE";
+                ws.innerHTML = `
+                    <div class="flex-1 flex flex-col justify-between max-w-sm mx-auto p-4 bg-slate-900 rounded-2xl border border-slate-800">
+                        <div class="relative w-full aspect-square bg-slate-950 rounded-xl overflow-hidden border border-slate-800">
+                            <svg id="trans-svg" class="w-full h-full" viewBox="0 0 300 300">
+                                <!-- Center of homothety O -->
+                                <circle cx="50" cy="250" r="4" fill="#ef4444"/>
+                                <text x="40" y="270" fill="#ef4444" font-weight="bold">O (Centre)</text>
+                                
+                                <!-- Original Triangle -->
+                                <polygon points="80,220 120,220 100,180" fill="rgba(59, 130, 246, 0.3)" stroke="#3b82f6" stroke-width="2"/>
+                                <text x="130" y="210" fill="#3b82f6" font-size="10" font-weight="bold">Triangle initial</text>
+                                
+                                <!-- Transformed Triangle -->
+                                <polygon id="trans-tri" points="110,190 190,190 150,110" fill="rgba(16, 185, 129, 0.3)" stroke="#10b981" stroke-width="2"/>
+                                <text x="170" y="140" fill="#10b981" font-size="10" font-weight="bold">Image (k)</text>
+                            </svg>
+                        </div>
+                        <div class="space-y-4 pt-4 text-center">
+                            <div class="flex justify-between text-xs font-bold">
+                                <span class="text-slate-400">Rapport k : <span id="trans-k-val" class="text-teal-300">2</span></span>
+                                <input type="range" id="trans-k-slider" min="0.5" max="3" step="0.5" value="2" class="w-32 accent-teal-400">
+                            </div>
+                            <div class="bg-slate-950/80 p-3 rounded-lg border border-slate-800 text-[11px] text-slate-400 leading-relaxed text-left">
+                                L'homothétie glisse et agrandit/réduit la figure par rapport à O. Si $k > 1$, c'est un agrandissement. Si $k < 1$, c'est une réduction !
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                const kSlider = document.getElementById('trans-k-slider');
+                kSlider.oninput = () => {
+                    const k = parseFloat(kSlider.value);
+                    document.getElementById('trans-k-val').innerText = k;
+
+                    // Compute scaling from center O(50, 250)
+                    // Original points: P1(80, 220), P2(120, 220), P3(100, 180)
+                    // New point = O + k * (P - O)
+                    let p1_x = 50 + k * (80 - 50);
+                    let p1_y = 250 + k * (220 - 250);
+                    let p2_x = 50 + k * (120 - 50);
+                    let p2_y = 250 + k * (220 - 250);
+                    let p3_x = 50 + k * (100 - 50);
+                    let p3_y = 250 + k * (180 - 250);
+
+                    document.getElementById('trans-tri').setAttribute('points', `${p1_x},${p1_y} ${p2_x},${p2_y} ${p3_x},${p3_y}`);
+                };
+            }
+        }
+
+        function closeWidget() {
+            document.getElementById('widget-display-overlay').classList.add('hidden');
+        }
+
+
+        // ZOOM IMAGE MODAL
         function zoomImage() {
             const currentImg = document.getElementById('monster-image');
-            if (currentImg && currentImg.src) {
-                // Ne pas zoomer si c'est la vue "monstre vaincu" (si la question est déjà validée)
-                if (document.getElementById('monster-defeat-text').classList.contains('opacity-100')) {
-                    return;
-                }
+            if (currentImg && currentImg.src && !currentImg.classList.contains('hidden')) {
                 document.getElementById('zoomed-image').src = currentImg.src;
                 document.getElementById('zoom-modal').classList.remove('hidden');
             }
@@ -1014,17 +1589,8 @@
             document.getElementById('zoom-modal').classList.add('hidden');
         }
 
-        // Initialisation globale
+        // Initialize dashboard on load
         updateDashboard();
     </script>
-
-    <!-- Modal Zoom Image -->
-    <div id="zoom-modal" class="hidden fixed inset-0 bg-slate-950/95 z-[100] flex flex-col items-center justify-center p-4" onclick="closeZoom()">
-        <button class="absolute top-4 right-4 text-slate-400 hover:text-white text-4xl font-bold bg-slate-900/80 w-12 h-12 rounded-full flex items-center justify-center border border-slate-800">&times;</button>
-        <div class="w-full max-w-2xl aspect-square bg-slate-900 rounded-3xl p-3 border-2 border-slate-800 shadow-2xl flex items-center justify-center overflow-hidden" onclick="event.stopPropagation()">
-            <img id="zoomed-image" src="" alt="Schéma Agrandi" class="max-w-full max-h-full object-contain rounded-2xl">
-        </div>
-        <p class="text-slate-400 text-sm mt-4 font-semibold tracking-wide text-center">Clique n'importe où pour fermer le zoom</p>
-    </div>
 </body>
 </html>
