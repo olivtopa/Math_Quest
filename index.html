@@ -1592,6 +1592,15 @@
             document.getElementById('zoom-modal').classList.add('hidden');
         }
 
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker enregistré !', reg))
+                    .catch(err => console.error('Erreur SW:', err));
+            });
+        }
+
         // Initialize dashboard on load
         updateDashboard();
     </script>
