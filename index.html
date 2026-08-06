@@ -194,19 +194,19 @@
 
             <!-- Realms and Quests -->
             <div class="space-y-6">
-                <!-- Realm 1: Algèbre -->
+                <!-- Realm 1: Nombres & Algèbre -->
                 <div class="space-y-3">
                     <div class="flex items-center space-x-2">
                         <span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span>
-                        <h3 class="text-xs font-black text-violet-400 uppercase tracking-widest font-title">1. Citadelle de l'Algèbre</h3>
+                        <h3 class="text-xs font-black text-violet-400 uppercase tracking-widest font-title">Semaine 1 : Nombres & Algèbre</h3>
                     </div>
                     <div class="grid grid-cols-1 gap-3">
                         <button onclick="startDungeon('Algèbre', 0)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-violet-500/40 flex justify-between items-center">
                             <div class="flex items-center space-x-3">
                                 <span class="text-3xl">🔑</span>
                                 <div>
-                                    <h4 class="font-extrabold text-sm text-slate-100">Décomposition de Nombres</h4>
-                                    <p class="text-[11px] text-slate-400 mt-0.5">Produit de facteurs premiers</p>
+                                    <h4 class="font-extrabold text-sm text-slate-100">Décomposition & Fractions</h4>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Nombres premiers, simplifications et additions</p>
                                 </div>
                             </div>
                             <span class="text-violet-400 font-extrabold text-xs">Combattre →</span>
@@ -215,18 +215,18 @@
                             <div class="flex items-center space-x-3">
                                 <span class="text-3xl">💥</span>
                                 <div>
-                                    <h4 class="font-extrabold text-sm text-slate-100">Calcul Littéral & Distribution</h4>
-                                    <p class="text-[11px] text-slate-400 mt-0.5">Développer des expressions simples</p>
+                                    <h4 class="font-extrabold text-sm text-slate-100">Puissances & Écritures Scientifiques</h4>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Calculs de puissances de 10, ordres de grandeur</p>
                                 </div>
                             </div>
                             <span class="text-violet-400 font-extrabold text-xs">Combattre →</span>
                         </button>
-                        <button id="quest-algo-3" onclick="startDungeon('Algèbre', 2)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-violet-500/40 flex justify-between items-center">
+                        <button onclick="startDungeon('Algèbre', 2)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-violet-500/40 flex justify-between items-center">
                             <div class="flex items-center space-x-3">
                                 <span class="text-3xl">🌀</span>
                                 <div>
-                                    <h4 class="font-extrabold text-sm text-slate-100">Identités Remarquables</h4>
-                                    <p class="text-[11px] text-slate-400 mt-0.5">Calcul rapide du second degré</p>
+                                    <h4 class="font-extrabold text-sm text-slate-100">Calcul Littéral & Factorisation</h4>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Double distributivité et facteurs communs</p>
                                 </div>
                             </div>
                             <span class="text-violet-400 font-extrabold text-xs">Combattre →</span>
@@ -235,8 +235,8 @@
                             <div class="flex items-center space-x-3">
                                 <span class="text-3xl">🔒</span>
                                 <div>
-                                    <h4 class="font-extrabold text-sm text-slate-100">Équations-Produits</h4>
-                                    <p class="text-[11px] text-slate-400 mt-0.5">Résoudre A(x) * B(x) = 0</p>
+                                    <h4 class="font-extrabold text-sm text-slate-100">Équations & Inéquations</h4>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Résolution d'égalités et d'inégalités du 1er degré</p>
                                 </div>
                             </div>
                             <span class="text-violet-400 font-extrabold text-xs">Combattre →</span>
@@ -244,35 +244,35 @@
                     </div>
                 </div>
 
-                <!-- Realm 2: Géométrie -->
+                <!-- Realm 2: Fonctions -->
                 <div class="space-y-3">
                     <div class="flex items-center space-x-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                        <h3 class="text-xs font-black text-emerald-400 uppercase tracking-widest font-title">2. Arène de la Géométrie</h3>
+                        <span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>
+                        <h3 class="text-xs font-black text-pink-400 uppercase tracking-widest font-title">Semaine 2 : Royaume des Fonctions</h3>
                     </div>
-                    <div id="dungeon-geometry-container" class="grid grid-cols-1 gap-3">
+                    <div id="dungeon-functions-container" class="grid grid-cols-1 gap-3">
                         <!-- Locked state if level < 2, updated in JS -->
                     </div>
                 </div>
 
-                <!-- Realm 3: Probas / Stats -->
+                <!-- Realm 3: Géométrie -->
                 <div class="space-y-3">
                     <div class="flex items-center space-x-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                        <h3 class="text-xs font-black text-amber-400 uppercase tracking-widest font-title">3. Sanctuaire des Probas-Stats</h3>
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        <h3 class="text-xs font-black text-emerald-400 uppercase tracking-widest font-title">Semaine 3 : Arène de la Géométrie</h3>
                     </div>
-                    <div id="dungeon-stats-container" class="grid grid-cols-1 gap-3">
+                    <div id="dungeon-geometry-container" class="grid grid-cols-1 gap-3">
                         <!-- Locked state if level < 3, updated in JS -->
                     </div>
                 </div>
 
-                <!-- Realm 4: Algorithmique -->
+                <!-- Realm 4: Stats, Probas & Algorithmes -->
                 <div class="space-y-3">
                     <div class="flex items-center space-x-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                        <h3 class="text-xs font-black text-blue-400 uppercase tracking-widest font-title">4. Guilde d'Algorithmique</h3>
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                        <h3 class="text-xs font-black text-amber-400 uppercase tracking-widest font-title">Semaine 4 : Stats, Probas & Algorithmes</h3>
                     </div>
-                    <div id="dungeon-algo-container" class="grid grid-cols-1 gap-3">
+                    <div id="dungeon-stats-container" class="grid grid-cols-1 gap-3">
                         <!-- Locked state if level < 4, updated in JS -->
                     </div>
                 </div>
@@ -411,7 +411,7 @@
             </div>
 
             <!-- Widgets List / Selectors -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- Widget 1: Graphique des Fonctions -->
                 <div class="glass-card p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-52">
                     <div class="space-y-1">
@@ -424,14 +424,14 @@
                     </button>
                 </div>
 
-                <!-- Widget 2: Coupes dans l'Espace -->
+                <!-- Widget 2: Labo de Trigonométrie -->
                 <div class="glass-card p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-52">
                     <div class="space-y-1">
-                        <span class="text-3xl">🧊</span>
-                        <h4 class="font-extrabold text-sm text-slate-100">Coupes de Solides 3D</h4>
-                        <p class="text-[11px] text-slate-400 leading-relaxed">Coupe virtuellement un cylindre ou un cône avec un plan parallèle à la base pour étudier la section.</p>
+                        <span class="text-3xl">📐</span>
+                        <h4 class="font-extrabold text-sm text-slate-100">Trigonométrie Active</h4>
+                        <p class="text-[11px] text-slate-400 leading-relaxed">Modifie un angle aigu et regarde évoluer en direct les rapports de cosinus, sinus et tangente.</p>
                     </div>
-                    <button onclick="openWidget('solid-slice')" class="w-full mt-3 bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/30 text-teal-300 font-bold text-xs py-2 rounded-lg transition-all cursor-pointer">
+                    <button onclick="openWidget('trigonometry')" class="w-full mt-3 bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/30 text-teal-300 font-bold text-xs py-2 rounded-lg transition-all cursor-pointer">
                         Ouvrir le Labo →
                     </button>
                 </div>
@@ -440,10 +440,22 @@
                 <div class="glass-card p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-52">
                     <div class="space-y-1">
                         <span class="text-3xl">🌀</span>
-                        <h4 class="font-extrabold text-sm text-slate-100">Animations de Transformations</h4>
+                        <h4 class="font-extrabold text-sm text-slate-100">Homothétie & Échelles</h4>
                         <p class="text-[11px] text-slate-400 leading-relaxed">Observe le glissement d'une translation, la rotation ou l'homothétie avec un facteur dynamique $k$.</p>
                     </div>
                     <button onclick="openWidget('transformations')" class="w-full mt-3 bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/30 text-teal-300 font-bold text-xs py-2 rounded-lg transition-all cursor-pointer">
+                        Ouvrir le Labo →
+                    </button>
+                </div>
+
+                <!-- Widget 4: Simulateur Scratch -->
+                <div class="glass-card p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-52">
+                    <div class="space-y-1">
+                        <span class="text-3xl">💻</span>
+                        <h4 class="font-extrabold text-sm text-slate-100">Labo Scratch Express</h4>
+                        <p class="text-[11px] text-slate-400 leading-relaxed">Assemble des blocs Scratch simples pour faire avancer et orienter un lutin sur une grille 2D.</p>
+                    </div>
+                    <button onclick="openWidget('scratch-lab')" class="w-full mt-3 bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/30 text-teal-300 font-bold text-xs py-2 rounded-lg transition-all cursor-pointer">
                         Ouvrir le Labo →
                     </button>
                 </div>
@@ -686,16 +698,56 @@
                 document.getElementById('trophy-4').classList.add('border-indigo-500/30', 'bg-indigo-950/20');
             }
 
-            // Realm 2 unlocking (requires Level >= 2)
-            const r2Container = document.getElementById('dungeon-geometry-container');
+            // Semaine 2: Fonctions unlocking (requires Level >= 2)
+            const r2Container = document.getElementById('dungeon-functions-container');
             if (gameState.level >= 2) {
                 r2Container.innerHTML = `
+                    <button onclick="startDungeon('Fonctions', 0)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-pink-500/40 flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">📉</span>
+                            <div>
+                                <h4 class="font-extrabold text-sm text-slate-100">Notion de Fonction</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Calculs et lectures d'images et antécédents</p>
+                            </div>
+                        </div>
+                        <span class="text-pink-400 font-extrabold text-xs">Combattre →</span>
+                    </button>
+                    <button onclick="startDungeon('Fonctions', 1)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-pink-500/40 flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">📈</span>
+                            <div>
+                                <h4 class="font-extrabold text-sm text-slate-100">Fonctions Linéaires & Affines</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Coefficient directeur, tracés et droites y = ax + b</p>
+                            </div>
+                        </div>
+                        <span class="text-pink-400 font-extrabold text-xs">Combattre →</span>
+                    </button>
+                `;
+            } else {
+                r2Container.innerHTML = `
+                    <div class="w-full bg-slate-950/40 opacity-40 p-4 rounded-xl border border-dashed border-slate-900 flex justify-between items-center select-none">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">🔒</span>
+                            <div>
+                                <h4 class="font-extrabold text-sm text-slate-500">Donjons des Fonctions</h4>
+                                <p class="text-[11px] text-slate-600 mt-0.5">Requis : Niveau 2 (Terminer la Semaine 1)</p>
+                            </div>
+                        </div>
+                        <span class="text-slate-600 text-xs font-bold">Verrouillé</span>
+                    </div>
+                `;
+            }
+
+            // Semaine 3: Géométrie & Trigonométrie unlocking (requires Level >= 3)
+            const r3Container = document.getElementById('dungeon-geometry-container');
+            if (gameState.level >= 3) {
+                r3Container.innerHTML = `
                     <button onclick="startDungeon('Géométrie', 0)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-emerald-500/40 flex justify-between items-center">
                         <div class="flex items-center space-x-3">
                             <span class="text-3xl">📐</span>
                             <div>
                                 <h4 class="font-extrabold text-sm text-slate-100">Théorème de Pythagore</h4>
-                                <p class="text-[11px] text-slate-400 mt-0.5">Calculer l'hypoténuse ou un côté</p>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Hypoténuse, calcul de côté et réciproque</p>
                             </div>
                         </div>
                         <span class="text-emerald-400 font-extrabold text-xs">Combattre →</span>
@@ -705,7 +757,7 @@
                             <span class="text-3xl">🗼</span>
                             <div>
                                 <h4 class="font-extrabold text-sm text-slate-100">Théorème de Thalès</h4>
-                                <p class="text-[11px] text-slate-400 mt-0.5">Triangles emboîtés et papillon</p>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Proportions, configuration papillon et réciproque</p>
                             </div>
                         </div>
                         <span class="text-emerald-400 font-extrabold text-xs">Combattre →</span>
@@ -714,21 +766,31 @@
                         <div class="flex items-center space-x-3">
                             <span class="text-3xl">🔗</span>
                             <div>
-                                <h4 class="font-extrabold text-sm text-slate-100">La Réciproque de Thalès</h4>
-                                <p class="text-[11px] text-slate-400 mt-0.5">Démontrer que des droites sont parallèles</p>
+                                <h4 class="font-extrabold text-sm text-slate-100">Trigonométrie active</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Cosinus, Sinus, Tangente (angles et côtés)</p>
+                            </div>
+                        </div>
+                        <span class="text-emerald-400 font-extrabold text-xs">Combattre →</span>
+                    </button>
+                    <button onclick="startDungeon('Géométrie', 3)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-emerald-500/40 flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">🧊</span>
+                            <div>
+                                <h4 class="font-extrabold text-sm text-slate-100">Transformations & Espace</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Homothéties, rotations, sections 3D et volumes</p>
                             </div>
                         </div>
                         <span class="text-emerald-400 font-extrabold text-xs">Combattre →</span>
                     </button>
                 `;
             } else {
-                r2Container.innerHTML = `
+                r3Container.innerHTML = `
                     <div class="w-full bg-slate-950/40 opacity-40 p-4 rounded-xl border border-dashed border-slate-900 flex justify-between items-center select-none">
                         <div class="flex items-center space-x-3">
                             <span class="text-3xl">🔒</span>
                             <div>
                                 <h4 class="font-extrabold text-sm text-slate-500">Donjons Géométriques</h4>
-                                <p class="text-[11px] text-slate-600 mt-0.5">Requis : Niveau 2 (Terminer l'Algèbre)</p>
+                                <p class="text-[11px] text-slate-600 mt-0.5">Requis : Niveau 3 (Terminer la Semaine 2)</p>
                             </div>
                         </div>
                         <span class="text-slate-600 text-xs font-bold">Verrouillé</span>
@@ -736,69 +798,49 @@
                 `;
             }
 
-            // Realm 3 unlocking (requires Level >= 3)
-            const r3Container = document.getElementById('dungeon-stats-container');
-            if (gameState.level >= 3) {
-                r3Container.innerHTML = `
-                    <button onclick="startDungeon('ProbasStats', 0)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-amber-500/40 flex justify-between items-center">
+            // Semaine 4: Stats, Probas & Algorithmes unlocking (requires Level >= 4)
+            const r4Container = document.getElementById('dungeon-stats-container');
+            if (gameState.level >= 4) {
+                r4Container.innerHTML = `
+                    <button onclick="startDungeon('ProbasStatsAlgo', 0)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-amber-500/40 flex justify-between items-center">
                         <div class="flex items-center space-x-3">
                             <span class="text-3xl">📊</span>
                             <div>
-                                <h4 class="font-extrabold text-sm text-slate-100">Statistiques & Médiane</h4>
-                                <p class="text-[11px] text-slate-400 mt-0.5">Trier des données et trouver le milieu</p>
+                                <h4 class="font-extrabold text-sm text-slate-100">Statistiques Descriptives</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Moyenne pondérée, étendue et médiane</p>
                             </div>
                         </div>
                         <span class="text-amber-400 font-extrabold text-xs">Combattre →</span>
                     </button>
-                    <button onclick="startDungeon('ProbasStats', 1)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-amber-500/40 flex justify-between items-center">
+                    <button onclick="startDungeon('ProbasStatsAlgo', 1)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-amber-500/40 flex justify-between items-center">
                         <div class="flex items-center space-x-3">
                             <span class="text-3xl">🎲</span>
                             <div>
-                                <h4 class="font-extrabold text-sm text-slate-100">Probabilités Express</h4>
-                                <p class="text-[11px] text-slate-400 mt-0.5">Calculer les ratios de hasard</p>
+                                <h4 class="font-extrabold text-sm text-slate-100">Probabilités à 2 Épreuves</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Tirages successifs et arbres de probabilité</p>
+                            </div>
+                        </div>
+                        <span class="text-amber-400 font-extrabold text-xs">Combattre →</span>
+                    </button>
+                    <button onclick="startDungeon('ProbasStatsAlgo', 2)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-amber-500/40 flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">💻</span>
+                            <div>
+                                <h4 class="font-extrabold text-sm text-slate-100">Algorithmique & Scratch</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Variables, boucles et conditions (Si... Alors... Sinon)</p>
                             </div>
                         </div>
                         <span class="text-amber-400 font-extrabold text-xs">Combattre →</span>
                     </button>
                 `;
             } else {
-                r3Container.innerHTML = `
-                    <div class="w-full bg-slate-950/40 opacity-40 p-4 rounded-xl border border-dashed border-slate-900 flex justify-between items-center select-none">
-                        <div class="flex items-center space-x-3">
-                            <span class="text-3xl">🔒</span>
-                            <div>
-                                <h4 class="font-extrabold text-sm text-slate-500">Donjons Statistiques</h4>
-                                <p class="text-[11px] text-slate-600 mt-0.5">Requis : Niveau 3 (Terminer la Géométrie)</p>
-                            </div>
-                        </div>
-                        <span class="text-slate-600 text-xs font-bold">Verrouillé</span>
-                    </div>
-                `;
-            }
-
-            // Realm 4 unlocking (requires Level >= 4)
-            const r4Container = document.getElementById('dungeon-algo-container');
-            if (gameState.level >= 4) {
-                r4Container.innerHTML = `
-                    <button onclick="startDungeon('Algo', 0)" class="w-full text-left glass-card p-4 rounded-xl border border-slate-800 hover:border-blue-500/40 flex justify-between items-center">
-                        <div class="flex items-center space-x-3">
-                            <span class="text-3xl">💻</span>
-                            <div>
-                                <h4 class="font-extrabold text-sm text-slate-100">Logique d'Algorithmes</h4>
-                                <p class="text-[11px] text-slate-400 mt-0.5">Boucles Scratch et conditions Python</p>
-                            </div>
-                        </div>
-                        <span class="text-blue-400 font-extrabold text-xs">Combattre →</span>
-                    </button>
-                `;
-            } else {
                 r4Container.innerHTML = `
                     <div class="w-full bg-slate-950/40 opacity-40 p-4 rounded-xl border border-dashed border-slate-900 flex justify-between items-center select-none">
                         <div class="flex items-center space-x-3">
                             <span class="text-3xl">🔒</span>
                             <div>
-                                <h4 class="font-extrabold text-sm text-slate-500">Donjons d'Algorithmique</h4>
-                                <p class="text-[11px] text-slate-600 mt-0.5">Requis : Niveau 4 (Terminer les Statistiques)</p>
+                                <h4 class="font-extrabold text-sm text-slate-500">Donjons Stats, Probas & Algo</h4>
+                                <p class="text-[11px] text-slate-600 mt-0.5">Requis : Niveau 4 (Terminer la Semaine 3)</p>
                             </div>
                         </div>
                         <span class="text-slate-600 text-xs font-bold">Verrouillé</span>
@@ -821,278 +863,646 @@
                 drawOverlay: null // JS function to draw SVG elements
             };
 
+            // Helpers for shuffling options
+            const setupOptions = (correct, list) => {
+                let opts = [correct, ...list].map(String);
+                // remove duplicates
+                opts = opts.filter((v, i, self) => self.indexOf(v) === i);
+                // shuffle
+                opts.sort(() => Math.random() - 0.5);
+                if (opts.indexOf(String(correct)) === -1) {
+                    opts[0] = String(correct);
+                }
+                q.options = opts.slice(0, 4);
+                q.answer = String(correct);
+            };
+
             if (realm === "Algèbre") {
                 if (questIndex === 0) {
-                    // Prime factorization
-                    let primes = [2, 3, 5, 7];
-                    let p1 = primes[Math.floor(Math.random() * 3)];
-                    let p2 = primes[Math.floor(Math.random() * 3)];
-                    let p3 = primes[Math.floor(Math.random() * 4)];
-                    let val = p1 * p1 * p2 * p3;
-                    if (val > 150) val = 60; // Keep it clean
-                    
-                    // compute standard factors
-                    let factors = [p1, p1, p2, p3].sort((a,b)=>a-b);
-                    let formula = "";
-                    let counts = {};
-                    factors.forEach(f => counts[f] = (counts[f] || 0) + 1);
-                    formula = Object.keys(counts).map(k => counts[k] > 1 ? `${k}²` : k).join(" × ");
+                    // Fractions & Décomposition
+                    let isAddition = Math.random() > 0.5;
+                    if (isAddition) {
+                        // Addition of fractions: a/b + c/d
+                        let b = 3;
+                        let d = 12; // common denom will be 12
+                        let a = Math.floor(Math.random() * 2) + 1; // 1 or 2
+                        let c = Math.floor(Math.random() * 4) + 1; // 1 to 4
+                        let num = a * 4 + c;
+                        let correctVal = `${num}/12`;
+                        
+                        q.title = "Addition de Fractions";
+                        q.question = `Calcule et simplifie le résultat : A = ${a}/3 + ${c}/12`;
+                        setupOptions(correctVal, [`${a+c}/15`, `${a*c}/36`, `${num+2}/12`, `${Math.max(1, num-3)}/12`]);
+                        q.explanation = `
+                            <div><strong>Données :</strong> L'expression ${a}/3 + ${c}/12.</div>
+                            <div><strong>Règle :</strong> Pour additionner deux fractions, on les met au même dénominateur. Ici, le dénominateur commun est 12 (car 12 est un multiple de 3).</div>
+                            <div><strong>Calcul :</strong><br>
+                            • On convertit la première fraction : ${a}/3 = (${a} × 4) / (3 × 4) = ${a*4}/12.<br>
+                            • On additionne les numérateurs : ${a*4}/12 + ${c}/12 = (${a*4} + ${c}) / 12 = ${num}/12.</div>
+                            <div><strong>Conclusion :</strong> Le résultat final est bien ${correctVal}.</div>
+                        `;
+                        q.drawOverlay = (svg) => {
+                            svg.innerHTML = `
+                                <!-- Fraction visualizer -->
+                                <text x="150" y="40" fill="#10b981" font-size="12" font-weight="bold" text-anchor="middle">Visualisation : ${a}/3 + ${c}/12</text>
+                                <!-- Circle 1: Thirds -->
+                                <circle cx="80" cy="140" r="40" fill="none" stroke="#334155" stroke-width="3"/>
+                                <path d="M 80 140 L 80 100 A 40 40 0 0 1 114.6 160 Z" fill="rgba(16, 185, 129, 0.4)" stroke="#10b981" stroke-width="2"/>
+                                ${a > 1 ? `<path d="M 80 140 L 114.6 160 A 40 40 0 0 1 45.4 160 Z" fill="rgba(16, 185, 129, 0.4)" stroke="#10b981" stroke-width="2"/>` : ''}
+                                <text x="80" y="200" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${a}/3</text>
+                                
+                                <!-- Plus sign -->
+                                <text x="150" y="145" fill="#fff" font-size="24" font-weight="bold" text-anchor="middle">+</text>
 
-                    q.title = "Décomposition Primaire";
-                    q.question = `Décompose le nombre ${val} en produit de facteurs premiers :`;
-                    q.answer = formula;
-                    q.options = [
-                        formula,
-                        `${val/2} × 2`,
-                        factors.join(" × "),
-                        `2² × 3 × 5 × 7`
-                    ].filter((v, i, self) => self.indexOf(v) === i).slice(0, 4);
-                    // Shuffle
-                    q.options.sort(() => Math.random() - 0.5);
-                    if (q.options.indexOf(q.answer) === -1) q.options[0] = q.answer;
+                                <!-- Circle 2: Twelfths -->
+                                <circle cx="220" cy="140" r="40" fill="none" stroke="#334155" stroke-width="3"/>
+                                <!-- Slice lines for 12ths -->
+                                <path d="M 220 100 L 220 180 M 180 140 L 260 140 M 200 105.4 L 240 174.6 M 240 105.4 L 200 174.6" stroke="#1e293b" stroke-width="1"/>
+                                <path d="M 220 140 L 220 100 A 40 40 0 0 1 240 105.4 Z" fill="rgba(99, 102, 241, 0.5)" stroke="#6366f1" stroke-width="1"/>
+                                ${c > 1 ? `<path d="M 220 140 L 240 105.4 A 40 40 0 0 1 254.6 120 Z" fill="rgba(99, 102, 241, 0.5)" stroke="#6366f1" stroke-width="1"/>` : ''}
+                                ${c > 2 ? `<path d="M 220 140 L 254.6 120 A 40 40 0 0 1 260 140 Z" fill="rgba(99, 102, 241, 0.5)" stroke="#6366f1" stroke-width="1"/>` : ''}
+                                ${c > 3 ? `<path d="M 220 140 L 260 140 A 40 40 0 0 1 254.6 160 Z" fill="rgba(99, 102, 241, 0.5)" stroke="#6366f1" stroke-width="1"/>` : ''}
+                                <text x="220" y="200" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${c}/12</text>
+                            `;
+                        };
+                    } else {
+                        // Decompose & Simplify
+                        let primes = [2, 3, 5, 7];
+                        let f1 = primes[Math.floor(Math.random() * 2)]; // 2 or 3
+                        let f2 = primes[Math.floor(Math.random() * 2) + 1]; // 3 or 5
+                        let common = primes[Math.floor(Math.random() * 3)]; // 2, 3 or 5
+                        
+                        let num = f1 * common;
+                        let den = f2 * common;
+                        let correctVal = `${f1}/${f2}`;
 
-                    q.explanation = `
-                        <div><strong>Données :</strong> Le nombre entier ${val}.</div>
-                        <div><strong>Propriété :</strong> Tout nombre entier peut s'écrire de façon unique sous la forme d'un produit de nombres premiers.</div>
-                        <div><strong>Conclusion :</strong> ${val} = ${factors.join(" × ")} = ${formula}. Remarque que tous les facteurs de la bonne formule sont bien des nombres premiers !</div>
-                    `;
-                    q.image = "spectre_monster.png";
-                } 
+                        q.title = "Simplification par Facteurs Premiers";
+                        q.question = `Simplifie la fraction suivante en utilisant la décomposition en facteurs premiers : B = ${num}/${den}`;
+                        setupOptions(correctVal, [`${f1+1}/${f2+1}`, `${f1}/${common}`, `${common}/${f2}`, `1/${f2}`]);
+                        
+                        q.explanation = `
+                            <div><strong>Données :</strong> La fraction ${num}/${den}.</div>
+                            <div><strong>Règle :</strong> On décompose le numérateur et le dénominateur en produit de facteurs premiers, puis on simplifie les facteurs communs.</div>
+                            <div><strong>Décomposition :</strong><br>
+                            • Numérateur : ${num} = ${f1} × ${common}.<br>
+                            • Dénominateur : ${den} = ${f2} × ${common}.</div>
+                            <div><strong>Simplification :</strong> On simplifie par le facteur commun ${common} : (${f1} × ${common}) / (${f2} × ${common}) = ${f1}/${f2}.</div>
+                        `;
+                        q.drawOverlay = (svg) => {
+                            svg.innerHTML = `
+                                <text x="150" y="60" fill="#10b981" font-size="14" font-weight="bold" text-anchor="middle">Décomposition en facteurs premiers</text>
+                                <text x="150" y="110" fill="#fff" font-size="28" font-weight="bold" text-anchor="middle">${num}</text>
+                                <line x1="100" y1="125" x2="200" y2="125" stroke="#334155" stroke-width="3"/>
+                                <text x="150" y="165" fill="#fff" font-size="28" font-weight="bold" text-anchor="middle">${den}</text>
+                                
+                                <text x="150" y="210" fill="#a7f3d0" font-size="11" font-weight="bold" text-anchor="middle">Astuce : Décompose en ${f1} × ${common} et ${f2} × ${common}</text>
+                            `;
+                        };
+                    }
+                }
                 else if (questIndex === 1) {
-                    // Distribution: ax(bx - c)
-                    let a = Math.floor(Math.random() * 4) + 2;
-                    let b = Math.floor(Math.random() * 3) + 2;
-                    let c = Math.floor(Math.random() * 5) + 2;
-                    let correct = `${a*b}x² - ${a*c}x`;
+                    // Puissances & Écritures Scientifiques
+                    let n = Math.floor(Math.random() * 5) + 2; // 2 to 6
+                    let m = Math.floor(Math.random() * 4) + 2; // 2 to 5
+                    let p = Math.floor(Math.random() * 5) + 2; // 2 to 6
+                    let correctExp = n + m - p;
+                    let correctVal = `10^${correctExp}`;
 
-                    q.title = "Calcul Littéral";
-                    q.question = `Développe l'expression suivante : A = ${a}x(${b}x - ${c})`;
-                    q.answer = correct;
-                    q.options = [
-                        correct,
-                        `${a*b}x - ${a*c}`,
-                        `${a*b}x² - ${c}`,
-                        `${a+b}x² - ${a+c}x`
-                    ];
-                    q.options.sort(() => Math.random() - 0.5);
+                    q.title = "Règles des Puissances";
+                    q.question = `Simplifie l'expression suivante sous la forme d'une puissance de 10 : C = (10^${n} × 10^${m}) / 10^${p}`;
+                    setupOptions(correctVal, [`10^${n+m+p}`, `10^${n*m-p}`, `10^${Math.max(1, n-m+p)}`, `10^${n+m}`]);
+
                     q.explanation = `
-                        <div><strong>Données :</strong> L'expression ${a}x(${b}x - ${c}).</div>
-                        <div><strong>Propriété :</strong> Simple distributivité : k(a - b) = k×a - k×b.</div>
-                        <div><strong>Conclusion :</strong> On multiplie ${a}x par chaque terme : ${a}x × ${b}x = ${a*b}x² et ${a}x × (-${c}) = -${a*c}x. Le résultat est bien ${correct}.</div>
+                        <div><strong>Données :</strong> (10^${n} × 10^${m}) / 10^${p}.</div>
+                        <div><strong>Règles :</strong><br>
+                        • Multiplier des puissances : $10^a × 10^b = 10^{a+b}$.<br>
+                        • Diviser des puissances : $10^a / 10^b = 10^{a-b}$.</div>
+                        <div><strong>Calcul :</strong><br>
+                        • Étape 1 : 10^${n} × 10^${m} = 10^{${n}+${m}} = 10^${n+m}.<br>
+                        • Étape 2 : 10^${n+m} / 10^${p} = 10^{${n+m}-${p}} = 10^${correctExp}.</div>
                     `;
-                    q.image = "colossus_monster.png";
+                    q.drawOverlay = (svg) => {
+                        svg.innerHTML = `
+                            <text x="150" y="50" fill="#10b981" font-size="14" font-weight="bold" text-anchor="middle">Échelle des puissances de 10</text>
+                            
+                            <!-- Scale line -->
+                            <line x1="40" y1="140" x2="260" y2="140" stroke="#334155" stroke-width="4"/>
+                            
+                            <!-- Points on scale -->
+                            <circle cx="50" cy="140" r="6" fill="#ef4444"/>
+                            <text x="50" y="120" fill="#ef4444" font-size="9" font-weight="bold" text-anchor="middle">10⁻¹⁵m (Atome)</text>
+                            
+                            <circle cx="150" cy="140" r="6" fill="#10b981"/>
+                            <text x="150" y="120" fill="#10b981" font-size="9" font-weight="bold" text-anchor="middle">10⁰m (Humain)</text>
+                            
+                            <circle cx="250" cy="140" r="6" fill="#6366f1"/>
+                            <text x="250" y="120" fill="#6366f1" font-size="9" font-weight="bold" text-anchor="middle">10⁷m (Terre)</text>
+                            
+                            <text x="150" y="200" fill="#a7f3d0" font-size="11" font-weight="bold" text-anchor="middle">Objectif : Simplifier l'écriture de C</text>
+                        `;
+                    };
                 }
                 else if (questIndex === 2) {
-                    // (x + a)^2
-                    let a = Math.floor(Math.random() * 6) + 2;
-                    let correct = `x² + ${2*a}x + ${a*a}`;
+                    // Calcul Littéral & Factorisation
+                    let isFactorisation = Math.random() > 0.5;
+                    if (isFactorisation) {
+                        // Factorize ax^2 + bx = x(ax + b)
+                        let a = Math.floor(Math.random() * 3) + 2; // 2 to 4
+                        let b = Math.floor(Math.random() * 5) + 3; // 3 to 7
+                        let correctVal = `x(${a}x + ${b})`;
 
-                    q.title = "Identités Remarquables";
-                    q.question = `Développe l'expression : B = (x + ${a})²`;
-                    q.answer = correct;
-                    q.options = [
-                        correct,
-                        `x² + ${a*a}`,
-                        `x² + ${a}x + ${a*a}`,
-                        `x² + ${2*a}x + ${2*a}`
-                    ];
-                    q.options.sort(() => Math.random() - 0.5);
-                    q.explanation = `
-                        <div><strong>Données :</strong> L'expression (x + ${a})².</div>
-                        <div><strong>Propriété :</strong> L'identité remarquable (a + b)² = a² + 2ab + b².</div>
-                        <div><strong>Conclusion :</strong> Ici, a = x et b = ${a}. Donc B = x² + 2×x×${a} + ${a}² = ${correct}. Attention au double produit !</div>
-                    `;
-                    q.image = "mirror_monster.png";
+                        q.title = "Factorisation (Facteur Commun)";
+                        q.question = `Factorise l'expression suivante en trouvant le facteur commun : D = ${a}x² + ${b}x`;
+                        setupOptions(correctVal, [`${a}x(x + ${b})`, `x(${a}x - ${b})`, `x²(${a} + ${b}x)`, `${a+b}x(x + 1)`]);
+
+                        q.explanation = `
+                            <div><strong>Données :</strong> L'expression ${a}x² + ${b}x.</div>
+                            <div><strong>Règle :</strong> On cherche le plus grand facteur commun présent dans chaque terme. Ici, c'est $x$.</div>
+                            <div><strong>Calcul :</strong><br>
+                            • On décompose chaque terme : ${a}x² = x × (${a}x) et ${b}x = x × ${b}.<br>
+                            • On extrait le facteur commun : D = x × (${a}x + ${b}) = ${correctVal}.</div>
+                        `;
+                        q.drawOverlay = (svg) => {
+                            svg.innerHTML = `
+                                <text x="150" y="50" fill="#10b981" font-size="14" font-weight="bold" text-anchor="middle">Visualisation Géométrique</text>
+                                
+                                <!-- Area visualization of ax^2 + bx -->
+                                <rect x="50" y="90" width="110" height="70" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" stroke-width="2"/>
+                                <text x="105" y="130" fill="#10b981" font-weight="bold" font-size="12" text-anchor="middle">Aire = ${a}x²</text>
+                                
+                                <rect x="160" y="90" width="70" height="70" fill="rgba(99, 102, 241, 0.15)" stroke="#6366f1" stroke-width="2"/>
+                                <text x="195" y="130" fill="#6366f1" font-weight="bold" font-size="12" text-anchor="middle">Aire = ${b}x</text>
+                                
+                                <!-- Sides -->
+                                <text x="35" y="130" fill="#fff" font-weight="bold" font-size="12">x</text>
+                                <text x="105" y="80" fill="#fff" font-weight="bold" font-size="12" text-anchor="middle">${a}x</text>
+                                <text x="195" y="80" fill="#fff" font-weight="bold" font-size="12" text-anchor="middle">${b}</text>
+                                
+                                <text x="140" y="200" fill="#a7f3d0" font-size="10" font-weight="bold" text-anchor="middle">Aire totale = x × (${a}x + ${b})</text>
+                            `;
+                        };
+                    } else {
+                        // Double Distributivité: (x+a)(x+b) = x^2 + (a+b)x + ab
+                        let a = Math.floor(Math.random() * 4) + 2; // 2 to 5
+                        let b = Math.floor(Math.random() * 4) + 2; // 2 to 5
+                        let correctVal = `x² + ${a+b}x + ${a*b}`;
+
+                        q.title = "Double Distributivité";
+                        q.question = `Développe et réduis l'expression suivante : E = (x + ${a})(x + ${b})`;
+                        setupOptions(correctVal, [`x² + ${a*b}`, `x² + ${a+b}x + ${a+b}`, `x² + ${a*b}x + ${a+b}`, `x² - ${a+b}x + ${a*b}`]);
+
+                        q.explanation = `
+                            <div><strong>Données :</strong> (x + ${a})(x + ${b}).</div>
+                            <div><strong>Règle :</strong> On utilise la double distributivité : $(a+b)(c+d) = ac + ad + bc + bd$.</div>
+                            <div><strong>Calcul :</strong><br>
+                            E = x×x + x×${b} + ${a}×x + ${a}×${b}<br>
+                            E = x² + ${b}x + ${a}x + ${a*b}<br>
+                            E = x² + (${a}+${b})x + ${a*b} = ${correctVal}.</div>
+                        `;
+                        q.drawOverlay = (svg) => {
+                            svg.innerHTML = `
+                                <text x="150" y="45" fill="#10b981" font-size="14" font-weight="bold" text-anchor="middle">Aire de (x + ${a})(x + ${b})</text>
+                                
+                                <!-- Subdivided rectangle -->
+                                <rect x="60" y="80" width="80" height="60" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-dasharray="2"/>
+                                <text x="100" y="115" fill="#fff" font-size="10" text-anchor="middle">x²</text>
+                                
+                                <rect x="140" y="80" width="60" height="60" fill="rgba(99, 102, 241, 0.1)" stroke="#6366f1" stroke-dasharray="2"/>
+                                <text x="170" y="115" fill="#fff" font-size="10" text-anchor="middle">${b}x</text>
+                                
+                                <rect x="60" y="140" width="80" height="40" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b" stroke-dasharray="2"/>
+                                <text x="100" y="165" fill="#fff" font-size="10" text-anchor="middle">${a}x</text>
+                                
+                                <rect x="140" y="140" width="60" height="40" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444" stroke-dasharray="2"/>
+                                <text x="170" y="165" fill="#fff" font-size="10" text-anchor="middle">${a*b}</text>
+                                
+                                <!-- Labels -->
+                                <text x="45" y="110" fill="#fff" font-size="11">x</text>
+                                <text x="45" y="165" fill="#fff" font-size="11">${a}</text>
+                                <text x="100" y="70" fill="#fff" font-size="11" text-anchor="middle">x</text>
+                                <text x="170" y="70" fill="#fff" font-size="11" text-anchor="middle">${b}</text>
+                            `;
+                        };
+                    }
                 }
                 else if (questIndex === 3) {
-                    // (x - a)(bx + c) = 0
-                    let a = Math.floor(Math.random() * 5) + 2;
-                    let b = Math.floor(Math.random() * 3) + 2;
-                    let c = b * (Math.floor(Math.random() * 3) + 1); // ensure integer division
-                    let sol1 = a;
-                    let sol2 = -c/b;
-                    let correct = `x = ${sol1} et x = ${sol2}`;
+                    // Équations & Inéquations
+                    let isEquation = Math.random() > 0.5;
+                    if (isEquation) {
+                        // ax + b = c
+                        let a = Math.floor(Math.random() * 3) + 2; // 2 to 4
+                        let b = Math.floor(Math.random() * 8) + 2; // 2 to 9
+                        let correctX = Math.floor(Math.random() * 4) + 2; // 2 to 5
+                        let c = a * correctX + b;
+                        let correctVal = `x = ${correctX}`;
 
-                    q.title = "Équations-Produits";
-                    q.question = `Résous l'équation suivante : (x - ${a})(${b}x + ${c}) = 0. Quelles sont les solutions ?`;
-                    q.answer = correct;
-                    q.options = [
-                        correct,
-                        `x = -${a} et x = ${sol2}`,
-                        `x = ${sol1} et x = ${c}`,
-                        `x = 0 et x = ${sol1}`
-                    ];
-                    q.options.sort(() => Math.random() - 0.5);
+                        q.title = "Résolution d'Équation";
+                        q.question = `Résous l'équation suivante : ${a}x + ${b} = ${c}. Quelle est la valeur de x ?`;
+                        setupOptions(correctVal, [`x = ${correctX + 1}`, `x = ${correctX - 1}`, `x = ${c - b}`, `x = ${(c - b) * a}`]);
+
+                        q.explanation = `
+                            <div><strong>Données :</strong> ${a}x + ${b} = ${c}.</div>
+                            <div><strong>Règle :</strong> On isole le terme en $x$ en effectuant la même opération des deux côtés de l'égalité.</div>
+                            <div><strong>Étapes :</strong><br>
+                            1. Soustraire ${b} des deux côtés : ${a}x = ${c} - ${b} = ${c-b}.<br>
+                            2. Diviser par ${a} des deux côtés : x = ${c-b} / ${a} = ${correctX}.</div>
+                            <div><strong>Conclusion :</strong> La solution est bien ${correctVal}.</div>
+                        `;
+                        q.drawOverlay = (svg) => {
+                            svg.innerHTML = `
+                                <text x="150" y="45" fill="#10b981" font-size="14" font-weight="bold" text-anchor="middle">Principe de la Balance</text>
+                                
+                                <!-- Balance drawing -->
+                                <line x1="60" y1="150" x2="240" y2="150" stroke="#fff" stroke-width="4"/>
+                                <polygon points="150,150 140,190 160,190" fill="#334155"/>
+                                
+                                <!-- Left side -->
+                                <rect x="70" y="110" width="30" height="30" fill="rgba(16, 185, 129, 0.3)" stroke="#10b981"/>
+                                <text x="85" y="130" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">${a}x</text>
+                                
+                                <circle cx="120" cy="125" r="12" fill="rgba(99, 102, 241, 0.3)" stroke="#6366f1"/>
+                                <text x="120" y="129" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">+${b}</text>
+                                
+                                <!-- Right side -->
+                                <circle cx="210" cy="125" r="16" fill="rgba(245, 158, 11, 0.3)" stroke="#f59e0b"/>
+                                <text x="210" y="130" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">${c}</text>
+                                
+                                <text x="150" y="215" fill="#a7f3d0" font-size="11" font-weight="bold" text-anchor="middle">L'égalité maintient l'équilibre !</text>
+                            `;
+                        };
+                    } else {
+                        // Inequation: ax + b <= c
+                        let a = 2;
+                        let b = Math.floor(Math.random() * 5) + 1; // 1 to 5
+                        let val = Math.floor(Math.random() * 3) + 3; // 3 to 5
+                        let c = 2 * val + b;
+                        let correctVal = `x ≤ ${val}`;
+
+                        q.title = "Résolution d'Inéquation";
+                        q.question = `Résous l'inéquation suivante : 2x + ${b} ≤ ${c}`;
+                        setupOptions(correctVal, [`x ≤ ${val + 1}`, `x ≥ ${val}`, `x ≤ ${(c-b)}`, `x < ${val}`]);
+
+                        q.explanation = `
+                            <div><strong>Données :</strong> 2x + ${b} ≤ ${c}.</div>
+                            <div><strong>Règle :</strong> Les règles d'isolement sont les mêmes que pour les équations, sauf que si on multiplie ou divise par un nombre négatif, on change le sens de l'inégalité (ici on divise par +2, donc le sens ne change pas).</div>
+                            <div><strong>Calcul :</strong><br>
+                            • Soustraire ${b} : 2x ≤ ${c} - ${b} → 2x ≤ ${c-b}.<br>
+                            • Diviser par 2 : x ≤ ${c-b} / 2 → x ≤ ${val}.</div>
+                        `;
+                        q.drawOverlay = (svg) => {
+                            svg.innerHTML = `
+                                <text x="150" y="50" fill="#10b981" font-size="14" font-weight="bold" text-anchor="middle">Représentation sur l'Axe</text>
+                                
+                                <!-- Graduated line -->
+                                <line x1="40" y1="140" x2="260" y2="140" stroke="#334155" stroke-width="3"/>
+                                <line x1="150" y1="130" x2="150" y2="150" stroke="#fff" stroke-width="2"/>
+                                <text x="150" y="125" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">${val}</text>
+                                
+                                <!-- Thick line for solution set -->
+                                <line x1="40" y1="140" x2="150" y2="140" stroke="#ef4444" stroke-width="6"/>
+                                <!-- Bracket -->
+                                <text x="146" y="145" fill="#ef4444" font-size="20" font-weight="bold">]</text>
+                                
+                                <text x="150" y="200" fill="#a7f3d0" font-size="10" font-weight="bold" text-anchor="middle">Zone rouge = solutions de l'inéquation</text>
+                            `;
+                        };
+                    }
+                }
+            }
+            else if (realm === "Fonctions") {
+                if (questIndex === 0) {
+                    // Notion de fonction (Image / Antécédent)
+                    let isImage = Math.random() > 0.5;
+                    // We define f(x) = x^2 - 2
+                    // Let's use simple points: x=2 -> y=2. x=-1 -> y=-1. x=0 -> y=-2.
+                    let xVal = isImage ? 2 : 2;
+                    let yVal = isImage ? 2 : 2;
+                    
+                    if (isImage) {
+                        q.title = "Lecture d'Image";
+                        q.question = "En observant la courbe f(x) ci-dessous, quelle est l'image de 2 par la fonction f (c'est-à-dire f(2)) ?";
+                        setupOptions("2", ["0", "-2", "4", "1"]);
+                        q.explanation = `
+                            <div><strong>Méthode :</strong> Pour trouver l'image de 2 par f :</div>
+                            <div>1. On repère 2 sur l'axe des **abscisses** (axe horizontal).</div>
+                            <div>2. On monte verticalement jusqu'à croiser la courbe (point de coordonnées (2, 2)).</div>
+                            <div>3. On lit la valeur correspondante sur l'axe des **ordonnées** (axe vertical), soit 2.</div>
+                            <div><strong>Conclusion :</strong> l'image de 2 est bien 2 (f(2) = 2).</div>
+                        `;
+                    } else {
+                        q.title = "Recherche d'Antécédent";
+                        q.question = "En observant la courbe f(x) ci-dessous, quel nombre est un antécédent de -2 par la fonction f (c'est-à-dire f(x) = -2) ?";
+                        setupOptions("0", ["2", "-1", "1", "3"]);
+                        q.explanation = `
+                            <div><strong>Méthode :</strong> Pour trouver un antécédent de -2 :</div>
+                            <div>1. On repère -2 sur l'axe des **ordonnées** (axe vertical).</div>
+                            <div>2. On trace une ligne horizontale. On observe où elle croise la courbe. Ici, elle coupe au point le plus bas, de coordonnées (0, -2).</div>
+                            <div>3. On lit l'abscisse correspondante, soit 0.</div>
+                            <div><strong>Conclusion :</strong> un antécédent de -2 est 0.</div>
+                        `;
+                    }
+
+                    q.drawOverlay = (svg) => {
+                        // Draw a grid and parabola curve y = x^2 - 2
+                        // scale: middle is (150, 150), unit is 30px
+                        svg.innerHTML = `
+                            <!-- Grid -->
+                            <path d="M 0 150 L 300 150 M 150 0 L 150 300" stroke="#475569" stroke-width="2"/>
+                            <!-- Y grid lines -->
+                            <line x1="0" y1="90" x2="300" y2="90" stroke="#1e293b" stroke-width="1"/>
+                            <line x1="0" y1="210" x2="300" y2="210" stroke="#1e293b" stroke-width="1"/>
+                            <!-- X grid lines -->
+                            <line x1="90" y1="0" x2="90" y2="300" stroke="#1e293b" stroke-width="1"/>
+                            <line x1="210" y1="0" x2="210" y2="300" stroke="#1e293b" stroke-width="1"/>
+                            
+                            <!-- Curve f(x) = 0.1 * (x-150)^2 - 60 mapped to SVG coords -->
+                            <!-- Points: (150, 210) which is (0, -2) in math. (210, 90) which is (2, 2) in math. (90, 90) which is (-2, 2) in math. -->
+                            <path d="M 60 50 Q 150 210 240 50" fill="none" stroke="#ec4899" stroke-width="4"/>
+                            <text x="250" y="60" fill="#ec4899" font-weight="bold" font-size="12">C_f</text>
+
+                            <!-- Marked points -->
+                            <circle cx="210" cy="90" r="5" fill="#fff"/>
+                            <circle cx="150" cy="210" r="5" fill="#fff"/>
+                            
+                            <!-- Dotted guides for x=2, y=2 -->
+                            <path d="M 210 150 L 210 90 L 150 90" stroke="#fff" stroke-dasharray="3" fill="none"/>
+                            <text x="210" y="165" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">2</text>
+                            <text x="135" y="94" fill="#fff" font-size="10" font-weight="bold">2</text>
+                            
+                            <!-- Dotted guide for x=0, y=-2 -->
+                            <text x="135" y="214" fill="#fff" font-size="10" font-weight="bold">-2</text>
+                        `;
+                    };
+                }
+                else if (questIndex === 1) {
+                    // Fonctions Linéaires & Affines
+                    let a = 2; // slope
+                    let b = -1; // y-intercept
+                    let correctVal = "y = 2x - 1";
+
+                    q.title = "Équation de Droite Affine";
+                    q.question = "La droite D représentée ci-dessous correspond à une fonction affine f(x) = ax + b. Détermine son équation :";
+                    setupOptions(correctVal, ["y = 2x + 1", "y = -2x - 1", "y = x - 1", "y = 3x - 1"]);
+
                     q.explanation = `
-                        <div><strong>Données :</strong> L'équation (x - ${a})(${b}x + ${c}) = 0.</div>
-                        <div><strong>Propriété :</strong> Un produit de facteurs est nul si et seulement si au moins l'un des facteurs est nul.</div>
-                        <div><strong>Conclusion :</strong> Soit x - ${a} = 0 (donc x = ${sol1}), soit ${b}x + ${c} = 0 (donc ${b}x = -${c} → x = -${c}/${b} = ${sol2}). Les solutions sont bien ${correct}.</div>
+                        <div><strong>Méthode d'identification :</strong></div>
+                        <div>1. **Ordonnée à l'origine (b) :** La droite coupe l'axe vertical à la hauteur -1. Donc $b = -1$.</div>
+                        <div>2. **Coefficient directeur / Pente (a) :** En partant de l'ordonnée à l'origine $(0, -1)$, si on avance de 1 unité vers la droite, on doit monter de 2 unités verticalement pour retrouver la droite (on arrive au point $(1, 1)$). Donc la pente $a = 2$.</div>
+                        <div><strong>Conclusion :</strong> L'équation est $y = 2x - 1$.</div>
                     `;
-                    q.image = "keymaster_monster.png";
+                    q.drawOverlay = (svg) => {
+                        // y = 2x - 1
+                        // coords: Center is (150, 150). scale = 30px per unit.
+                        // b = -1 -> y_svg = 150 - (-1)*30 = 180.
+                        // x = 1 -> y = 1 -> y_svg = 150 - (1)*30 = 120.
+                        // x = -1 -> y = -3 -> y_svg = 150 - (-3)*30 = 240.
+                        svg.innerHTML = `
+                            <!-- Orthonormal Grid -->
+                            <path d="M 0 150 L 300 150 M 150 0 L 150 300" stroke="#475569" stroke-width="2"/>
+                            <!-- grid lines -->
+                            <path d="M 0 90 L 300 90 M 0 120 L 300 120 M 0 180 L 300 180 M 0 210 L 300 210
+                                     M 90 0 L 90 300 M 120 0 L 120 300 M 180 0 L 180 300 M 210 0 L 210 300" stroke="#1e293b" stroke-width="1"/>
+                            
+                            <!-- Plot line y = 2x - 1 -->
+                            <line x1="50" y1="290" x2="200" y2="-10" stroke="#ec4899" stroke-width="4"/>
+                            
+                            <!-- Highlight Y-intercept -->
+                            <circle cx="150" cy="180" r="5" fill="#fff"/>
+                            <text x="135" y="184" fill="#fff" font-size="10" font-weight="bold">-1</text>
+                            
+                            <!-- Slope visual steps -->
+                            <path d="M 150 180 L 180 180 L 180 120" stroke="#f59e0b" stroke-width="2" stroke-dasharray="2" fill="none"/>
+                            <text x="165" y="195" fill="#f59e0b" font-size="9" font-weight="bold">+1</text>
+                            <text x="195" y="150" fill="#f59e0b" font-size="9" font-weight="bold">+2</text>
+                        `;
+                    };
                 }
             }
             else if (realm === "Géométrie") {
                 if (questIndex === 0) {
-                    // Pythagorean Theorem
-                    let isHyp = Math.random() > 0.5;
-                    if (isHyp) {
-                        q.title = "Pythagore (Calcul d'Hypoténuse)";
-                        q.question = "Dans le triangle ABC rectangle en A, on donne AB = 3 cm et AC = 4 cm. Quelle est la longueur de l'hypoténuse [BC] ?";
-                        q.answer = "5 cm";
-                        q.options = ["5 cm", "7 cm", "25 cm", "3,5 cm"];
-                        q.explanation = `
-                            <div><strong>Données :</strong> Triangle ABC rectangle en A, AB = 3 cm et AC = 4 cm.</div>
-                            <div><strong>Propriété :</strong> D'après le théorème de Pythagore, BC² = AB² + AC².</div>
-                            <div><strong>Conclusion :</strong> BC² = 3² + 4² = 9 + 16 = 25. Donc BC = √25 = 5 cm.</div>
-                        `;
-                    } else {
-                        q.title = "Pythagore (Calcul d'un côté)";
-                        q.question = "Dans le triangle DEF rectangle en D, on donne l'hypoténuse EF = 10 cm et DF = 6 cm. Calcule la longueur de [DE] :";
-                        q.answer = "8 cm";
-                        q.options = ["8 cm", "4 cm", "16 cm", "64 cm"];
-                        q.explanation = `
-                            <div><strong>Données :</strong> Triangle DEF rectangle en D, EF = 10 cm, DF = 6 cm.</div>
-                            <div><strong>Propriété :</strong> D'après le théorème de Pythagore, EF² = DE² + DF². Donc DE² = EF² - DF².</div>
-                            <div><strong>Conclusion :</strong> DE² = 10² - 6² = 100 - 36 = 64. Donc DE = √64 = 8 cm.</div>
-                        `;
-                    }
-                    q.image = ""; // Draw custom right triangle SVG
+                    // Pythagore (Calcul de l'hypoténuse)
+                    let a = 6;
+                    let b = 8;
+                    let correctVal = "10 cm";
+
+                    q.title = "Théorème de Pythagore";
+                    q.question = "Dans un triangle rectangle ABC en A, on donne les côtés de l'angle droit : AB = 6 cm et AC = 8 cm. Calcule la longueur de l'hypoténuse BC :";
+                    setupOptions(correctVal, ["14 cm", "9 cm", "12 cm", "48 cm"]);
+                    q.explanation = `
+                        <div><strong>Données :</strong> Triangle ABC rectangle en A, AB = 6 cm, AC = 8 cm.</div>
+                        <div><strong>Théorème :</strong> D'après le théorème de Pythagore, $BC² = AB² + AC²$.</div>
+                        <div><strong>Calcul :</strong><br>
+                        $BC² = 6² + 8²$<br>
+                        $BC² = 36 + 64 = 100$.<br>
+                        Donc $BC = \\sqrt{100} = 10$ cm.</div>
+                    `;
                     q.drawOverlay = (svg) => {
                         svg.innerHTML = `
-                            <polygon points="50,220 230,220 50,50" fill="none" stroke="#10b981" stroke-width="4"/>
-                            <rect x="50" y="200" width="20" height="20" fill="none" stroke="#10b981" stroke-width="2"/>
-                            <text x="35" y="235" fill="#fff" font-weight="bold">A / D</text>
-                            <text x="240" y="230" fill="#fff" font-weight="bold">B / E</text>
-                            <text x="35" y="45" fill="#fff" font-weight="bold">C / F</text>
+                            <polygon points="60,200 240,200 60,60" fill="none" stroke="#10b981" stroke-width="4"/>
+                            <rect x="60" y="185" width="15" height="15" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <text x="45" y="215" fill="#fff" font-weight="bold">A</text>
+                            <text x="250" y="210" fill="#fff" font-weight="bold">B</text>
+                            <text x="50" y="55" fill="#fff" font-weight="bold">C</text>
+                            <text x="150" y="215" fill="#a7f3d0" font-size="10">AB = 6</text>
+                            <text x="35" y="130" fill="#a7f3d0" font-size="10">AC = 8</text>
                         `;
                     };
                 }
                 else if (questIndex === 1) {
-                    // Thales theorem
+                    // Thalès (calcul de longueur)
+                    let correctVal = "7.5 cm";
                     q.title = "Théorème de Thalès";
-                    q.question = "Dans la configuration de Thalès ci-dessous, les droites (BC) et (DE) sont parallèles. On a AD = 3 cm, AB = 12 cm, et AE = 2 cm. Quelle est la longueur de [AC] ?";
-                    q.answer = "8 cm";
-                    q.options = ["8 cm", "6 cm", "9 cm", "1,5 cm"];
-                    q.options.sort(() => Math.random() - 0.5);
+                    q.question = "Dans la configuration ci-dessous, les droites (BC) et (DE) sont parallèles. On donne AD = 4 cm, AB = 10 cm, et AE = 3 cm. Calcule la longueur de [AC] :";
+                    setupOptions(correctVal, ["9 cm", "7 cm", "12 cm", "1.2 cm"]);
                     q.explanation = `
-                        <div><strong>Données :</strong> Droites (BC) // (DE). Points A,D,B et A,E,C alignés. AD=3 cm, AB=12 cm, AE=2 cm.</div>
-                        <div><strong>Propriété :</strong> D'après le théorème de Thalès : AD/AB = AE/AC.</div>
-                        <div><strong>Conclusion :</strong> 3/12 = 2/AC. En faisant un produit en croix : AC = (12 × 2) ÷ 3 = 8 cm. Le segment [AC] mesure bien 8 cm !</div>
+                        <div><strong>Propriété :</strong> Les points A,D,B d'une part et A,E,C d'autre part sont alignés. Puisque (DE) // (BC), d'après le théorème de Thalès :</div>
+                        <div>$\\frac{AD}{AB} = \\frac{AE}{AC}$</div>
+                        <div>$\\frac{4}{10} = \\frac{3}{AC}$</div>
+                        <div>En utilisant le produit en croix : $AC = \\frac{10 \\times 3}{4} = \\frac{30}{4} = 7,5$ cm.</div>
                     `;
-                    q.image = "";
                     q.drawOverlay = (svg) => {
                         svg.innerHTML = `
-                            <polygon points="40,240 260,240 150,40" fill="none" stroke="#10b981" stroke-width="3"/>
-                            <line x1="85" y1="160" x2="215" y2="160" stroke="#ef4444" stroke-width="3"/>
-                            <text x="145" y="30" fill="#fff" font-weight="bold">A</text>
-                            <text x="65" y="165" fill="#fff" font-weight="bold">D</text>
-                            <text x="225" y="165" fill="#fff" font-weight="bold">E</text>
-                            <text x="25" y="250" fill="#fff" font-weight="bold">B</text>
-                            <text x="265" y="250" fill="#fff" font-weight="bold">C</text>
+                            <polygon points="50,220 250,220 150,50" fill="none" stroke="#10b981" stroke-width="3"/>
+                            <line x1="90" y1="150" x2="210" y2="150" stroke="#ef4444" stroke-width="3"/>
+                            <text x="145" y="40" fill="#fff" font-weight="bold">A</text>
+                            <text x="70" y="155" fill="#fff" font-weight="bold">D</text>
+                            <text x="220" y="155" fill="#fff" font-weight="bold">E</text>
+                            <text x="35" y="235" fill="#fff" font-weight="bold">B</text>
+                            <text x="255" y="235" fill="#fff" font-weight="bold">C</text>
                         `;
                     };
                 }
                 else if (questIndex === 2) {
-                    // Thales converse
-                    q.title = "Réciproque de Thalès";
-                    q.question = "Les rapports calculés sur la figure donnent AM/AB = 0,75 et AN/AC = 0,75. Les points A, M, B et A, N, C sont alignés dans le même ordre. Que permet d'affirmer la réciproque ?";
-                    q.answer = "Les droites (MN) et (BC) sont parallèles";
-                    q.options = [
-                        "Les droites (MN) et (BC) sont parallèles",
-                        "Les droites (MN) et (BC) se croisent à angle droit",
-                        "Les droites ne sont pas parallèles",
-                        "On ne peut rien en conclure"
-                    ];
-                    q.options.sort(() => Math.random() - 0.5);
+                    // Trigonométrie Active
+                    let correctVal = "30°";
+                    q.title = "Calcul d'Angle par Trigonométrie";
+                    q.question = "Dans un triangle ABC rectangle en B, on donne l'hypoténuse AC = 10 cm et le côté opposé à l'angle A, BC = 5 cm. Calcule la mesure de l'angle BAC (arrondie au degré) :";
+                    setupOptions(correctVal, ["45°", "60°", "15°", "90°"]);
                     q.explanation = `
-                        <div><strong>Données :</strong> Les rapports de longueurs AM/AB et AN/AC sont tous deux égaux à 0,75. Les points sont alignés dans le même ordre.</div>
-                        <div><strong>Propriété :</strong> Si les rapports des côtés correspondants sont égaux et les points alignés dans le même ordre, alors la réciproque du théorème de Thalès s'applique.</div>
-                        <div><strong>Conclusion :</strong> Les droites (MN) et (BC) sont donc parfaitement parallèles !</div>
+                        <div><strong>Données :</strong> Triangle rectangle en B. Hypoténuse $AC = 10$ cm. Côté opposé $BC = 5$ cm.</div>
+                        <div><strong>Règle :</strong> $\\sin(\\widehat{BAC}) = \\frac{\\text{Côté Opposé}}{\\text{Hypoténuse}} = \\frac{BC}{AC} = \\frac{5}{10} = 0,5$.</div>
+                        <div><strong>Calcul :</strong> L'angle dont le sinus vaut 0,5 se trouve en utilisant la fonction réciproque $\\arcsin(0,5)$ (ou touche $\\sin^{-1}$ de la calculatrice). On obtient exactement $30^\\circ$.</div>
                     `;
-                    q.image = "";
                     q.drawOverlay = (svg) => {
                         svg.innerHTML = `
-                            <polygon points="40,240 260,240 150,40" fill="none" stroke="#10b981" stroke-width="3"/>
-                            <line x1="85" y1="160" x2="215" y2="160" stroke="#ef4444" stroke-width="3"/>
-                            <text x="145" y="30" fill="#fff" font-weight="bold">A</text>
-                            <text x="65" y="165" fill="#fff" font-weight="bold">M</text>
-                            <text x="225" y="165" fill="#fff" font-weight="bold">N</text>
-                            <text x="25" y="250" fill="#fff" font-weight="bold">B</text>
-                            <text x="265" y="250" fill="#fff" font-weight="bold">C</text>
+                            <polygon points="60,200 240,200 240,80" fill="none" stroke="#10b981" stroke-width="4"/>
+                            <rect x="225" y="185" width="15" height="15" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <text x="45" y="215" fill="#fff" font-weight="bold">A</text>
+                            <text x="250" y="215" fill="#fff" font-weight="bold">B</text>
+                            <text x="250" y="75" fill="#fff" font-weight="bold">C</text>
+                            
+                            <!-- Angle arc at A -->
+                            <path d="M 90 200 A 30 30 0 0 0 85 183" fill="none" stroke="#f59e0b" stroke-width="3"/>
+                            <text x="100" y="190" fill="#f59e0b" font-weight="bold">?</text>
+                            <text x="260" y="140" fill="#a7f3d0" font-size="10">Opposé = 5</text>
+                            <text x="130" y="125" fill="#a7f3d0" font-size="10">Hypoténuse = 10</text>
+                        `;
+                    };
+                }
+                else if (questIndex === 3) {
+                    // Transformations & Espace
+                    let correctVal = "Une réduction de rapport 0.5";
+                    q.title = "Homothétie & Sections de Solides";
+                    q.question = "On coupe une pyramide de hauteur 12 cm par un plan parallèle à sa base situé à 6 cm de son sommet. Quelle transformation associe la base d'origine à la section obtenue ?";
+                    setupOptions(correctVal, ["Un agrandissement de rapport 2", "Une réduction de rapport 0.25", "Une translation", "Une rotation de 90°"]);
+                    q.explanation = `
+                        <div><strong>Données :</strong> Pyramide coupée parallèlement à la base. Hauteur totale = 12 cm. Hauteur de la petite pyramide = 6 cm.</div>
+                        <div><strong>Propriété :</strong> La section obtenue est une réduction de la base. Le rapport de cette réduction est le rapport des hauteurs : $k = \\frac{\\text{petite hauteur}}{\\text{grande hauteur}} = \\frac{6}{12} = 0,5$.</div>
+                        <div><strong>Conclusion :</strong> C'est donc une réduction de rapport 0,5.</div>
+                    `;
+                    q.drawOverlay = (svg) => {
+                        svg.innerHTML = `
+                            <text x="150" y="40" fill="#10b981" font-size="14" font-weight="bold" text-anchor="middle">Coupe d'une Pyramide</text>
+                            <!-- Apex -->
+                            <circle cx="150" cy="60" r="4" fill="#fff"/>
+                            <text x="150" y="50" fill="#fff" font-size="10" text-anchor="middle">Sommet</text>
+                            
+                            <!-- Base -->
+                            <polygon points="70,200 170,220 230,200 130,180" fill="rgba(16, 185, 129, 0.1)" stroke="#334155"/>
+                            
+                            <!-- Cutting Plane Section -->
+                            <polygon points="110,130 160,140 190,130 140,120" fill="rgba(239, 68, 68, 0.3)" stroke="#ef4444" stroke-width="2"/>
+                            
+                            <!-- Lines Apex to Base -->
+                            <line x1="150" y1="60" x2="70" y2="200" stroke="#334155"/>
+                            <line x1="150" y1="60" x2="170" y2="220" stroke="#334155"/>
+                            <line x1="150" y1="60" x2="230" y2="200" stroke="#334155"/>
+                            
+                            <!-- Height annotations -->
+                            <line x1="130" y1="60" x2="130" y2="200" stroke="#f59e0b" stroke-dasharray="3"/>
+                            <text x="120" y="130" fill="#f59e0b" font-size="10">12 cm</text>
                         `;
                     };
                 }
             }
-            else if (realm === "ProbasStats") {
+            else if (realm === "ProbasStatsAlgo") {
                 if (questIndex === 0) {
-                    // Median stats
-                    let start = Math.floor(Math.random() * 5) + 3;
-                    let step = Math.floor(Math.random() * 3) + 2;
-                    let list = [start, start + step, start + 2*step, start + 3*step, start + 4*step];
-                    // Shuffle it to make student sort
-                    let shuffled = [...list].sort(() => Math.random() - 0.5);
-                    let correct = list[2]; // middle element
-
-                    q.title = "Statistiques (Médiane)";
-                    q.question = `Calcule la médiane de la série de notes suivantes : ${shuffled.join(", ")}`;
-                    q.answer = String(correct);
-                    q.options = [String(correct), String(list[1]), String(list[3]), String(list[4])];
-                    q.options.sort(() => Math.random() - 0.5);
+                    // Stats Descriptives (Moyenne pondérée)
+                    let correctVal = "11";
+                    q.title = "Moyenne Pondérée";
+                    q.question = "Voici les notes d'un élève avec leurs coefficients respectifs : Note 10 (coeff 2), Note 13 (coeff 1). Calcule sa moyenne pondérée :";
+                    setupOptions(correctVal, ["11.5", "12", "10.5", "11.2"]);
                     q.explanation = `
-                        <div><strong>Données :</strong> La série brute de notes : ${shuffled.join(", ")}.</div>
-                        <div><strong>Propriété :</strong> Pour trouver la médiane, on range impérativement les valeurs dans l'ordre croissant : ${list.join(", ")}.</div>
-                        <div><strong>Conclusion :</strong> L'effectif total est de 5 (impair). La médiane est la valeur centrale (3ème position), soit bien ${correct}.</div>
+                        <div><strong>Formule :</strong> La moyenne pondérée est la somme des produits (note × coefficient) divisée par la somme des coefficients.</div>
+                        <div><strong>Calcul :</strong><br>
+                        • Somme des produits : $(10 \\times 2) + (13 \\times 1) = 20 + 13 = 33$.<br>
+                        • Somme des coefficients : $2 + 1 = 3$.<br>
+                        • Moyenne : $\\frac{33}{3} = 11$.</div>
                     `;
-                    q.image = "pente_monster.png";
+                    q.drawOverlay = (svg) => {
+                        svg.innerHTML = `
+                            <text x="150" y="45" fill="#10b981" font-size="14" font-weight="bold" text-anchor="middle">Répartition des Notes</text>
+                            
+                            <!-- Bar 1 (Note 10, Coeff 2) -->
+                            <rect x="70" y="100" width="40" height="80" fill="rgba(16, 185, 129, 0.4)" stroke="#10b981" stroke-width="2"/>
+                            <text x="90" y="90" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">Note: 10</text>
+                            <text x="90" y="140" fill="#fff" font-size="10" text-anchor="middle">Coeff 2</text>
+                            
+                            <!-- Bar 2 (Note 13, Coeff 1) -->
+                            <rect x="190" y="140" width="40" height="40" fill="rgba(99, 102, 241, 0.4)" stroke="#6366f1" stroke-width="2"/>
+                            <text x="210" y="130" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">Note: 13</text>
+                            <text x="210" y="165" fill="#fff" font-size="10" text-anchor="middle">Coeff 1</text>
+                        `;
+                    };
                 }
                 else if (questIndex === 1) {
-                    // Probability of multiples
-                    let sides = 8;
-                    let mult = Math.random() > 0.5 ? 3 : 4;
-                    let list = [];
-                    for(let i=1; i<=sides; i++) {
-                        if (i % mult === 0) list.push(i);
-                    }
-                    let correctPct = (list.length / sides) * 100;
-                    let correctAns = `${list.length}/${sides} (soit ${correctPct}%)`;
-
-                    q.title = "Probabilités";
-                    q.question = `L'Oracle lance un dé équilibré à ${sides} faces. Quelle est la probabilité d'obtenir un multiple de ${mult} ?`;
-                    q.answer = correctAns;
-                    q.options = [
-                        correctAns,
-                        `1/${sides} (soit ${100/sides}%)`,
-                        `1/2 (soit 50%)`,
-                        `3/${sides} (soit ${(3/sides)*100}%)`
-                    ];
-                    q.options.sort(() => Math.random() - 0.5);
+                    // Probabilités à 2 Épreuves (tirages successifs)
+                    let correctVal = "1/4";
+                    q.title = "Probabilités à deux épreuves";
+                    q.question = "Une urne contient 2 boules Rouges et 2 boules Bleues. On tire au hasard une première boule, on la remet, puis on tire une seconde boule. Quelle est la probabilité d'obtenir deux boules Rouges (R, R) ?";
+                    setupOptions(correctVal, ["1/2", "1/8", "1/16", "1/3"]);
                     q.explanation = `
-                        <div><strong>Données :</strong> Un dé à 8 faces (issues possibles : 1,2,3,4,5,6,7,8).</div>
-                        <div><strong>Propriété :</strong> La probabilité est égale au nombre d'issues favorables divisé par le nombre total d'issues.</div>
-                        <div><strong>Conclusion :</strong> Les multiples de ${mult} compris entre 1 et 8 sont : ${list.join(", ")} (${list.length} issues). Donc la probabilité est de ${list.length}/${sides} = ${correctAns}.</div>
+                        <div><strong>Données :</strong> 2 Rouges (R) et 2 Bleues (B) dans l'urne. Total = 4 boules.</div>
+                        <div><strong>Règle :</strong> Les deux tirages étant indépendants (puisqu'il y a remise), la probabilité d'obtenir (R, R) est le produit des probabilités de chaque tirage.</div>
+                        <div>• Premier tirage : P(R) = 2/4 = 1/2.<br>
+                        • Deuxième tirage : P(R) = 2/4 = 1/2.<br>
+                        • P(R, R) = 1/2 × 1/2 = 1/4.</div>
                     `;
-                    q.image = "oracle_monster.png";
+                    q.drawOverlay = (svg) => {
+                        svg.innerHTML = `
+                            <text x="150" y="35" fill="#10b981" font-size="14" font-weight="bold" text-anchor="middle">Arbre de Probabilités</text>
+                            
+                            <!-- Root to R / B -->
+                            <line x1="80" y1="120" x2="140" y2="80" stroke="#475569" stroke-width="2"/>
+                            <line x1="80" y1="120" x2="140" y2="160" stroke="#475569" stroke-width="2"/>
+                            
+                            <!-- Labels branch 1 -->
+                            <text x="100" y="90" fill="#f59e0b" font-size="10" font-weight="bold">1/2</text>
+                            <text x="100" y="160" fill="#f59e0b" font-size="10" font-weight="bold">1/2</text>
+                            
+                            <!-- Nodes 1 -->
+                            <text x="155" y="84" fill="#ef4444" font-weight="bold">R</text>
+                            <text x="155" y="164" fill="#3b82f6" font-weight="bold">B</text>
+                            
+                            <!-- Second level branches from R -->
+                            <line x1="170" y1="80" x2="220" y2="60" stroke="#475569" stroke-width="1.5"/>
+                            <line x1="170" y1="80" x2="220" y2="100" stroke="#475569" stroke-width="1.5"/>
+                            <text x="235" y="64" fill="#ef4444" font-weight="bold">R</text>
+                            <text x="235" y="104" fill="#3b82f6" font-weight="bold">B</text>
+                            
+                            <text x="195" y="65" fill="#f59e0b" font-size="8">1/2</text>
+                        `;
+                    };
                 }
-            }
-            else if (realm === "Algo") {
-                if (questIndex === 0) {
-                    // Scratch loop logic
-                    let startVal = Math.floor(Math.random() * 3) * 10 + 20; // 20, 30, 40
-                    let loopCount = Math.floor(Math.random() * 3) + 3; // 3, 4, 5
-                    let increment = Math.floor(Math.random() * 2) * 5 + 5; // 5, 10
-                    let correct = startVal + (loopCount * increment);
-
-                    q.title = "Algorithmique";
-                    q.question = `Dans un script Scratch, on a : 'Mettre Score à ${startVal}' puis 'Répéter ${loopCount} fois : Ajouter ${increment} à Score'. Quel sera le score final ?`;
-                    q.answer = String(correct);
-                    q.options = [String(correct), String(startVal + increment), String(startVal + loopCount), String(correct - increment)];
-                    q.options.sort(() => Math.random() - 0.5);
+                else if (questIndex === 2) {
+                    // Algorithmique & Scratch (Si... Alors... Sinon)
+                    let correctVal = "30";
+                    q.title = "Algorithme conditionnel Scratch";
+                    q.question = "Si X vaut 5 au départ, et qu'on exécute ce script Scratch : 'Si X > 10 alors Mettre Score à 100, Sinon Mettre Score à 30'. Quelle sera la valeur finale du Score ?";
+                    setupOptions(correctVal, ["100", "5", "10", "130"]);
                     q.explanation = `
-                        <div><strong>Données :</strong> Score initial = ${startVal}. Une boucle répétant ${loopCount} fois une addition de ${increment}.</div>
-                        <div><strong>Propriété :</strong> La structure de boucle 'Répéter N fois' multiplie l'action intérieure : ${loopCount} × ${increment} = ${loopCount*increment} ajoutés.</div>
-                        <div><strong>Conclusion :</strong> Score final = ${startVal} + ${loopCount*increment} = ${correct}.</div>
+                        <div><strong>Données :</strong> Valeur initiale $X = 5$. Condition testée : $X > 10$.</div>
+                        <div><strong>Règle :</strong> La condition $5 > 10$ est fausse. On prend donc la branche **Sinon**.</div>
+                        <div><strong>Conclusion :</strong> C'est l'instruction de la branche **Sinon** qui s'applique, le Score devient donc 30.</div>
                     `;
-                    q.image = "cyber_spectre.png";
+                    q.drawOverlay = (svg) => {
+                        svg.innerHTML = `
+                            <!-- Graphical Scratch Blocks Representation -->
+                            <g transform="translate(40, 60)">
+                                <!-- Block IF -->
+                                <path d="M 0,0 L 150,0 A 10,10 0 0,0 170,0 L 200,0 L 200,30 L 70,30 L 60,40 L 40,40 L 30,30 L 0,30 Z" fill="#ffab19"/>
+                                <text x="15" y="20" fill="#fff" font-size="10" font-weight="bold">si X > 10 alors</text>
+                                
+                                <!-- Inside IF -->
+                                <g transform="translate(20, 30)">
+                                    <rect width="180" height="25" fill="#4c97ff" rx="4"/>
+                                    <text x="10" y="17" fill="#fff" font-size="9" font-weight="bold">mettre Score à 100</text>
+                                </g>
+                                
+                                <!-- Block ELSE -->
+                                <g transform="translate(0, 55)">
+                                    <path d="M 0,0 L 80,0 L 80,25 L 200,25 L 200,55 L 70,55 L 60,65 L 40,65 L 30,55 L 0,55 Z" fill="#ffab19"/>
+                                    <text x="15" y="17" fill="#fff" font-size="10" font-weight="bold">sinon</text>
+                                    
+                                    <!-- Inside ELSE -->
+                                    <g transform="translate(20, 25)">
+                                        <rect width="180" height="25" fill="#4c97ff" rx="4"/>
+                                        <text x="10" y="17" fill="#fff" font-size="9" font-weight="bold">mettre Score à 30</text>
+                                    </g>
+                                </g>
+                            </g>
+                        `;
+                    };
                 }
             }
 
@@ -1216,8 +1626,14 @@
                     btnEl.innerText = "Réclamer le butin et continuer →";
                     pendingCallback = () => {
                         gameState.gold += 15;
-                        if (gameState.level <= currentQuestIndex + 1) {
-                            gameState.level = currentQuestIndex + 2;
+                        if (currentActiveDungeon === 'Algèbre' && currentQuestIndex === 3 && gameState.level < 2) {
+                            gameState.level = 2;
+                        } else if (currentActiveDungeon === 'Fonctions' && currentQuestIndex === 1 && gameState.level < 3) {
+                            gameState.level = 3;
+                        } else if (currentActiveDungeon === 'Géométrie' && currentQuestIndex === 3 && gameState.level < 4) {
+                            gameState.level = 4;
+                        } else if (currentActiveDungeon === 'ProbasStatsAlgo' && currentQuestIndex === 2 && gameState.level < 5) {
+                            gameState.level = 5;
                         }
                         saveGame();
                         switchView('home');
@@ -1480,48 +1896,87 @@
                 bSlider.oninput = updateFuncLine;
                 updateFuncLine();
             }
-            else if (widgetId === 'solid-slice') {
-                document.getElementById('active-widget-title').innerText = "LABORATOIRE : COUPE DE SOLIDE (CÔNE DE RÉVOLUTION)";
+            else if (widgetId === 'trigonometry') {
+                document.getElementById('active-widget-title').innerText = "LABORATOIRE : TRIGONOMÉTRIE INTERACTIVE";
                 ws.innerHTML = `
                     <div class="flex-1 flex flex-col justify-between max-w-sm mx-auto p-4 bg-slate-900 rounded-2xl border border-slate-800">
                         <div class="relative w-full aspect-square bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
-                            <svg id="cone-svg" class="w-64 h-64" viewBox="0 0 200 200">
-                                <!-- Cone structure -->
-                                <polygon points="100,20 40,160 160,160" fill="rgba(16, 185, 129, 0.1)" stroke="#334155" stroke-width="2"/>
-                                <ellipse cx="100" cy="160" rx="60" ry="15" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="2"/>
-                                <!-- Height cut plane -->
-                                <line id="cone-plane" x1="20" y1="90" x2="180" y2="90" stroke="#ef4444" stroke-dasharray="4" stroke-width="3"/>
-                                <!-- Cross section ellipse -->
-                                <ellipse id="cone-section" cx="100" cy="90" rx="30" ry="7.5" fill="rgba(239, 68, 68, 0.3)" stroke="#ef4444" stroke-width="2"/>
+                            <svg id="trig-svg" class="w-64 h-64" viewBox="0 0 250 250">
+                                <!-- Triangle -->
+                                <polygon id="trig-poly" points="50,200 200,200 200,100" fill="none" stroke="#10b981" stroke-width="4"/>
+                                <rect id="trig-square" x="185" y="185" width="15" height="15" fill="none" stroke="#10b981" stroke-width="2"/>
+                                
+                                <!-- Vertex Labels -->
+                                <text x="35" y="215" fill="#fff" font-weight="bold">A</text>
+                                <text x="210" y="215" fill="#fff" font-weight="bold">B</text>
+                                <text x="210" y="90" fill="#fff" font-weight="bold">C</text>
+                                
+                                <!-- Angle Arc -->
+                                <path id="trig-arc" d="M 80 200 A 30 30 0 0 0 76 180" fill="none" stroke="#f59e0b" stroke-width="3"/>
                             </svg>
                         </div>
                         <div class="space-y-4 pt-4 text-center">
-                            <p class="text-xs font-bold text-slate-300">Déplace le plan de coupe (slider) :</p>
-                            <input type="range" id="cone-slider" min="20" max="160" value="90" class="w-full accent-teal-400">
-                            <div class="bg-slate-950/80 p-3 rounded-lg border border-slate-800">
-                                <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest block font-title">Section obtenue</span>
-                                <p class="text-xs text-slate-300 mt-1">C'est un <strong>cercle</strong> (réduction du cercle de base).</p>
+                            <div class="flex justify-between text-xs font-bold">
+                                <span class="text-slate-400">Angle A : <span id="trig-angle-val" class="text-teal-300">30</span>°</span>
+                                <input type="range" id="trig-angle-slider" min="10" max="80" value="30" class="w-32 accent-teal-400">
+                            </div>
+                            <div class="bg-slate-950/80 p-3 rounded-lg border border-slate-800 text-[11px] text-slate-300 space-y-1 text-left font-semibold">
+                                <div>Adjacent AB = <span id="trig-adj-val" class="text-emerald-400">8.66</span> cm</div>
+                                <div>Opposé BC = <span id="trig-opp-val" class="text-pink-400">5.00</span> cm</div>
+                                <div>Hypoténuse AC = <span class="text-indigo-400">10.00</span> cm</div>
+                                <div class="border-t border-slate-800 mt-2 pt-1 text-[10px] space-y-0.5">
+                                    <div>cos(A) = Adj/Hyp = <span id="trig-cos-val">0.87</span></div>
+                                    <div>sin(A) = Opp/Hyp = <span id="trig-sin-val">0.50</span></div>
+                                    <div>tan(A) = Opp/Adj = <span id="trig-tan-val">0.58</span></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 `;
 
-                const coneSlider = document.getElementById('cone-slider');
-                coneSlider.oninput = () => {
-                    const y = parseInt(coneSlider.value);
-                    document.getElementById('cone-plane').setAttribute('y1', y);
-                    document.getElementById('cone-plane').setAttribute('y2', y);
-                    
-                    const section = document.getElementById('cone-section');
-                    section.setAttribute('cy', y);
-                    // Radius decreases as we go up (toward y=20)
-                    // base is at y=160 (radius 60), apex is at y=20 (radius 0)
-                    const factor = (y - 20) / (160 - 20);
-                    const rx = 60 * factor;
-                    const ry = 15 * factor;
-                    section.setAttribute('rx', rx);
-                    section.setAttribute('ry', ry);
+                const angleSlider = document.getElementById('trig-angle-slider');
+                const updateTrig = () => {
+                    const angleDeg = parseInt(angleSlider.value);
+                    const angleRad = (angleDeg * Math.PI) / 180;
+                    document.getElementById('trig-angle-val').innerText = angleDeg;
+
+                    // Hyp = 10 (150px)
+                    // Opp = Hyp * sin(angle)
+                    // Adj = Hyp * cos(angle)
+                    const hypPx = 150;
+                    const oppPx = hypPx * Math.sin(angleRad);
+                    const adjPx = hypPx * Math.cos(angleRad);
+
+                    // A is at (50, 200)
+                    // B is at (50 + adj, 200)
+                    // C is at (50 + adj, 200 - opp)
+                    const bx = 50 + adjPx;
+                    const by = 200;
+                    const cx = bx;
+                    const cy = 200 - oppPx;
+
+                    document.getElementById('trig-poly').setAttribute('points', `50,200 ${bx},${by} ${cx},${cy}`);
+                    document.getElementById('trig-square').setAttribute('x', bx - 15);
+
+                    // Update angle arc
+                    // A is at (50, 200). We draw arc from (50 + 30, 200) to (50 + 30*cos, 200 - 30*sin)
+                    const arcEndX = 50 + 30 * Math.cos(angleRad);
+                    const arcEndY = 200 - 30 * Math.sin(angleRad);
+                    document.getElementById('trig-arc').setAttribute('d', `M ${50 + 30} 200 A 30 30 0 0 0 ${arcEndX} ${arcEndY}`);
+
+                    // Update values
+                    const oppCm = (10 * Math.sin(angleRad)).toFixed(2);
+                    const adjCm = (10 * Math.cos(angleRad)).toFixed(2);
+                    document.getElementById('trig-opp-val').innerText = oppCm;
+                    document.getElementById('trig-adj-val').innerText = adjCm;
+
+                    document.getElementById('trig-cos-val').innerText = Math.cos(angleRad).toFixed(3);
+                    document.getElementById('trig-sin-val').innerText = Math.sin(angleRad).toFixed(3);
+                    document.getElementById('trig-tan-val').innerText = Math.tan(angleRad).toFixed(3);
                 };
+
+                angleSlider.oninput = updateTrig;
+                updateTrig();
             }
             else if (widgetId === 'transformations') {
                 document.getElementById('active-widget-title').innerText = "LABORATOIRE : HOMOTHÉTIE GÉOMÉTRIQUE";
@@ -1559,9 +2014,6 @@
                     const k = parseFloat(kSlider.value);
                     document.getElementById('trans-k-val').innerText = k;
 
-                    // Compute scaling from center O(50, 250)
-                    // Original points: P1(80, 220), P2(120, 220), P3(100, 180)
-                    // New point = O + k * (P - O)
                     let p1_x = 50 + k * (80 - 50);
                     let p1_y = 250 + k * (220 - 250);
                     let p2_x = 50 + k * (120 - 50);
@@ -1570,6 +2022,107 @@
                     let p3_y = 250 + k * (180 - 250);
 
                     document.getElementById('trans-tri').setAttribute('points', `${p1_x},${p1_y} ${p2_x},${p2_y} ${p3_x},${p3_y}`);
+                };
+            }
+            else if (widgetId === 'scratch-lab') {
+                document.getElementById('active-widget-title').innerText = "LABORATOIRE : MINI-SIMULATEUR SCRATCH";
+                ws.innerHTML = `
+                    <div class="flex-1 flex flex-col justify-between max-w-sm mx-auto p-4 bg-slate-900 rounded-2xl border border-slate-800">
+                        <div class="relative w-full aspect-square bg-slate-950 rounded-xl overflow-hidden border border-slate-800">
+                            <!-- Grid -->
+                            <svg id="scratch-grid" class="w-full h-full" viewBox="0 0 200 200">
+                                <path d="M 0 100 L 200 100 M 100 0 L 100 200" stroke="#334155" stroke-width="1.5"/>
+                                <text x="180" y="115" fill="#475569" font-size="8">X</text>
+                                <text x="105" y="15" fill="#475569" font-size="8">Y</text>
+                                
+                                <!-- Lutin Sprite (Rotatable Triangle) -->
+                                <g id="scratch-sprite" transform="translate(100, 100) rotate(0)">
+                                    <polygon points="12,0 -8,-7 -4,0 -8,7" fill="#f59e0b" stroke="#fff" stroke-width="1.5"/>
+                                    <circle cx="0" cy="0" r="2" fill="#fff"/>
+                                </g>
+                            </svg>
+                        </div>
+                        
+                        <div class="space-y-3 pt-3">
+                            <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800 flex justify-between text-xs font-mono text-slate-300">
+                                <span>Sprite : X = <span id="scratch-x" class="text-teal-300">0</span>, Y = <span id="scratch-y" class="text-teal-300">0</span></span>
+                                <span>Cap = <span id="scratch-dir" class="text-amber-400">90</span>°</span>
+                            </div>
+                            
+                            <!-- Action blocks -->
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="runScratchAction('forward')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded-lg text-xs flex items-center justify-center gap-1">
+                                    avancer de 20 pas
+                                </button>
+                                <button onclick="runScratchAction('right')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-2 rounded-lg text-xs flex items-center justify-center gap-1">
+                                    tourner ↻ de 90°
+                                </button>
+                                <button onclick="runScratchAction('left')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-2 rounded-lg text-xs flex items-center justify-center gap-1">
+                                    tourner ↺ de 90°
+                                </button>
+                                <button onclick="runScratchAction('reset')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2 rounded-lg text-xs flex items-center justify-center gap-1">
+                                    réinitialiser
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Scratch local state variables
+                window.scratchState = {
+                    x: 0,
+                    y: 0,
+                    dir: 90 // 90 degrees is pointing right (Scratch standard)
+                };
+
+                window.runScratchAction = (action) => {
+                    const sprite = document.getElementById('scratch-sprite');
+                    if (!sprite) return;
+
+                    if (action === 'reset') {
+                        window.scratchState.x = 0;
+                        window.scratchState.y = 0;
+                        window.scratchState.dir = 90;
+                    } 
+                    else if (action === 'right') {
+                        window.scratchState.dir = (window.scratchState.dir + 90) % 360;
+                    } 
+                    else if (action === 'left') {
+                        window.scratchState.dir = (window.scratchState.dir - 90 + 360) % 360;
+                    } 
+                    else if (action === 'forward') {
+                        // Map Scratch coordinates to math coordinates
+                        // dir = 90 (right, dx=1, dy=0)
+                        // dir = 0 (up, dx=0, dy=-1 in SVG)
+                        // dir = 180 (down, dx=0, dy=1 in SVG)
+                        // dir = 270 (left, dx=-1, dy=0)
+                        const rad = ((90 - window.scratchState.dir) * Math.PI) / 180;
+                        const dist = 20;
+                        window.scratchState.x += Math.round(dist * Math.cos(rad));
+                        window.scratchState.y += Math.round(dist * Math.sin(rad));
+
+                        // Clamp to grid limits (-90 to +90)
+                        window.scratchState.x = Math.max(-90, Math.min(90, window.scratchState.x));
+                        window.scratchState.y = Math.max(-90, Math.min(90, window.scratchState.y));
+                    }
+
+                    // Update sprite display
+                    // SVG center is (100, 100)
+                    // y axis in SVG is inverted relative to standard math
+                    const svgX = 100 + window.scratchState.x;
+                    const svgY = 100 - window.scratchState.y;
+                    
+                    // Rotate translation: Scratch dir 90 is pointing right (0 rotation in SVG polygon)
+                    // Scratch dir 0 is pointing up (-90 rotation in SVG)
+                    // Scratch dir 180 is pointing down (90 rotation in SVG)
+                    const rotationAngle = window.scratchState.dir - 90;
+
+                    sprite.setAttribute('transform', `translate(${svgX}, ${svgY}) rotate(${rotationAngle})`);
+
+                    // Update labels
+                    document.getElementById('scratch-x').innerText = window.scratchState.x;
+                    document.getElementById('scratch-y').innerText = window.scratchState.y;
+                    document.getElementById('scratch-dir').innerText = window.scratchState.dir;
                 };
             }
         }
