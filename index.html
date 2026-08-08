@@ -289,7 +289,7 @@
             <!-- Question Panel -->
             <div class="bg-slate-950/80 rounded-2xl border border-slate-800/80 shadow-2xl flex flex-col shrink-0 p-4 relative overflow-hidden">
                 <!-- Graphic panel (SVG drawing area or monster image depending on content) -->
-                <div id="combat-graphic-container" class="w-64 h-64 sm:w-72 sm:h-72 shrink-0 bg-slate-900/60 mx-auto rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center relative shadow-inner">
+                <div id="combat-graphic-container" onclick="zoomImage()" class="w-64 h-64 sm:w-72 sm:h-72 shrink-0 bg-slate-900/60 mx-auto rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center relative shadow-inner cursor-pointer hover:border-emerald-500/40 hover:bg-slate-900/80 transition-all duration-150">
                     <div id="monster-defeat-text" class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 opacity-0 transition-opacity duration-300 pointer-events-none z-20">
                         <span class="text-3xl">🌟</span>
                         <span class="text-sm font-black text-emerald-400 tracking-wider uppercase mt-2 font-title">Bravo !</span>
@@ -571,8 +571,10 @@
     <!-- Image Zoom Modal -->
     <div id="zoom-modal" class="hidden fixed inset-0 bg-slate-950/95 z-[100] flex flex-col items-center justify-center p-4" onclick="closeZoom()">
         <button class="absolute top-4 right-4 text-slate-400 hover:text-white text-4xl font-bold bg-slate-900/80 w-12 h-12 rounded-full flex items-center justify-center border border-slate-800">&times;</button>
-        <div class="w-full max-w-2xl aspect-square bg-slate-900 rounded-3xl p-3 border border-slate-800 shadow-2xl flex items-center justify-center overflow-hidden" onclick="event.stopPropagation()">
-            <img id="zoomed-image" src="" alt="Schéma Agrandi" class="max-w-full max-h-full object-contain rounded-2xl">
+        <div class="w-full max-w-2xl aspect-square bg-slate-900 rounded-3xl p-6 border border-slate-800 shadow-2xl flex items-center justify-center overflow-hidden" onclick="event.stopPropagation()">
+            <img id="zoomed-image" src="" alt="Schéma Agrandi" class="max-w-full max-h-full object-contain rounded-2xl hidden">
+            <!-- Zoomed SVG Overlay -->
+            <svg id="zoomed-svg" class="w-full h-full max-w-full max-h-full hidden" viewBox="0 0 300 300"></svg>
         </div>
         <p class="text-slate-400 text-xs mt-4 font-semibold tracking-wide text-center">Clique n'importe où pour fermer le zoom</p>
     </div>
@@ -2132,11 +2134,26 @@
         }
 
 
-        // ZOOM IMAGE MODAL
+        // ZOOM IMAGE & DIAGRAM MODAL
         function zoomImage() {
             const currentImg = document.getElementById('monster-image');
-            if (currentImg && currentImg.src && !currentImg.classList.contains('hidden')) {
-                document.getElementById('zoomed-image').src = currentImg.src;
+            const svgOverlay = document.getElementById('combat-svg-overlay');
+            const zoomedImg = document.getElementById('zoomed-image');
+            const zoomedSvg = document.getElementById('zoomed-svg');
+            
+            if (svgOverlay && !svgOverlay.classList.contains('hidden')) {
+                // We copy the SVG content and viewBox to allow auto vector scaling (with scaled font sizes)
+                zoomedSvg.innerHTML = svgOverlay.innerHTML;
+                zoomedSvg.setAttribute('viewBox', svgOverlay.getAttribute('viewBox') || '0 0 300 300');
+                
+                zoomedImg.classList.add('hidden');
+                zoomedSvg.classList.remove('hidden');
+                document.getElementById('zoom-modal').classList.remove('hidden');
+            } else if (currentImg && currentImg.src && !currentImg.classList.contains('hidden')) {
+                zoomedImg.src = currentImg.src;
+                
+                zoomedSvg.classList.add('hidden');
+                zoomedImg.classList.remove('hidden');
                 document.getElementById('zoom-modal').classList.remove('hidden');
             }
         }
