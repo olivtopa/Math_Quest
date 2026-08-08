@@ -416,7 +416,7 @@
                 <div class="glass-card p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-52">
                     <div class="space-y-1">
                         <span class="text-3xl">📉</span>
-                        <h4 class="font-extrabold text-sm text-slate-100">Labo des Fonctions ($ax + b$)</h4>
+                        <h4 class="font-extrabold text-sm text-slate-100">Labo des Fonctions (ax + b)</h4>
                         <p class="text-[11px] text-slate-400 leading-relaxed">Glisse des curseurs pour observer en temps réel la droite se déplacer, monter ou descendre.</p>
                     </div>
                     <button onclick="openWidget('functions')" class="w-full mt-3 bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/30 text-teal-300 font-bold text-xs py-2 rounded-lg transition-all cursor-pointer">
@@ -441,7 +441,7 @@
                     <div class="space-y-1">
                         <span class="text-3xl">🌀</span>
                         <h4 class="font-extrabold text-sm text-slate-100">Homothétie & Échelles</h4>
-                        <p class="text-[11px] text-slate-400 leading-relaxed">Observe le glissement d'une translation, la rotation ou l'homothétie avec un facteur dynamique $k$.</p>
+                        <p class="text-[11px] text-slate-400 leading-relaxed">Observe le glissement d'une translation, la rotation ou l'homothétie avec un facteur dynamique k.</p>
                     </div>
                     <button onclick="openWidget('transformations')" class="w-full mt-3 bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/30 text-teal-300 font-bold text-xs py-2 rounded-lg transition-all cursor-pointer">
                         Ouvrir le Labo →
@@ -977,11 +977,11 @@
                     q.explanation = `
                         <div><strong>Données :</strong> (10^${n} × 10^${m}) / 10^${p}.</div>
                         <div><strong>Règles :</strong><br>
-                        • Multiplier des puissances : $10^a × 10^b = 10^{a+b}$.<br>
-                        • Diviser des puissances : $10^a / 10^b = 10^{a-b}$.</div>
+                        • Multiplier des puissances : 10^a × 10^b = 10^(a+b).<br>
+                        • Diviser des puissances : 10^a / 10^b = 10^(a-b).</div>
                         <div><strong>Calcul :</strong><br>
                         • Étape 1 : 10^${n} × 10^${m} = 10^{${n}+${m}} = 10^${n+m}.<br>
-                        • Étape 2 : 10^${n+m} / 10^${p} = 10^{${n+m}-${p}} = 10^${correctExp}.</div>
+                        • Étape 2 : 10^${n+m} / 10^p = 10^{${n+m}-${p}} = 10^${correctExp}.</div>
                     `;
                     q.drawOverlay = (svg) => {
                         svg.innerHTML = `
@@ -1019,7 +1019,7 @@
 
                         q.explanation = `
                             <div><strong>Données :</strong> L'expression ${a}x² + ${b}x.</div>
-                            <div><strong>Règle :</strong> On cherche le plus grand facteur commun présent dans chaque terme. Ici, c'est $x$.</div>
+                            <div><strong>Règle :</strong> On cherche le plus grand facteur commun présent dans chaque terme. Ici, c'est x.</div>
                             <div><strong>Calcul :</strong><br>
                             • On décompose chaque terme : ${a}x² = x × (${a}x) et ${b}x = x × ${b}.<br>
                             • On extrait le facteur commun : D = x × (${a}x + ${b}) = ${correctVal}.</div>
@@ -1055,7 +1055,7 @@
 
                         q.explanation = `
                             <div><strong>Données :</strong> (x + ${a})(x + ${b}).</div>
-                            <div><strong>Règle :</strong> On utilise la double distributivité : $(a+b)(c+d) = ac + ad + bc + bd$.</div>
+                            <div><strong>Règle :</strong> On utilise la double distributivité : (a+b)(c+d) = ac + ad + bc + bd.</div>
                             <div><strong>Calcul :</strong><br>
                             E = x×x + x×${b} + ${a}×x + ${a}×${b}<br>
                             E = x² + ${b}x + ${a}x + ${a*b}<br>
@@ -1248,9 +1248,9 @@
 
                     q.explanation = `
                         <div><strong>Méthode d'identification :</strong></div>
-                        <div>1. **Ordonnée à l'origine (b) :** La droite coupe l'axe vertical à la hauteur -1. Donc $b = -1$.</div>
-                        <div>2. **Coefficient directeur / Pente (a) :** En partant de l'ordonnée à l'origine $(0, -1)$, si on avance de 1 unité vers la droite, on doit monter de 2 unités verticalement pour retrouver la droite (on arrive au point $(1, 1)$). Donc la pente $a = 2$.</div>
-                        <div><strong>Conclusion :</strong> L'équation est $y = 2x - 1$.</div>
+                        <div>1. **Ordonnée à l'origine (b) :** La droite coupe l'axe vertical à la hauteur -1. Donc b = -1.</div>
+                        <div>2. **Coefficient directeur / Pente (a) :** En partant de l'ordonnée à l'origine (0, -1), si on avance de 1 unité vers la droite, on doit monter de 2 unités verticalement pour retrouver la droite (on arrive au point (1, 1)). Donc la pente a = 2.</div>
+                        <div><strong>Conclusion :</strong> L'équation est y = 2x - 1.</div>
                     `;
                     q.drawOverlay = (svg) => {
                         // y = 2x - 1
@@ -1292,11 +1292,11 @@
                     setupOptions(correctVal, ["14 cm", "9 cm", "12 cm", "48 cm"]);
                     q.explanation = `
                         <div><strong>Données :</strong> Triangle ABC rectangle en A, AB = 6 cm, AC = 8 cm.</div>
-                        <div><strong>Théorème :</strong> D'après le théorème de Pythagore, $BC² = AB² + AC²$.</div>
+                        <div><strong>Théorème :</strong> D'après le théorème de Pythagore, BC² = AB² + AC².</div>
                         <div><strong>Calcul :</strong><br>
-                        $BC² = 6² + 8²$<br>
-                        $BC² = 36 + 64 = 100$.<br>
-                        Donc $BC = \\sqrt{100} = 10$ cm.</div>
+                        BC² = 6² + 8²<br>
+                        BC² = 36 + 64 = 100.<br>
+                        Donc BC = √100 = 10 cm.</div>
                     `;
                     q.drawOverlay = (svg) => {
                         svg.innerHTML = `
@@ -1317,10 +1317,10 @@
                     q.question = "Dans la configuration ci-dessous, les droites (BC) et (DE) sont parallèles. On donne AD = 4 cm, AB = 10 cm, et AE = 3 cm. Calcule la longueur de [AC] :";
                     setupOptions(correctVal, ["9 cm", "7 cm", "12 cm", "1.2 cm"]);
                     q.explanation = `
-                        <div><strong>Propriété :</strong> Les points A,D,B d'une part et A,E,C d'autre part sont alignés. Puisque (DE) // (BC), d'après le théorème de Thalès :</div>
-                        <div>$\\frac{AD}{AB} = \\frac{AE}{AC}$</div>
-                        <div>$\\frac{4}{10} = \\frac{3}{AC}$</div>
-                        <div>En utilisant le produit en croix : $AC = \\frac{10 \\times 3}{4} = \\frac{30}{4} = 7,5$ cm.</div>
+                        <div><strong>Propriété :</strong> Les points A, D, B d'une part et A, E, C d'autre part sont alignés. Puisque (DE) // (BC), d'après le théorème de Thalès :</div>
+                        <div>AD / AB = AE / AC</div>
+                        <div>4 / 10 = 3 / AC</div>
+                        <div>En utilisant le produit en croix : AC = (10 × 3) / 4 = 30 / 4 = 7,5 cm.</div>
                     `;
                     q.drawOverlay = (svg) => {
                         svg.innerHTML = `
@@ -1341,9 +1341,9 @@
                     q.question = "Dans un triangle ABC rectangle en B, on donne l'hypoténuse AC = 10 cm et le côté opposé à l'angle A, BC = 5 cm. Calcule la mesure de l'angle BAC (arrondie au degré) :";
                     setupOptions(correctVal, ["45°", "60°", "15°", "90°"]);
                     q.explanation = `
-                        <div><strong>Données :</strong> Triangle rectangle en B. Hypoténuse $AC = 10$ cm. Côté opposé $BC = 5$ cm.</div>
-                        <div><strong>Règle :</strong> $\\sin(\\widehat{BAC}) = \\frac{\\text{Côté Opposé}}{\\text{Hypoténuse}} = \\frac{BC}{AC} = \\frac{5}{10} = 0,5$.</div>
-                        <div><strong>Calcul :</strong> L'angle dont le sinus vaut 0,5 se trouve en utilisant la fonction réciproque $\\arcsin(0,5)$ (ou touche $\\sin^{-1}$ de la calculatrice). On obtient exactement $30^\\circ$.</div>
+                        <div><strong>Données :</strong> Triangle rectangle en B. Hypoténuse AC = 10 cm. Côté opposé BC = 5 cm.</div>
+                        <div><strong>Règle :</strong> sin(BAC) = Côté Opposé / Hypoténuse = BC / AC = 5/10 = 0,5.</div>
+                        <div><strong>Calcul :</strong> L'angle dont le sinus vaut 0,5 se trouve en utilisant la fonction réciproque arcsin(0,5) (ou touche sin⁻¹ de la calculatrice). On obtient exactement 30°.</div>
                     `;
                     q.drawOverlay = (svg) => {
                         svg.innerHTML = `
@@ -1369,7 +1369,7 @@
                     setupOptions(correctVal, ["Un agrandissement de rapport 2", "Une réduction de rapport 0.25", "Une translation", "Une rotation de 90°"]);
                     q.explanation = `
                         <div><strong>Données :</strong> Pyramide coupée parallèlement à la base. Hauteur totale = 12 cm. Hauteur de la petite pyramide = 6 cm.</div>
-                        <div><strong>Propriété :</strong> La section obtenue est une réduction de la base. Le rapport de cette réduction est le rapport des hauteurs : $k = \\frac{\\text{petite hauteur}}{\\text{grande hauteur}} = \\frac{6}{12} = 0,5$.</div>
+                        <div><strong>Propriété :</strong> La section obtenue est une réduction de la base. Le rapport de cette réduction est le rapport des hauteurs : k = petite hauteur / grande hauteur = 6/12 = 0,5.</div>
                         <div><strong>Conclusion :</strong> C'est donc une réduction de rapport 0,5.</div>
                     `;
                     q.drawOverlay = (svg) => {
@@ -1473,8 +1473,8 @@
                     q.question = "Si X vaut 5 au départ, et qu'on exécute ce script Scratch : 'Si X > 10 alors Mettre Score à 100, Sinon Mettre Score à 30'. Quelle sera la valeur finale du Score ?";
                     setupOptions(correctVal, ["100", "5", "10", "130"]);
                     q.explanation = `
-                        <div><strong>Données :</strong> Valeur initiale $X = 5$. Condition testée : $X > 10$.</div>
-                        <div><strong>Règle :</strong> La condition $5 > 10$ est fausse. On prend donc la branche **Sinon**.</div>
+                        <div><strong>Données :</strong> Valeur initiale X = 5. Condition testée : X > 10.</div>
+                        <div><strong>Règle :</strong> La condition 5 > 10 est fausse. On prend donc la branche **Sinon**.</div>
                         <div><strong>Conclusion :</strong> C'est l'instruction de la branche **Sinon** qui s'applique, le Score devient donc 30.</div>
                     `;
                     q.drawOverlay = (svg) => {
