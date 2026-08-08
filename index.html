@@ -2142,9 +2142,22 @@
             const zoomedSvg = document.getElementById('zoomed-svg');
             
             if (svgOverlay && !svgOverlay.classList.contains('hidden')) {
-                // We copy the SVG content and viewBox to allow auto vector scaling (with scaled font sizes)
+                // We copy the SVG content and viewBox to allow auto vector scaling
                 zoomedSvg.innerHTML = svgOverlay.innerHTML;
                 zoomedSvg.setAttribute('viewBox', svgOverlay.getAttribute('viewBox') || '0 0 300 300');
+                
+                // Enlarge all text elements inside the zoomed SVG
+                const texts = zoomedSvg.querySelectorAll('text');
+                texts.forEach(t => {
+                    const currentSize = parseFloat(t.getAttribute('font-size'));
+                    if (currentSize) {
+                        t.setAttribute('font-size', currentSize * 1.5);
+                    } else {
+                        t.setAttribute('font-size', '16');
+                    }
+                    // Apply extra font-weight and styling for high contrast
+                    t.setAttribute('font-weight', 'bold');
+                });
                 
                 zoomedImg.classList.add('hidden');
                 zoomedSvg.classList.remove('hidden');
