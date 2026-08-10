@@ -1798,14 +1798,19 @@
                     correct = n2;
                 }
 
+                let choices = [correct, correct + 4, correct - 3, correct + 2];
+                choices = choices.filter((v, i, self) => self.indexOf(v) === i);
+                choices.sort(() => Math.random() - 0.5);
+
+                let buttonsHtml = choices.map(val => `
+                    <button onclick="submitMentalAns(${val}, ${correct})" class="bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold py-2.5 rounded-xl border border-slate-700 cursor-pointer">${val}</button>
+                `).join('');
+
                 container.innerHTML = `
                     <h3 class="text-sm font-black text-slate-400 uppercase tracking-widest font-title">Calcule Rapidement</h3>
                     <p class="text-2xl font-black text-slate-100 font-title">${question} = ?</p>
                     <div class="grid grid-cols-2 gap-3 pt-4">
-                        <button onclick="submitMentalAns(${correct}, ${correct})" class="bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold py-2.5 rounded-xl border border-slate-700 cursor-pointer">${correct}</button>
-                        <button onclick="submitMentalAns(${correct+4}, ${correct})" class="bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold py-2.5 rounded-xl border border-slate-700 cursor-pointer">${correct+4}</button>
-                        <button onclick="submitMentalAns(${correct-3}, ${correct})" class="bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold py-2.5 rounded-xl border border-slate-700 cursor-pointer">${correct-3}</button>
-                        <button onclick="submitMentalAns(${correct+2}, ${correct})" class="bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold py-2.5 rounded-xl border border-slate-700 cursor-pointer">${correct+2}</button>
+                        ${buttonsHtml}
                     </div>
                 `;
             }
