@@ -884,55 +884,98 @@
                     // Fractions & Décomposition
                     let isAddition = Math.random() > 0.5;
                     if (isAddition) {
-                        // Addition of fractions: a/b + c/d
-                        let b = 3;
-                        let d = 12; // common denom will be 12
-                        let a = Math.floor(Math.random() * 2) + 1; // 1 or 2
-                        let c = Math.floor(Math.random() * 4) + 1; // 1 to 4
-                        let num = a * 4 + c;
-                        let correctVal = `${num}/12`;
+                        // Addition of fractions: a/b + c/d where d is a multiple of b
+                        const pairs = [
+                            { b: 2, d: 4, k: 2 },
+                            { b: 2, d: 6, k: 3 },
+                            { b: 2, d: 8, k: 4 },
+                            { b: 3, d: 6, k: 2 },
+                            { b: 3, d: 9, k: 3 },
+                            { b: 3, d: 12, k: 4 },
+                            { b: 4, d: 8, k: 2 },
+                            { b: 4, d: 12, k: 3 },
+                            { b: 5, d: 10, k: 2 }
+                        ];
+                        const pair = pairs[Math.floor(Math.random() * pairs.length)];
+                        const b = pair.b;
+                        const d = pair.d;
+                        const k = pair.k;
+
+                        // Numerators: keep them small to be proper fractions and fits visually
+                        let a = Math.floor(Math.random() * (b - 1)) + 1; // 1 to b-1
+                        let c = Math.floor(Math.random() * (d - 1)) + 1; // 1 to d-1
+                        let num = a * k + c;
+                        let correctVal = `${num}/${d}`;
                         
                         q.title = "Addition de Fractions";
-                        q.question = `Calcule et simplifie le résultat : A = ${a}/3 + ${c}/12`;
-                        setupOptions(correctVal, [`${a+c}/15`, `${a*c}/36`, `${num+2}/12`, `${Math.max(1, num-3)}/12`]);
+                        q.question = `Calcule et simplifie le résultat : A = ${a}/${b} + ${c}/${d}`;
+                        setupOptions(correctVal, [
+                            `${a + c}/${b + d}`, 
+                            `${a * c}/${b * d}`, 
+                            `${num + 2}/${d}`, 
+                            `${Math.max(1, num - 3)}/${d}`
+                        ]);
                         q.explanation = `
-                            <div><strong>Données :</strong> L'expression ${a}/3 + ${c}/12.</div>
-                            <div><strong>Règle :</strong> Pour additionner deux fractions, on les met au même dénominateur. Ici, le dénominateur commun est 12 (car 12 est un multiple de 3).</div>
+                            <div><strong>Données :</strong> L'expression ${a}/${b} + ${c}/${d}.</div>
+                            <div><strong>Règle :</strong> Pour additionner deux fractions, on les met au même dénominateur. Ici, le dénominateur commun est ${d} (car ${d} est un multiple de ${b}).</div>
                             <div><strong>Calcul :</strong><br>
-                            • On convertit la première fraction : ${a}/3 = (${a} × 4) / (3 × 4) = ${a*4}/12.<br>
-                            • On additionne les numérateurs : ${a*4}/12 + ${c}/12 = (${a*4} + ${c}) / 12 = ${num}/12.</div>
+                            • On convertit la première fraction : ${a}/${b} = (${a} × ${k}) / (${b} × ${k}) = ${a * k}/${d}.<br>
+                            • On additionne les numérateurs : ${a * k}/${d} + ${c}/${d} = (${a * k} + ${c}) / ${d} = ${num}/${d}.</div>
                             <div><strong>Conclusion :</strong> Le résultat final est bien ${correctVal}.</div>
                         `;
                         q.drawOverlay = (svg) => {
+                            const getSlicePath = (cx, cy, r, start, end, N) => {
+                                let a1 = -Math.PI / 2 + (2 * Math.PI * start) / N;
+                                let a2 = -Math.PI / 2 + (2 * Math.PI * end) / N;
+                                let x1 = cx + r * Math.cos(a1);
+                                let y1 = cy + r * Math.sin(a1);
+                                let x2 = cx + r * Math.cos(a2);
+                                let y2 = cy + r * Math.sin(a2);
+                                let largeArc = (end - start) / N > 0.5 ? 1 : 0;
+                                return `M ${cx} ${cy} L ${x1.toFixed(1)} ${y1.toFixed(1)} A ${r} ${r} 0 ${largeArc} 1 ${x2.toFixed(1)} ${y2.toFixed(1)} Z`;
+                            };
+
+                            const getSpokes = (cx, cy, r, N) => {
+                                let spokesHtml = '';
+                                for (let i = 0; i < N; i++) {
+                                    let angle = -Math.PI / 2 + (2 * Math.PI * i) / N;
+                                    let x = cx + r * Math.cos(angle);
+                                    let y = cy + r * Math.sin(angle);
+                                    spokesHtml += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#1e293b" stroke-width="1"/>`;
+                                }
+                                return spokesHtml;
+                            };
+
                             svg.innerHTML = `
                                 <!-- Fraction visualizer -->
-                                <text x="150" y="40" fill="#10b981" font-size="12" font-weight="bold" text-anchor="middle">Visualisation : ${a}/3 + ${c}/12</text>
-                                <!-- Circle 1: Thirds -->
+                                <text x="150" y="40" fill="#10b981" font-size="12" font-weight="bold" text-anchor="middle">Visualisation : ${a}/${b} + ${c}/${d}</text>
+                                
+                                <!-- Circle 1 -->
+                                <path d="${getSlicePath(80, 140, 40, 0, a, b)}" fill="rgba(16, 185, 129, 0.4)" stroke="#10b981" stroke-width="1.5"/>
                                 <circle cx="80" cy="140" r="40" fill="none" stroke="#334155" stroke-width="3"/>
-                                <path d="M 80 140 L 80 100 A 40 40 0 0 1 114.6 160 Z" fill="rgba(16, 185, 129, 0.4)" stroke="#10b981" stroke-width="2"/>
-                                ${a > 1 ? `<path d="M 80 140 L 114.6 160 A 40 40 0 0 1 45.4 160 Z" fill="rgba(16, 185, 129, 0.4)" stroke="#10b981" stroke-width="2"/>` : ''}
-                                <text x="80" y="200" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${a}/3</text>
+                                ${getSpokes(80, 140, 40, b)}
+                                <text x="80" y="200" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${a}/${b}</text>
                                 
                                 <!-- Plus sign -->
                                 <text x="150" y="145" fill="#fff" font-size="24" font-weight="bold" text-anchor="middle">+</text>
 
-                                <!-- Circle 2: Twelfths -->
+                                <!-- Circle 2 -->
+                                <path d="${getSlicePath(220, 140, 40, 0, c, d)}" fill="rgba(99, 102, 241, 0.5)" stroke="#6366f1" stroke-width="1.5"/>
                                 <circle cx="220" cy="140" r="40" fill="none" stroke="#334155" stroke-width="3"/>
-                                <!-- Slice lines for 12ths -->
-                                <path d="M 220 100 L 220 180 M 180 140 L 260 140 M 200 105.4 L 240 174.6 M 240 105.4 L 200 174.6" stroke="#1e293b" stroke-width="1"/>
-                                <path d="M 220 140 L 220 100 A 40 40 0 0 1 240 105.4 Z" fill="rgba(99, 102, 241, 0.5)" stroke="#6366f1" stroke-width="1"/>
-                                ${c > 1 ? `<path d="M 220 140 L 240 105.4 A 40 40 0 0 1 254.6 120 Z" fill="rgba(99, 102, 241, 0.5)" stroke="#6366f1" stroke-width="1"/>` : ''}
-                                ${c > 2 ? `<path d="M 220 140 L 254.6 120 A 40 40 0 0 1 260 140 Z" fill="rgba(99, 102, 241, 0.5)" stroke="#6366f1" stroke-width="1"/>` : ''}
-                                ${c > 3 ? `<path d="M 220 140 L 260 140 A 40 40 0 0 1 254.6 160 Z" fill="rgba(99, 102, 241, 0.5)" stroke="#6366f1" stroke-width="1"/>` : ''}
-                                <text x="220" y="200" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${c}/12</text>
+                                ${getSpokes(220, 140, 40, d)}
+                                <text x="220" y="200" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${c}/${d}</text>
                             `;
                         };
                     } else {
                         // Decompose & Simplify
-                        let primes = [2, 3, 5, 7];
-                        let f1 = primes[Math.floor(Math.random() * 2)]; // 2 or 3
-                        let f2 = primes[Math.floor(Math.random() * 2) + 1]; // 3 or 5
-                        let common = primes[Math.floor(Math.random() * 3)]; // 2, 3 or 5
+                        let primes = [2, 3, 5, 7, 11, 13];
+                        let f1, f2, common;
+                        do {
+                            let shuffled = [...primes].sort(() => Math.random() - 0.5);
+                            f1 = shuffled[0];
+                            f2 = shuffled[1];
+                            common = primes[Math.floor(Math.random() * 4)]; // Pick a smaller prime (2, 3, 5, or 7) for common factor
+                        } while (f1 * common > 100 || f2 * common > 100 || f1 === f2);
                         
                         let num = f1 * common;
                         let den = f2 * common;
@@ -940,7 +983,13 @@
 
                         q.title = "Simplification par Facteurs Premiers";
                         q.question = `Simplifie la fraction suivante en utilisant la décomposition en facteurs premiers : B = ${num}/${den}`;
-                        setupOptions(correctVal, [`${f1+1}/${f2+1}`, `${f1}/${common}`, `${common}/${f2}`, `1/${f2}`]);
+                        setupOptions(correctVal, [
+                            `${f1 + 1}/${f2 + 1}`, 
+                            `${f1}/${common}`, 
+                            `${common}/${f2}`, 
+                            `${f2}/${f1}`, 
+                            `${f1}/${f2 + 2}`
+                        ]);
                         
                         q.explanation = `
                             <div><strong>Données :</strong> La fraction ${num}/${den}.</div>
