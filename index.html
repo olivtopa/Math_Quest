@@ -603,6 +603,8 @@
         let rituelTimeLeft = 60;
         let rituelScore = 0;
         let activeRituelStage = null;
+        let activeGeomQuestion = null;
+        let activeGeomChoices = [];
 
         // Load Save State
         if (localStorage.getItem('math_quest_save_2026')) {
@@ -1816,15 +1818,112 @@
             }
             else if (activeRituelStage === 'geometry') {
                 document.getElementById('rituel-title').innerText = "RITUEL : RÉSOLUTION GÉOMÉTRIQUE";
-                // Simple trig question
+                
+                const geomPool = [
+                    {
+                        category: "Trigonométrie",
+                        q: "Dans un triangle rectangle, quelle formule définit le Cosinus d'un angle ?",
+                        correct: "Adjacent / Hypoténuse",
+                        wrongs: ["Opposé / Hypoténuse", "Opposé / Adjacent", "Hypoténuse / Adjacent"],
+                        explanation: "Le cosinus (COS) est le rapport du côté Adjacent sur l'Hypoténuse (Moyen mnémotechnique : CAH-SOH-TOA)."
+                    },
+                    {
+                        category: "Trigonométrie",
+                        q: "Dans un triangle rectangle, quelle formule définit le Sinus d'un angle ?",
+                        correct: "Opposé / Hypoténuse",
+                        wrongs: ["Adjacent / Hypoténuse", "Opposé / Adjacent", "Hypoténuse / Opposé"],
+                        explanation: "Le sinus (SIN) est le rapport du côté Opposé sur l'Hypoténuse (Moyen mnémotechnique : CAH-SOH-TOA)."
+                    },
+                    {
+                        category: "Trigonométrie",
+                        q: "Dans un triangle rectangle, quelle formule définit la Tangente d'un angle ?",
+                        correct: "Opposé / Adjacent",
+                        wrongs: ["Adjacent / Hypoténuse", "Opposé / Hypoténuse", "Hypoténuse / Opposé"],
+                        explanation: "La tangente (TAN) est le rapport du côté Opposé sur le côté Adjacent (Moyen mnémotechnique : CAH-SOH-TOA)."
+                    },
+                    {
+                        category: "Théorème de Pythagore",
+                        q: "Dans un triangle ABC rectangle en A, quelle est l'égalité de Pythagore ?",
+                        correct: "BC² = AB² + AC²",
+                        wrongs: ["AB² = BC² + AC²", "AC² = AB² + BC²", "BC = AB + AC"],
+                        explanation: "L'hypoténuse est le côté BC (opposé à l'angle droit en A). Donc BC² = AB² + AC²."
+                    },
+                    {
+                        category: "Réciproque de Pythagore",
+                        q: "Si dans un triangle ABC on a BC² = AB² + AC², que peut-on conclure ?",
+                        correct: "Le triangle est rectangle en A",
+                        wrongs: ["Le triangle est isocèle en A", "Le triangle est rectangle en B", "Le triangle est équilatéral"],
+                        explanation: "D'après la réciproque du théorème de Pythagore, le triangle est rectangle au sommet opposé à l'hypoténuse BC, soit le sommet A."
+                    },
+                    {
+                        category: "Théorème de Thalès",
+                        q: "Le théorème de Thalès permet principalement de :",
+                        correct: "Calculer des longueurs dans des triangles en situation de parallélisme",
+                        wrongs: ["Calculer des angles dans un triangle rectangle", "Démontrer qu'un triangle est rectangle", "Calculer le périmètre d'un cercle"],
+                        explanation: "Thalès permet de calculer des longueurs lorsque deux droites sont parallèles coupées par deux sécantes."
+                    },
+                    {
+                        category: "Transformations",
+                        q: "Une homothétie de rapport k = -2 par rapport à un point O réalise :",
+                        correct: "Un agrandissement de facteur 2 et un demi-tour autour de O",
+                        wrongs: ["Une réduction de facteur 2", "Une simple translation", "Une symétrie axiale par rapport à une droite"],
+                        explanation: "Un rapport négatif (k = -2) agrandit les longueurs par 2 et inverse le sens par rapport au centre O."
+                    },
+                    {
+                        category: "Agrandissements & Réductions",
+                        q: "Si les longueurs d'une figure sont multipliées par k = 3, par quel facteur son aire est-elle multipliée ?",
+                        correct: "k² = 9",
+                        wrongs: ["k = 3", "2k = 6", "k³ = 27"],
+                        explanation: "Lors d'un agrandissement de rapport k, les aires sont multipliées par k² (ici 3² = 9)."
+                    },
+                    {
+                        category: "Agrandissements & Réductions",
+                        q: "Si les dimensions d'un solide sont multipliées par k = 2, par quel facteur son volume est-il multiplié ?",
+                        correct: "k³ = 8",
+                        wrongs: ["k = 2", "k² = 4", "2k = 4"],
+                        explanation: "Lors d'un agrandissement de rapport k, les volumes sont multipliés par k³ (ici 2³ = 8)."
+                    },
+                    {
+                        category: "Géométrie du Triangle",
+                        q: "Dans un triangle rectangle, la somme des deux angles aigus vaut toujours :",
+                        correct: "90°",
+                        wrongs: ["180°", "45°", "60°"],
+                        explanation: "La somme des angles d'un triangle fait 180°. Avec l'angle droit de 90°, les deux autres angles ont pour somme 180° - 90° = 90°."
+                    },
+                    {
+                        category: "Périmètre et Circonférence",
+                        q: "Quelle est la formule de la circonférence d'un cercle de rayon R ?",
+                        correct: "2 × π × R",
+                        wrongs: ["π × R²", "4 × π × R", "π × R / 2"],
+                        explanation: "Le périmètre (ou circonférence) d'un cercle de rayon R s'exprime par P = 2πR."
+                    },
+                    {
+                        category: "Aires de Surfaces",
+                        q: "Quelle est la formule de l'aire d'un disque de rayon R ?",
+                        correct: "π × R²",
+                        wrongs: ["2 × π × R", "4 × π × R²", "2 × π × R²"],
+                        explanation: "L'aire d'un disque de rayon R s'exprime par A = πR²."
+                    }
+                ];
+
+                let item = geomPool[Math.floor(Math.random() * geomPool.length)];
+                let choices = [item.correct, ...item.wrongs];
+                choices.sort(() => Math.random() - 0.5);
+
+                activeGeomQuestion = item;
+                activeGeomChoices = choices;
+
+                let buttonsHtml = choices.map((choice, idx) => `
+                    <button onclick="submitGeomAns(${idx})" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 px-4 rounded-xl border border-slate-700 cursor-pointer text-left transition-all">${choice}</button>
+                `).join('');
+
                 container.innerHTML = `
-                    <h3 class="text-sm font-black text-slate-400 uppercase tracking-widest font-title">Trigonométrie</h3>
-                    <p class="text-sm font-extrabold text-slate-200">Dans un triangle rectangle, quelle formule définit le Cosinus d'un angle ?</p>
-                    <div class="space-y-2 pt-4">
-                        <button onclick="submitGeomAns(true)" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 rounded-xl border border-slate-700 cursor-pointer">Adjacent / Hypoténuse</button>
-                        <button onclick="submitGeomAns(false)" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 rounded-xl border border-slate-700 cursor-pointer">Opposé / Hypoténuse</button>
-                        <button onclick="submitGeomAns(false)" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 rounded-xl border border-slate-700 cursor-pointer">Opposé / Adjacent</button>
+                    <h3 class="text-sm font-black text-slate-400 uppercase tracking-widest font-title">${item.category}</h3>
+                    <p class="text-sm font-extrabold text-slate-200 mt-1">${item.q}</p>
+                    <div id="geom-options-area" class="space-y-2 pt-4">
+                        ${buttonsHtml}
                     </div>
+                    <div id="geom-feedback-area" class="mt-4 hidden"></div>
                 `;
             }
         }
@@ -1847,12 +1946,52 @@
             loadRituelCard();
         }
 
-        function submitGeomAns(isCorrect) {
-            if(isCorrect) {
+        function submitGeomAns(choiceIndex) {
+            if (!activeGeomQuestion || !activeGeomChoices) return;
+            const selectedAns = activeGeomChoices[choiceIndex];
+            const correctAns = activeGeomQuestion.correct;
+            const isCorrect = (selectedAns === correctAns);
+
+            if (isCorrect) {
                 rituelScore += 2;
                 confetti({ particleCount: 20, spread: 30, origin: { y: 0.6 } });
             }
-            loadRituelCard();
+
+            const optionsArea = document.getElementById('geom-options-area');
+            const feedbackArea = document.getElementById('geom-feedback-area');
+
+            if (optionsArea && feedbackArea) {
+                const buttons = optionsArea.querySelectorAll('button');
+                buttons.forEach((btn, idx) => {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed');
+                    if (activeGeomChoices[idx] === correctAns) {
+                        btn.classList.remove('opacity-50', 'bg-slate-800');
+                        btn.classList.add('bg-emerald-950/80', 'border-emerald-500', 'text-emerald-200', 'font-black');
+                    } else if (idx === choiceIndex && !isCorrect) {
+                        btn.classList.remove('opacity-50', 'bg-slate-800');
+                        btn.classList.add('bg-rose-950/80', 'border-rose-500', 'text-rose-200');
+                    }
+                });
+
+                feedbackArea.classList.remove('hidden');
+                feedbackArea.innerHTML = `
+                    <div class="p-3.5 rounded-xl border ${isCorrect ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/40 border-rose-500/40 text-rose-300'} text-xs space-y-2">
+                        <div class="font-extrabold text-sm flex items-center space-x-2">
+                            <span>${isCorrect ? '✨ Exact ! (+2 pts)' : '❌ Incorrect'}</span>
+                        </div>
+                        <div><strong>Explication :</strong> ${activeGeomQuestion.explanation}</div>
+                    </div>
+                    <div class="pt-4 flex justify-center">
+                        <button onclick="loadRituelCard()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-2.5 px-6 rounded-xl transition-all cursor-pointer shadow-lg shadow-emerald-500/20 text-xs font-title tracking-wider uppercase flex items-center justify-center space-x-2">
+                            <span>Question Suivante</span>
+                            <span>➔</span>
+                        </button>
+                    </div>
+                `;
+            } else {
+                loadRituelCard();
+            }
         }
 
         function endRituelStage() {
