@@ -1139,26 +1139,83 @@
                     }
                 }
                 else if (questIndex === 3) {
-                    // Équations & Inéquations
                     let isEquation = Math.random() > 0.5;
                     if (isEquation) {
-                        // ax + b = c
-                        let a = Math.floor(Math.random() * 3) + 2; // 2 to 4
-                        let b = Math.floor(Math.random() * 8) + 2; // 2 to 9
-                        let correctX = Math.floor(Math.random() * 4) + 2; // 2 to 5
-                        let c = a * correctX + b;
-                        let correctVal = `x = ${correctX}`;
+                        let eqType = Math.floor(Math.random() * 4); // 0: ax+b=c, 1: ax-b=c, 2: ax+b=cx+d, 3: b-ax=c
+                        let a, b, c, d, correctX, eqStr, stepsHtml, leftVisual, rightVisual;
 
+                        if (eqType === 0) {
+                            // ax + b = c
+                            a = Math.floor(Math.random() * 4) + 2; // 2 to 5
+                            correctX = Math.floor(Math.random() * 6) + 1; // 1 to 6
+                            b = Math.floor(Math.random() * 8) + 2; // 2 to 9
+                            c = a * correctX + b;
+                            eqStr = `${a}x + ${b} = ${c}`;
+                            stepsHtml = `
+                                1. Soustraire ${b} des deux côtés : ${a}x = ${c} - ${b} = ${c - b}.<br>
+                                2. Diviser par ${a} des deux côtés : x = ${c - b} / ${a} = ${correctX}.
+                            `;
+                            leftVisual = `<rect x="65" y="110" width="35" height="30" fill="rgba(16, 185, 129, 0.3)" stroke="#10b981"/><text x="82" y="130" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">${a}x</text><circle cx="120" cy="125" r="12" fill="rgba(99, 102, 241, 0.3)" stroke="#6366f1"/><text x="120" y="129" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">+${b}</text>`;
+                            rightVisual = `<circle cx="210" cy="125" r="16" fill="rgba(245, 158, 11, 0.3)" stroke="#f59e0b"/><text x="210" y="130" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">${c}</text>`;
+                        } else if (eqType === 1) {
+                            // ax - b = c
+                            a = Math.floor(Math.random() * 4) + 2;
+                            correctX = Math.floor(Math.random() * 6) + 2; // 2 to 7
+                            b = Math.floor(Math.random() * 7) + 2;
+                            c = a * correctX - b;
+                            eqStr = `${a}x - ${b} = ${c}`;
+                            stepsHtml = `
+                                1. Ajouter ${b} des deux côtés : ${a}x = ${c} + ${b} = ${c + b}.<br>
+                                2. Diviser par ${a} des deux côtés : x = ${c + b} / ${a} = ${correctX}.
+                            `;
+                            leftVisual = `<rect x="65" y="110" width="35" height="30" fill="rgba(16, 185, 129, 0.3)" stroke="#10b981"/><text x="82" y="130" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">${a}x</text><circle cx="120" cy="125" r="12" fill="rgba(239, 68, 68, 0.3)" stroke="#ef4444"/><text x="120" y="129" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">-${b}</text>`;
+                            rightVisual = `<circle cx="210" cy="125" r="16" fill="rgba(245, 158, 11, 0.3)" stroke="#f59e0b"/><text x="210" y="130" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">${c}</text>`;
+                        } else if (eqType === 2) {
+                            // ax + b = cx + d
+                            correctX = Math.floor(Math.random() * 5) + 1;
+                            c = Math.floor(Math.random() * 3) + 1; // 1 to 3
+                            let diff = Math.floor(Math.random() * 3) + 2; // 2 to 4
+                            a = c + diff;
+                            b = Math.floor(Math.random() * 6) + 1;
+                            d = diff * correctX + b;
+                            eqStr = `${a}x + ${b} = ${c}x + ${d}`;
+                            stepsHtml = `
+                                1. Regrouper les termes en x à gauche : ${a}x - ${c}x = ${diff}x.<br>
+                                2. Regrouper les nombres à droite : ${d} - ${b} = ${d - b}.<br>
+                                3. Diviser par ${diff} : x = ${d - b} / ${diff} = ${correctX}.
+                            `;
+                            leftVisual = `<rect x="65" y="110" width="35" height="30" fill="rgba(16, 185, 129, 0.3)" stroke="#10b981"/><text x="82" y="130" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${a}x+${b}</text>`;
+                            rightVisual = `<rect x="190" y="110" width="40" height="30" fill="rgba(245, 158, 11, 0.3)" stroke="#f59e0b"/><text x="210" y="130" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${c}x+${d}</text>`;
+                        } else {
+                            // b - ax = c
+                            a = Math.floor(Math.random() * 3) + 2;
+                            correctX = Math.floor(Math.random() * 5) + 1;
+                            let cVal = Math.floor(Math.random() * 5) + 1;
+                            b = cVal + a * correctX;
+                            c = cVal;
+                            eqStr = `${b} - ${a}x = ${c}`;
+                            stepsHtml = `
+                                1. Soustraire ${b} des deux côtés : -${a}x = ${c} - ${b} = -${a * correctX}.<br>
+                                2. Diviser par -${a} : x = (-${a * correctX}) / (-${a}) = ${correctX}.
+                            `;
+                            leftVisual = `<rect x="65" y="110" width="45" height="30" fill="rgba(16, 185, 129, 0.3)" stroke="#10b981"/><text x="87" y="130" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${b}-${a}x</text>`;
+                            rightVisual = `<circle cx="210" cy="125" r="16" fill="rgba(245, 158, 11, 0.3)" stroke="#f59e0b"/><text x="210" y="130" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">${c}</text>`;
+                        }
+
+                        let correctVal = `x = ${correctX}`;
                         q.title = "Résolution d'Équation";
-                        q.question = `Résous l'équation suivante : ${a}x + ${b} = ${c}. Quelle est la valeur de x ?`;
-                        setupOptions(correctVal, [`x = ${correctX + 1}`, `x = ${correctX - 1}`, `x = ${c - b}`, `x = ${(c - b) * a}`]);
+                        q.question = `Résous l'équation suivante : ${eqStr}. Quelle est la valeur de x ?`;
+                        setupOptions(correctVal, [
+                            `x = ${correctX + 1}`, 
+                            `x = ${Math.max(0, correctX - 1)}`, 
+                            `x = ${correctX + 2}`, 
+                            `x = -${correctX}`
+                        ]);
 
                         q.explanation = `
-                            <div><strong>Données :</strong> ${a}x + ${b} = ${c}.</div>
-                            <div><strong>Règle :</strong> On isole le terme en $x$ en effectuant la même opération des deux côtés de l'égalité.</div>
-                            <div><strong>Étapes :</strong><br>
-                            1. Soustraire ${b} des deux côtés : ${a}x = ${c} - ${b} = ${c-b}.<br>
-                            2. Diviser par ${a} des deux côtés : x = ${c-b} / ${a} = ${correctX}.</div>
+                            <div><strong>Données :</strong> ${eqStr}.</div>
+                            <div><strong>Règle :</strong> On isole le terme en $x$ en effectuant les mêmes opérations des deux côtés de l'égalité.</div>
+                            <div><strong>Étapes :</strong><br>${stepsHtml}</div>
                             <div><strong>Conclusion :</strong> La solution est bien ${correctVal}.</div>
                         `;
                         q.drawOverlay = (svg) => {
@@ -1166,57 +1223,112 @@
                                 <text x="150" y="45" fill="#10b981" font-size="14" font-weight="bold" text-anchor="middle">Principe de la Balance</text>
                                 
                                 <!-- Balance drawing -->
-                                <line x1="60" y1="150" x2="240" y2="150" stroke="#fff" stroke-width="4"/>
+                                <line x1="50" y1="150" x2="250" y2="150" stroke="#fff" stroke-width="4"/>
                                 <polygon points="150,150 140,190 160,190" fill="#334155"/>
                                 
                                 <!-- Left side -->
-                                <rect x="70" y="110" width="30" height="30" fill="rgba(16, 185, 129, 0.3)" stroke="#10b981"/>
-                                <text x="85" y="130" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">${a}x</text>
-                                
-                                <circle cx="120" cy="125" r="12" fill="rgba(99, 102, 241, 0.3)" stroke="#6366f1"/>
-                                <text x="120" y="129" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">+${b}</text>
+                                ${leftVisual}
                                 
                                 <!-- Right side -->
-                                <circle cx="210" cy="125" r="16" fill="rgba(245, 158, 11, 0.3)" stroke="#f59e0b"/>
-                                <text x="210" y="130" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">${c}</text>
+                                ${rightVisual}
                                 
                                 <text x="150" y="215" fill="#a7f3d0" font-size="11" font-weight="bold" text-anchor="middle">L'égalité maintient l'équilibre !</text>
                             `;
                         };
                     } else {
-                        // Inequation: ax + b <= c
-                        let a = 2;
-                        let b = Math.floor(Math.random() * 5) + 1; // 1 to 5
-                        let val = Math.floor(Math.random() * 3) + 3; // 3 to 5
-                        let c = 2 * val + b;
-                        let correctVal = `x ≤ ${val}`;
+                        // Inequations with multiple structures including sign reversal
+                        let ineqType = Math.floor(Math.random() * 3); // 0: ax+b <= c, 1: ax-b >= c, 2: -ax+b <= c (sign flip!)
+                        let a, b, c, val, initOp, finalOp, ineqStr, stepsHtml, pointDirection, bracketChar, bracketOffset;
+
+                        if (ineqType === 0) {
+                            // ax + b <= c  or  ax + b < c
+                            a = Math.floor(Math.random() * 3) + 2; // 2 to 4
+                            val = Math.floor(Math.random() * 5) + 2; // 2 to 6
+                            b = Math.floor(Math.random() * 6) + 1;
+                            c = a * val + b;
+                            let isStrict = Math.random() > 0.5;
+                            initOp = isStrict ? "<" : "≤";
+                            finalOp = initOp;
+                            ineqStr = `${a}x + ${b} ${initOp} ${c}`;
+                            stepsHtml = `
+                                1. Soustraire ${b} : ${a}x ${initOp} ${c} - ${b} → ${a}x ${initOp} ${c - b}.<br>
+                                2. Diviser par +${a} (positif, le sens est conservé) : x ${finalOp} ${val}.
+                            `;
+                            pointDirection = "left"; // Ray goes left: -inf to val
+                            bracketChar = isStrict ? "[" : "]"; // Excluded: [, Included: ]
+                            bracketOffset = isStrict ? 150 : 146;
+                        } else if (ineqType === 1) {
+                            // ax - b >= c  or  ax - b > c
+                            a = Math.floor(Math.random() * 3) + 2;
+                            val = Math.floor(Math.random() * 5) + 2;
+                            b = Math.floor(Math.random() * 6) + 1;
+                            c = a * val - b;
+                            let isStrict = Math.random() > 0.5;
+                            initOp = isStrict ? ">" : "≥";
+                            finalOp = initOp;
+                            ineqStr = `${a}x - ${b} ${initOp} ${c}`;
+                            stepsHtml = `
+                                1. Ajouter ${b} : ${a}x ${initOp} ${c} + ${b} → ${a}x ${initOp} ${c + b}.<br>
+                                2. Diviser par +${a} (positif, le sens est conservé) : x ${finalOp} ${val}.
+                            `;
+                            pointDirection = "right"; // Ray goes right: val to +inf
+                            bracketChar = isStrict ? "]" : "["; // Excluded: ], Included: [
+                            bracketOffset = isStrict ? 146 : 148;
+                        } else {
+                            // -ax + b <= c  =>  SIGN REVERSAL!
+                            a = Math.floor(Math.random() * 3) + 2; // 2 to 4
+                            val = Math.floor(Math.random() * 5) + 1;
+                            b = Math.floor(Math.random() * 8) + 2;
+                            c = -a * val + b;
+                            let startLe = Math.random() > 0.5;
+                            initOp = startLe ? "≤" : "≥";
+                            finalOp = startLe ? "≥" : "≤"; // Inverted!
+                            ineqStr = `-${a}x + ${b} ${initOp} ${c}`;
+                            stepsHtml = `
+                                1. Soustraire ${b} : -${a}x ${initOp} ${c} - ${b} → -${a}x ${initOp} ${c - b}.<br>
+                                2. Diviser par -${a} (ATTENTION : division par un nombre négatif, ON INVERSE LE SENS !) : x ${finalOp} ${val}.
+                            `;
+                            pointDirection = (finalOp === "≥" || finalOp === ">") ? "right" : "left";
+                            bracketChar = (finalOp === "≥") ? "[" : "]";
+                            bracketOffset = (finalOp === "≥") ? 148 : 146;
+                        }
+
+                        let correctVal = `x ${finalOp} ${val}`;
+                        let oppOp = (finalOp === "≤") ? "≥" : (finalOp === "≥") ? "≤" : (finalOp === "<") ? ">" : "<";
 
                         q.title = "Résolution d'Inéquation";
-                        q.question = `Résous l'inéquation suivante : 2x + ${b} ≤ ${c}`;
-                        setupOptions(correctVal, [`x ≤ ${val + 1}`, `x ≥ ${val}`, `x ≤ ${(c-b)}`, `x < ${val}`]);
+                        q.question = `Résous l'inéquation suivante : ${ineqStr}`;
+                        setupOptions(correctVal, [
+                            `x ${oppOp} ${val}`, 
+                            `x ${finalOp} ${val + 1}`, 
+                            `x ${finalOp} ${Math.max(0, val - 1)}`, 
+                            `x ${oppOp} ${val + 1}`
+                        ]);
 
                         q.explanation = `
-                            <div><strong>Données :</strong> 2x + ${b} ≤ ${c}.</div>
-                            <div><strong>Règle :</strong> Les règles d'isolement sont les mêmes que pour les équations, sauf que si on multiplie ou divise par un nombre négatif, on change le sens de l'inégalité (ici on divise par +2, donc le sens ne change pas).</div>
-                            <div><strong>Calcul :</strong><br>
-                            • Soustraire ${b} : 2x ≤ ${c} - ${b} → 2x ≤ ${c-b}.<br>
-                            • Diviser par 2 : x ≤ ${c-b} / 2 → x ≤ ${val}.</div>
+                            <div><strong>Données :</strong> ${ineqStr}.</div>
+                            <div><strong>Règle :</strong> On isole $x$. Si on multiplie ou divise par un nombre NÉGATIF, le sens de l'inégalité s'inverse.</div>
+                            <div><strong>Calcul :</strong><br>${stepsHtml}</div>
+                            <div><strong>Conclusion :</strong> La solution de l'inéquation est bien ${correctVal}.</div>
                         `;
                         q.drawOverlay = (svg) => {
+                            let rayX1 = (pointDirection === "left") ? 40 : 150;
+                            let rayX2 = (pointDirection === "left") ? 150 : 260;
+
                             svg.innerHTML = `
                                 <text x="150" y="50" fill="#10b981" font-size="14" font-weight="bold" text-anchor="middle">Représentation sur l'Axe</text>
                                 
                                 <!-- Graduated line -->
                                 <line x1="40" y1="140" x2="260" y2="140" stroke="#334155" stroke-width="3"/>
                                 <line x1="150" y1="130" x2="150" y2="150" stroke="#fff" stroke-width="2"/>
-                                <text x="150" y="125" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">${val}</text>
+                                <text x="150" y="120" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">${val}</text>
                                 
                                 <!-- Thick line for solution set -->
-                                <line x1="40" y1="140" x2="150" y2="140" stroke="#ef4444" stroke-width="6"/>
+                                <line x1="${rayX1}" y1="140" x2="${rayX2}" y2="140" stroke="#ef4444" stroke-width="6"/>
                                 <!-- Bracket -->
-                                <text x="146" y="145" fill="#ef4444" font-size="20" font-weight="bold">]</text>
+                                <text x="${bracketOffset}" y="145" fill="#ef4444" font-size="20" font-weight="bold">${bracketChar}</text>
                                 
-                                <text x="150" y="200" fill="#a7f3d0" font-size="10" font-weight="bold" text-anchor="middle">Zone rouge = solutions de l'inéquation</text>
+                                <text x="150" y="200" fill="#a7f3d0" font-size="10" font-weight="bold" text-anchor="middle">Zone rouge = ensemble des solutions (${correctVal})</text>
                             `;
                         };
                     }
