@@ -2856,7 +2856,8 @@
                 "Algèbre": { tested: 0, passed: 0 },
                 "Fonctions": { tested: 0, passed: 0 },
                 "Géométrie": { tested: 0, passed: 0 },
-                "ProbasStatsAlgo": { tested: 0, passed: 0 }
+                "ProbasStatsAlgo": { tested: 0, passed: 0 },
+                "Rituel45": { tested: 0, passed: 0 }
             };
             let errorsLog = [];
 
@@ -2944,6 +2945,49 @@
                     }
                 }
             });
+
+            // 2. Audit Rituel 45' Questions
+            const rituelGeomPool = [
+                { category: "Trigonométrie", q: "Dans un triangle rectangle, quelle formule définit le Cosinus d'un angle ?", correct: "Adjacent / Hypoténuse", wrongs: ["Opposé / Hypoténuse", "Opposé / Adjacent", "Hypoténuse / Adjacent"] },
+                { category: "Trigonométrie", q: "Dans un triangle rectangle, quelle formule définit le Sinus d'un angle ?", correct: "Opposé / Hypoténuse", wrongs: ["Adjacent / Hypoténuse", "Opposé / Adjacent", "Hypoténuse / Opposé"] },
+                { category: "Trigonométrie", q: "Dans un triangle rectangle, quelle formule définit la Tangente d'un angle ?", correct: "Opposé / Adjacent", wrongs: ["Adjacent / Hypoténuse", "Opposé / Hypoténuse", "Hypoténuse / Opposé"] },
+                { category: "Théorème de Pythagore", q: "Dans un triangle ABC rectangle en A, quelle est l'égalité de Pythagore ?", correct: "BC² = AB² + AC²", wrongs: ["AB² = BC² + AC²", "AC² = AB² + BC²", "BC = AB + AC"] },
+                { category: "Réciproque de Pythagore", q: "Si dans un triangle ABC on a BC² = AB² + AC², que peut-on conclure ?", correct: "Le triangle est rectangle en A", wrongs: ["Le triangle est isocèle en A", "Le triangle est rectangle en B", "Le triangle est équilatéral"] },
+                { category: "Théorème de Thalès", q: "Le théorème de Thalès permet principalement de :", correct: "Calculer des longueurs dans des triangles en situation de parallélisme", wrongs: ["Calculer des angles dans un triangle rectangle", "Démontrer qu'un triangle est rectangle", "Calculer le périmètre d'un cercle"] },
+                { category: "Transformations", q: "Une homothétie de rapport k = -2 par rapport à un point O réalise :", correct: "Un agrandissement de facteur 2 et un demi-tour autour de O", wrongs: ["Une réduction de facteur 2", "Une simple translation", "Une symétrie axiale par rapport à une droite"] },
+                { category: "Agrandissements & Réductions", q: "Si les longueurs d'une figure sont multipliées par k = 3, par quel facteur son aire est-elle multipliée ?", correct: "k² = 9", wrongs: ["k = 3", "2k = 6", "k³ = 27"] }
+            ];
+
+            rituelGeomPool.forEach(g => {
+                let options = [g.correct, ...g.wrongs];
+                options.sort(() => Math.random() - 0.5);
+                validateQuestion({
+                    title: `Rituel Géométrie (${g.category})`,
+                    question: g.q,
+                    options: options,
+                    answer: g.correct,
+                    explanation: "Explication géométrique du rituel validée"
+                }, "Rituel45");
+            });
+
+            for (let m = 0; m < 50; m++) {
+                let n1 = Math.floor(Math.random() * 8) + 3;
+                let n2 = Math.floor(Math.random() * 8) + 3;
+                let correct = n1 * n2;
+                let choices = [correct, correct + 4, correct - 3, correct + 2];
+                choices = choices.filter((v, i, self) => self.indexOf(v) === i);
+                while (choices.length < 4) {
+                    choices.push(correct + choices.length * 3);
+                }
+                choices.sort(() => Math.random() - 0.5);
+                validateQuestion({
+                    title: "Rituel Calcul Mental Express",
+                    question: `${n1} × ${n2} = ?`,
+                    options: choices.map(String),
+                    answer: String(correct),
+                    explanation: "Calcul mental express"
+                }, "Rituel45");
+            }
 
             const durationMs = Math.round(performance.now() - startTime);
 
