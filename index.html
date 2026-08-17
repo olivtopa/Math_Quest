@@ -1335,112 +1335,320 @@
                 }
             }
             else if (realm === "Fonctions") {
-                if (questIndex === 0) {
-                    // Notion de fonction (Image / Antécédent)
-                    let isImage = Math.random() > 0.5;
-                    // We define f(x) = x^2 - 2
-                    // Let's use simple points: x=2 -> y=2. x=-1 -> y=-1. x=0 -> y=-2.
-                    let xVal = isImage ? 2 : 2;
-                    let yVal = isImage ? 2 : 2;
-                    
-                    if (isImage) {
-                        q.title = "Lecture d'Image";
-                        q.question = "En observant la courbe f(x) ci-dessous, quelle est l'image de 2 par la fonction f (c'est-à-dire f(2)) ?";
-                        setupOptions("2", ["0", "-2", "4", "1"]);
-                        q.explanation = `
-                            <div><strong>Méthode :</strong> Pour trouver l'image de 2 par f :</div>
-                            <div>1. On repère 2 sur l'axe des **abscisses** (axe horizontal).</div>
-                            <div>2. On monte verticalement jusqu'à croiser la courbe (point de coordonnées (2, 2)).</div>
-                            <div>3. On lit la valeur correspondante sur l'axe des **ordonnées** (axe vertical), soit 2.</div>
-                            <div><strong>Conclusion :</strong> l'image de 2 est bien 2 (f(2) = 2).</div>
-                        `;
-                    } else {
-                        q.title = "Recherche d'Antécédent";
-                        q.question = "En observant la courbe f(x) ci-dessous, quel nombre est un antécédent de -2 par la fonction f (c'est-à-dire f(x) = -2) ?";
-                        setupOptions("0", ["2", "-1", "1", "3"]);
-                        q.explanation = `
-                            <div><strong>Méthode :</strong> Pour trouver un antécédent de -2 :</div>
-                            <div>1. On repère -2 sur l'axe des **ordonnées** (axe vertical).</div>
-                            <div>2. On trace une ligne horizontale. On observe où elle croise la courbe. Ici, elle coupe au point le plus bas, de coordonnées (0, -2).</div>
-                            <div>3. On lit l'abscisse correspondante, soit 0.</div>
-                            <div><strong>Conclusion :</strong> un antécédent de -2 est 0.</div>
-                        `;
+                const drawGrid = () => `
+                    <path d="M 0 150 L 300 150 M 150 0 L 150 300" stroke="#475569" stroke-width="2"/>
+                    <path d="M 0 30 L 300 30 M 0 60 L 300 60 M 0 90 L 300 90 M 0 120 L 300 120 M 0 180 L 300 180 M 0 210 L 300 210 M 0 240 L 300 240 M 0 270 L 300 270
+                             M 30 0 L 30 300 M 60 0 L 60 300 M 90 0 L 90 300 M 120 0 L 120 300 M 180 0 L 180 300 M 210 0 L 210 300 M 240 0 L 240 300 M 270 0 L 270 300" stroke="#1e293b" stroke-width="1"/>
+                    <text x="180" y="165" fill="#64748b" font-size="9" font-weight="bold" text-anchor="middle">1</text>
+                    <text x="138" y="124" fill="#64748b" font-size="9" font-weight="bold">1</text>
+                    <text x="142" y="163" fill="#64748b" font-size="8" font-weight="bold">O</text>
+                `;
+
+                const plotPolyline = (fn, xMin = -2.8, xMax = 2.8, step = 0.05) => {
+                    let pts = [];
+                    for (let x = xMin; x <= xMax + 0.001; x += step) {
+                        let y = fn(x);
+                        let svgX = 150 + x * 30;
+                        let svgY = 150 - y * 30;
+                        if (svgY >= 0 && svgY <= 300) {
+                            pts.push(`${svgX.toFixed(1)},${svgY.toFixed(1)}`);
+                        }
                     }
+                    return pts.join(' ');
+                };
 
-                    q.drawOverlay = (svg) => {
-                        // Draw a grid and parabola curve y = x^2 - 2
-                        // scale: middle is (150, 150), unit is 30px
-                        svg.innerHTML = `
-                            <!-- Grid -->
-                            <path d="M 0 150 L 300 150 M 150 0 L 150 300" stroke="#475569" stroke-width="2"/>
-                            <!-- Y grid lines -->
-                            <line x1="0" y1="90" x2="300" y2="90" stroke="#1e293b" stroke-width="1"/>
-                            <line x1="0" y1="210" x2="300" y2="210" stroke="#1e293b" stroke-width="1"/>
-                            <!-- X grid lines -->
-                            <line x1="90" y1="0" x2="90" y2="300" stroke="#1e293b" stroke-width="1"/>
-                            <line x1="210" y1="0" x2="210" y2="300" stroke="#1e293b" stroke-width="1"/>
-                            
-                            <!-- Curve f(x) = 0.1 * (x-150)^2 - 60 mapped to SVG coords -->
-                            <!-- Points: (150, 210) which is (0, -2) in math. (210, 90) which is (2, 2) in math. (90, 90) which is (-2, 2) in math. -->
-                            <path d="M 60 50 Q 150 210 240 50" fill="none" stroke="#ec4899" stroke-width="4"/>
-                            <text x="250" y="60" fill="#ec4899" font-weight="bold" font-size="12">C_f</text>
+                if (questIndex === 0) {
+                    // Notion de fonction (Image / Antécédent / Lecture graphique)
+                    let fnType = Math.floor(Math.random() * 2); // 0: parabola, 1: cubic
+                    let isImage = Math.random() > 0.5;
 
-                            <!-- Marked points -->
-                            <circle cx="210" cy="90" r="5" fill="#fff"/>
-                            <circle cx="150" cy="210" r="5" fill="#fff"/>
-                            
-                            <!-- Dotted guides for x=2, y=2 -->
-                            <path d="M 210 150 L 210 90 L 150 90" stroke="#fff" stroke-dasharray="3" fill="none"/>
-                            <text x="210" y="165" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">2</text>
-                            <text x="135" y="94" fill="#fff" font-size="10" font-weight="bold">2</text>
-                            
-                            <!-- Dotted guide for x=0, y=-2 -->
-                            <text x="135" y="214" fill="#fff" font-size="10" font-weight="bold">-2</text>
-                        `;
-                    };
+                    if (fnType === 0) {
+                        // Parabola f(x) = a * x^2 + k
+                        let a = Math.random() > 0.5 ? 1 : -1;
+                        let k = a === 1 ? -3 : 3;
+                        let fn = (x) => a * (x * x) + k;
+
+                        let targetX = (Math.floor(Math.random() * 3) - 1); // -1, 0, 1 or 2
+                        if (targetX === 0 && Math.random() > 0.5) targetX = 2;
+                        let targetY = fn(targetX);
+
+                        let targetX_svg = 150 + targetX * 30;
+                        let targetY_svg = 150 - targetY * 30;
+
+                        if (isImage) {
+                            let correctVal = String(targetY);
+                            q.title = "Lecture d'Image sur Graphique";
+                            q.question = `En observant la courbe C_f ci-dessous, quelle est l'image de ${targetX} par la fonction f (c'est-à-dire f(${targetX})) ?`;
+                            setupOptions(correctVal, [
+                                String(targetY + 1), 
+                                String(targetY - 2), 
+                                String(targetX), 
+                                String(-targetY)
+                            ]);
+                            q.explanation = `
+                                <div><strong>Méthode :</strong> Pour trouver l'image de ${targetX} par f :</div>
+                                <div>1. On repère <strong>${targetX}</strong> sur l'axe horizontal (abscisses).</div>
+                                <div>2. On suit la ligne verticale de guidage jusqu'à couper la courbe C_f au point (${targetX}, ${targetY}).</div>
+                                <div>3. On lit la valeur sur l'axe vertical (ordonnées), soit <strong>${targetY}</strong>.</div>
+                                <div><strong>Conclusion :</strong> f(${targetX}) = ${targetY}.</div>
+                            `;
+                        } else {
+                            let correctVal = String(targetX);
+                            q.title = "Recherche d'Antécédent sur Graphique";
+                            q.question = `En observant la courbe C_f ci-dessous, quel nombre est un antécédent de ${targetY} par la fonction f (c'est-à-dire f(x) = ${targetY}) ?`;
+                            setupOptions(correctVal, [
+                                String(targetY), 
+                                String(targetX + 2), 
+                                String(targetX - 3), 
+                                String(-targetX + 3)
+                            ]);
+                            q.explanation = `
+                                <div><strong>Méthode :</strong> Pour trouver un antécédent de ${targetY} :</div>
+                                <div>1. On repère <strong>${targetY}</strong> sur l'axe vertical (ordonnées).</div>
+                                <div>2. On suit la ligne horizontale jusqu'à couper la courbe C_f au point (${targetX}, ${targetY}).</div>
+                                <div>3. On lit l'abscisse correspondante sur l'axe horizontal, soit <strong>${targetX}</strong>.</div>
+                                <div><strong>Conclusion :</strong> Un antécédent de ${targetY} est ${targetX}.</div>
+                            `;
+                        }
+
+                        q.drawOverlay = (svg) => {
+                            svg.innerHTML = `
+                                ${drawGrid()}
+                                <polyline points="${plotPolyline(fn)}" fill="none" stroke="#ec4899" stroke-width="4"/>
+                                <text x="250" y="50" fill="#ec4899" font-weight="bold" font-size="12">C_f</text>
+
+                                <!-- Dotted guides -->
+                                <path d="M ${targetX_svg} 150 L ${targetX_svg} ${targetY_svg} L 150 ${targetY_svg}" stroke="#fff" stroke-dasharray="3" stroke-width="1.5" fill="none"/>
+                                <circle cx="${targetX_svg}" cy="${targetY_svg}" r="5" fill="#fff"/>
+                                
+                                <text x="${targetX_svg}" y="${targetX_svg === 150 ? 165 : 165}" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${targetX}</text>
+                                <text x="${targetY_svg === 150 ? 135 : 135}" y="${targetY_svg + 4}" fill="#fff" font-size="10" font-weight="bold" text-anchor="end">${targetY}</text>
+                            `;
+                        };
+                    } else {
+                        // Cubic curve f(x) = x^3 - 3x
+                        let fn = (x) => (x * x * x) - 3 * x;
+                        let ptsList = [{x: -2, y: -2}, {x: -1, y: 2}, {x: 0, y: 0}, {x: 1, y: -2}, {x: 2, y: 2}];
+                        let pt = ptsList[Math.floor(Math.random() * ptsList.length)];
+                        let targetX = pt.x;
+                        let targetY = pt.y;
+
+                        let targetX_svg = 150 + targetX * 30;
+                        let targetY_svg = 150 - targetY * 30;
+
+                        if (isImage) {
+                            let correctVal = String(targetY);
+                            q.title = "Lecture d'Image sur Courbe";
+                            q.question = `En observant la courbe C_f ci-dessous, quelle est l'image de ${targetX} par la fonction f (f(${targetX})) ?`;
+                            setupOptions(correctVal, [
+                                String(targetY + 1), 
+                                String(targetY - 2), 
+                                String(targetX), 
+                                String(-targetY + 1)
+                            ]);
+                            q.explanation = `
+                                <div><strong>Méthode :</strong> On part de x = ${targetX} sur l'axe des abscisses, on va verticalement jusqu'à la courbe au point (${targetX}, ${targetY}), puis on lit y = ${targetY} sur l'axe des ordonnées.</div>
+                                <div><strong>Conclusion :</strong> f(${targetX}) = ${targetY}.</div>
+                            `;
+                        } else {
+                            let correctVal = String(targetX);
+                            q.title = "Recherche d'Antécédent sur Courbe";
+                            q.question = `En observant la courbe C_f ci-dessous, quel nombre est un antécédent de ${targetY} par f ?`;
+                            setupOptions(correctVal, [
+                                String(targetY), 
+                                String(targetX + 3), 
+                                String(targetX - 2), 
+                                String(-targetX + 4)
+                            ]);
+                            q.explanation = `
+                                <div><strong>Méthode :</strong> On repère y = ${targetY} sur l'axe des ordonnées, on suit l'horizontale jusqu'à la courbe, et on lit l'abscisse x = ${targetX}.</div>
+                                <div><strong>Conclusion :</strong> Un antécédent de ${targetY} par f est ${targetX}.</div>
+                            `;
+                        }
+
+                        q.drawOverlay = (svg) => {
+                            svg.innerHTML = `
+                                ${drawGrid()}
+                                <polyline points="${plotPolyline(fn)}" fill="none" stroke="#ec4899" stroke-width="4"/>
+                                <text x="250" y="50" fill="#ec4899" font-weight="bold" font-size="12">C_f</text>
+
+                                <!-- Dotted guides -->
+                                <path d="M ${targetX_svg} 150 L ${targetX_svg} ${targetY_svg} L 150 ${targetY_svg}" stroke="#fff" stroke-dasharray="3" stroke-width="1.5" fill="none"/>
+                                <circle cx="${targetX_svg}" cy="${targetY_svg}" r="5" fill="#fff"/>
+                                
+                                <text x="${targetX_svg}" y="165" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${targetX}</text>
+                                <text x="135" y="${targetY_svg + 4}" fill="#fff" font-size="10" font-weight="bold" text-anchor="end">${targetY}</text>
+                            `;
+                        };
+                    }
                 }
                 else if (questIndex === 1) {
-                    // Fonctions Linéaires & Affines
-                    let a = 2; // slope
-                    let b = -1; // y-intercept
-                    let correctVal = "y = 2x - 1";
+                    // Fonctions Linéaires & Affines (y = ax + b)
+                    let subType = Math.floor(Math.random() * 3); // 0: Graph equation, 1: Image/antecedent calc, 2: Slope calc
 
-                    q.title = "Équation de Droite Affine";
-                    q.question = "La droite D représentée ci-dessous correspond à une fonction affine f(x) = ax + b. Détermine son équation :";
-                    setupOptions(correctVal, ["y = 2x + 1", "y = -2x - 1", "y = x - 1", "y = 3x - 1"]);
+                    if (subType === 0) {
+                        // Graph equation identification y = ax + b
+                        let aList = [-3, -2, -1, 1, 2, 3];
+                        let bList = [-3, -2, -1, 0, 1, 2, 3];
+                        let a = aList[Math.floor(Math.random() * aList.length)];
+                        let b = bList[Math.floor(Math.random() * bList.length)];
 
-                    q.explanation = `
-                        <div><strong>Méthode d'identification :</strong></div>
-                        <div>1. **Ordonnée à l'origine (b) :** La droite coupe l'axe vertical à la hauteur -1. Donc b = -1.</div>
-                        <div>2. **Coefficient directeur / Pente (a) :** En partant de l'ordonnée à l'origine (0, -1), si on avance de 1 unité vers la droite, on doit monter de 2 unités verticalement pour retrouver la droite (on arrive au point (1, 1)). Donc la pente a = 2.</div>
-                        <div><strong>Conclusion :</strong> L'équation est y = 2x - 1.</div>
-                    `;
-                    q.drawOverlay = (svg) => {
-                        // y = 2x - 1
-                        // coords: Center is (150, 150). scale = 30px per unit.
-                        // b = -1 -> y_svg = 150 - (-1)*30 = 180.
-                        // x = 1 -> y = 1 -> y_svg = 150 - (1)*30 = 120.
-                        // x = -1 -> y = -3 -> y_svg = 150 - (-3)*30 = 240.
-                        svg.innerHTML = `
-                            <!-- Orthonormal Grid -->
-                            <path d="M 0 150 L 300 150 M 150 0 L 150 300" stroke="#475569" stroke-width="2"/>
-                            <!-- grid lines -->
-                            <path d="M 0 90 L 300 90 M 0 120 L 300 120 M 0 180 L 300 180 M 0 210 L 300 210
-                                     M 90 0 L 90 300 M 120 0 L 120 300 M 180 0 L 180 300 M 210 0 L 210 300" stroke="#1e293b" stroke-width="1"/>
-                            
-                            <!-- Plot line y = 2x - 1 -->
-                            <line x1="50" y1="290" x2="200" y2="-10" stroke="#ec4899" stroke-width="4"/>
-                            
-                            <!-- Highlight Y-intercept -->
-                            <circle cx="150" cy="180" r="5" fill="#fff"/>
-                            <text x="135" y="184" fill="#fff" font-size="10" font-weight="bold">-1</text>
-                            
-                            <!-- Slope visual steps -->
-                            <path d="M 150 180 L 180 180 L 180 120" stroke="#f59e0b" stroke-width="2" stroke-dasharray="2" fill="none"/>
-                            <text x="165" y="195" fill="#f59e0b" font-size="9" font-weight="bold">+1</text>
-                            <text x="195" y="150" fill="#f59e0b" font-size="9" font-weight="bold">+2</text>
+                        let formatEq = (aCoef, bConst) => {
+                            let aStr = aCoef === 1 ? '' : aCoef === -1 ? '-' : String(aCoef);
+                            let bStr = bConst === 0 ? '' : bConst > 0 ? ` + ${bConst}` : ` - ${Math.abs(bConst)}`;
+                            return `y = ${aStr}x${bStr}`;
+                        };
+
+                        let correctVal = formatEq(a, b);
+                        q.title = "Équation de Droite Affine";
+                        q.question = "La droite D représentée ci-dessous correspond à une fonction affine f(x) = ax + b. Détermine son équation :";
+                        setupOptions(correctVal, [
+                            formatEq(-a, b), 
+                            formatEq(a, -b), 
+                            formatEq(b === 0 ? 1 : b, a), 
+                            formatEq(a + 1, b)
+                        ]);
+
+                        q.explanation = `
+                            <div><strong>Méthode d'identification :</strong></div>
+                            <div>1. **Ordonnée à l'origine (b) :** La droite coupe l'axe vertical au point (0, ${b}). Donc <strong>b = ${b}</strong>.</div>
+                            <div>2. **Coefficient directeur / Pente (a) :** En partant de (0, ${b}), si on avance de 1 unité horizontalement (+1), on doit effectuer une variation verticale de <strong>${a >= 0 ? '+' + a : a}</strong> pour retrouver la droite. Donc <strong>a = ${a}</strong>.</div>
+                            <div><strong>Conclusion :</strong> L'équation est <strong>${correctVal}</strong>.</div>
                         `;
-                    };
+
+                        q.drawOverlay = (svg) => {
+                            // Points for line: x1 = -4, x2 = 4
+                            let x1 = -4, y1 = a * x1 + b;
+                            let x2 = 4, y2 = a * x2 + b;
+                            let svgX1 = 150 + x1 * 30, svgY1 = 150 - y1 * 30;
+                            let svgX2 = 150 + x2 * 30, svgY2 = 150 - y2 * 30;
+
+                            // Y-intercept point
+                            let yInt_svg = 150 - b * 30;
+                            
+                            // Slope triangle: (0, b) -> (1, b) -> (1, b+a)
+                            let trX0 = 150, trY0 = yInt_svg;
+                            let trX1 = 180, trY1 = yInt_svg;
+                            let trX2 = 180, trY2 = 150 - (b + a) * 30;
+
+                            svg.innerHTML = `
+                                ${drawGrid()}
+                                <!-- Line -->
+                                <line x1="${svgX1.toFixed(1)}" y1="${svgY1.toFixed(1)}" x2="${svgX2.toFixed(1)}" y2="${svgY2.toFixed(1)}" stroke="#ec4899" stroke-width="4"/>
+                                <text x="${svgX2 - 15}" y="${svgY2 + 15}" fill="#ec4899" font-weight="bold" font-size="12">D</text>
+
+                                <!-- Y-intercept highlight -->
+                                <circle cx="150" cy="${yInt_svg}" r="5" fill="#fff"/>
+                                ${b !== 0 ? `<text x="135" y="${yInt_svg + 4}" fill="#fff" font-size="10" font-weight="bold" text-anchor="end">${b}</text>` : ''}
+
+                                <!-- Slope triangle -->
+                                <path d="M ${trX0} ${trY0} L ${trX1} ${trY1} L ${trX2} ${trY2}" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3" fill="none"/>
+                                <text x="165" y="${trY0 + (a >= 0 ? 14 : -4)}" fill="#f59e0b" font-size="9" font-weight="bold" text-anchor="middle">+1</text>
+                                <text x="192" y="${(trY1 + trY2) / 2 + 3}" fill="#f59e0b" font-size="9" font-weight="bold">${a >= 0 ? '+' + a : a}</text>
+                            `;
+                        };
+                    } else if (subType === 1) {
+                        // Image / Antecedent calculation for affine function f(x) = ax + b
+                        let a = (Math.floor(Math.random() * 4) + 2) * (Math.random() > 0.5 ? 1 : -1);
+                        let b = Math.floor(Math.random() * 7) - 3;
+                        let isCalcImage = Math.random() > 0.5;
+
+                        let bStr = b === 0 ? '' : b > 0 ? ` + ${b}` : ` - ${Math.abs(b)}`;
+                        let fStr = `f(x) = ${a}x${bStr}`;
+
+                        if (isCalcImage) {
+                            let x0 = Math.floor(Math.random() * 5) - 2; // -2 to 2
+                            let correctRes = a * x0 + b;
+                            let correctVal = String(correctRes);
+
+                            q.title = "Calcul d'Image (Fonction Affine)";
+                            q.question = `Soit la fonction affine ${fStr}. Calcule l'image de ${x0} par la fonction f :`;
+                            setupOptions(correctVal, [
+                                String(correctRes + 2), 
+                                String(correctRes - 3), 
+                                String(a + x0), 
+                                String(correctRes * -1)
+                            ]);
+
+                            q.explanation = `
+                                <div><strong>Calcul d'image :</strong> Pour calculer l'image de ${x0}, on remplace x par ${x0} dans l'expression de f(x).</div>
+                                <div>f(${x0}) = ${a} × (${x0})${bStr}</div>
+                                <div>f(${x0}) = ${a * x0}${bStr} = <strong>${correctRes}</strong>.</div>
+                            `;
+                        } else {
+                            let x0 = Math.floor(Math.random() * 5) - 2;
+                            let y0 = a * x0 + b;
+                            let correctVal = String(x0);
+
+                            q.title = "Recherche d'Antécédent (Fonction Affine)";
+                            q.question = `Soit la fonction affine ${fStr}. Détermine l'antécédent de ${y0} par la fonction f (c'est-à-dire f(x) = ${y0}) :`;
+                            setupOptions(correctVal, [
+                                String(x0 + 1), 
+                                String(x0 - 2), 
+                                String(y0), 
+                                String(-x0)
+                            ]);
+
+                            q.explanation = `
+                                <div><strong>Recherche d'antécédent :</strong> On résout l'équation f(x) = ${y0}.</div>
+                                <div>${a}x${bStr} = ${y0}</div>
+                                <div>${a}x = ${y0}${b === 0 ? '' : b > 0 ? ' - ' + b : ' + ' + Math.abs(b)} = ${y0 - b}</div>
+                                <div>x = ${y0 - b} / ${a} = <strong>${x0}</strong>.</div>
+                            `;
+                        }
+
+                        q.drawOverlay = (svg) => {
+                            let x1 = -4, y1 = a * x1 + b;
+                            let x2 = 4, y2 = a * x2 + b;
+                            let svgX1 = 150 + x1 * 30, svgY1 = 150 - y1 * 30;
+                            let svgX2 = 150 + x2 * 30, svgY2 = 150 - y2 * 30;
+
+                            svg.innerHTML = `
+                                ${drawGrid()}
+                                <line x1="${svgX1.toFixed(1)}" y1="${svgY1.toFixed(1)}" x2="${svgX2.toFixed(1)}" y2="${svgY2.toFixed(1)}" stroke="#ec4899" stroke-width="4"/>
+                                <text x="150" y="45" fill="#10b981" font-size="13" font-weight="bold" text-anchor="middle">${fStr}</text>
+                            `;
+                        };
+                    } else {
+                        // Slope calculation from 2 points A(x1, y1) and B(x2, y2)
+                        let a = Math.floor(Math.random() * 5) - 2;
+                        if (a === 0) a = 3;
+                        let b = Math.floor(Math.random() * 5) - 2;
+
+                        let x1 = 1, y1 = a * x1 + b;
+                        let x2 = 3, y2 = a * x2 + b;
+
+                        let correctVal = String(a);
+
+                        q.title = "Calcul du Coefficient Directeur";
+                        q.question = `Une fonction affine f vérifie f(${x1}) = ${y1} et f(${x2}) = ${y2}. Quel est son coefficient directeur a ?`;
+                        setupOptions(correctVal, [
+                            String(a + 1), 
+                            String(a - 2), 
+                            String(y2 - y1), 
+                            String(-a)
+                        ]);
+
+                        q.explanation = `
+                            <div><strong>Formule du coefficient directeur :</strong></div>
+                            <div>a = (f(x₂) - f(x₁)) / (x₂ - x₁) = (y₂ - y₁) / (x₂ - x₁)</div>
+                            <div>a = (${y2} - (${y1})) / (${x2} - ${x1}) = ${y2 - y1} / ${x2 - x1} = <strong>${a}</strong>.</div>
+                        `;
+
+                        q.drawOverlay = (svg) => {
+                            let svgX1 = 150 + x1 * 30, svgY1 = 150 - y1 * 30;
+                            let svgX2 = 150 + x2 * 30, svgY2 = 150 - y2 * 30;
+
+                            svg.innerHTML = `
+                                ${drawGrid()}
+                                <line x1="${150 + (-3)*30}" y1="${150 - (a*(-3)+b)*30}" x2="${150 + 4*30}" y2="${150 - (a*4+b)*30}" stroke="#ec4899" stroke-width="4"/>
+                                <circle cx="${svgX1}" cy="${svgY1}" r="5" fill="#fff"/>
+                                <text x="${svgX1 - 10}" y="${svgY1 - 10}" fill="#fff" font-size="10" font-weight="bold">A(${x1}, ${y1})</text>
+                                <circle cx="${svgX2}" cy="${svgY2}" r="5" fill="#fff"/>
+                                <text x="${svgX2 + 10}" y="${svgY2 - 10}" fill="#fff" font-size="10" font-weight="bold">B(${x2}, ${y2})</text>
+                            `;
+                        };
+                    }
                 }
             }
             else if (realm === "Géométrie") {
