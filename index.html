@@ -2149,19 +2149,49 @@
 
             if (activeRituelStage === 'flashcards') {
                 document.getElementById('rituel-title').innerText = "RITUEL : FLASHCARDS (MÉMORISATION)";
-                let cardPool = [
-                    { q: "Quelle est l'identité remarquable pour (a-b)² ?", a: "a² - 2ab + b²" },
-                    { q: "D'après Pythagore, quel est le plus long côté ?", a: "L'hypoténuse (opposé à l'angle droit)" },
-                    { q: "Que vaut la somme des angles d'un triangle ?", a: "180 degrés" },
-                    { q: "Comment s'appelle l'agrandissement d'une figure géométrique ?", a: "Une homothétie" }
+                
+                const fullFlashcardsPool = [
+                    { q: "Quelle est l'identité remarquable pour (a + b)² ?", a: "a² + 2ab + b²" },
+                    { q: "Quelle est l'identité remarquable pour (a - b)² ?", a: "a² - 2ab + b²" },
+                    { q: "Quelle est la forme factorisée de a² - b² ?", a: "(a - b)(a + b)" },
+                    { q: "D'après Pythagore, quel est le plus long côté d'un triangle rectangle ?", a: "L'hypoténuse (opposé à l'angle droit)" },
+                    { q: "Que vaut la somme des angles de n'importe quel triangle ?", a: "180°" },
+                    { q: "Comment s'appelle une transformation qui agrandit ou réduit une figure par un facteur k ?", a: "Une homothétie" },
+                    { q: "Dans un triangle rectangle, quel est le rapport définissant le Cosinus ?", a: "Côté Adjacent / Hypoténuse" },
+                    { q: "Dans un triangle rectangle, quel est le rapport définissant le Sinus ?", a: "Côté Opposé / Hypoténuse" },
+                    { q: "Dans un triangle rectangle, quel est le rapport définissant la Tangente ?", a: "Côté Opposé / Côté Adjacent" },
+                    { q: "Si les longueurs d'une figure sont multipliées par k, par quoi est multipliée son aire ?", a: "Par k²" },
+                    { q: "Si les longueurs d'un solide sont multipliées par k, par quoi est multiplié son volume ?", a: "Par k³" },
+                    { q: "Dans l'expression d'une fonction affine f(x) = ax + b, que représente a ?", a: "Le coefficient directeur (la pente)" },
+                    { q: "Dans l'expression d'une fonction affine f(x) = ax + b, que représente b ?", a: "L'ordonnée à l'origine (intersection avec l'axe vertical)" },
+                    { q: "Comment calcule-t-on le coefficient directeur a passant par A(x₁, y₁) et B(x₂, y₂) ?", a: "a = (y₂ - y₁) / (x₂ - x₁)" },
+                    { q: "Quelle est l'image de 0 par une fonction linéaire f(x) = ax ?", a: "0 (la droite passe par l'origine O)" },
+                    { q: "Que vaut 10⁰ (10 puissance 0) ?", a: "1" },
+                    { q: "Que vaut 10⁻¹ (10 puissance -1) ?", a: "0,1 (ou 1/10)" },
+                    { q: "Quelle est la règle de calcul pour 10ᵃ × 10ᵇ ?", a: "10ᵃ⁺ᵇ" },
+                    { q: "Quelle est la règle de calcul pour (10ᵃ)ᵇ ?", a: "10ᵃˣᵇ" },
+                    { q: "Dans une expérience aléatoire, quelle est la somme des probabilités de toutes les issues ?", a: "1" },
+                    { q: "Si un événement A a une probabilité P(A), quelle est la probabilité de son événement contraire non-A ?", a: "P(non-A) = 1 - P(A)" },
+                    { q: "En statistiques, qu'est-ce que l'étendue d'une série numérique ?", a: "La différence entre la valeur maximale et la valeur minimale" },
+                    { q: "En statistiques, qu'est-ce que la médiane d'une série ordonnée ?", a: "La valeur du milieu qui partage la série en deux groupes égaux de 50%" },
+                    { q: "Quelle est la forme d'une équation du premier degré à une inconnue ?", a: "ax + b = c" },
+                    { q: "Que se passe-t-il quand on multiplie ou divise une inéquation par un nombre négatif ?", a: "Le sens du symbole d'inégalité est inversé (< devient >)" }
                 ];
-                let item = cardPool[Math.floor(Math.random() * cardPool.length)];
+
+                if (!window.flashcardQueue || window.flashcardQueue.length === 0) {
+                    let indices = Array.from({ length: fullFlashcardsPool.length }, (_, i) => i);
+                    indices.sort(() => Math.random() - 0.5);
+                    window.flashcardQueue = indices;
+                }
+
+                const cardIdx = window.flashcardQueue.pop();
+                let item = fullFlashcardsPool[cardIdx];
 
                 container.innerHTML = `
-                    <h3 class="text-sm font-black text-slate-400 uppercase tracking-widest font-title">Question Flash</h3>
-                    <p class="text-lg font-extrabold text-slate-100">${item.q}</p>
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest font-title">Question Flash (${fullFlashcardsPool.length - window.flashcardQueue.length}/${fullFlashcardsPool.length})</h3>
+                    <p class="text-base font-extrabold text-slate-100">${item.q}</p>
                     <div id="flashcard-answer-area" class="pt-4">
-                        <button onclick="revealFlashcardAnswer('${item.a}')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs py-2 px-4 rounded-lg cursor-pointer">Révéler la réponse</button>
+                        <button onclick="revealFlashcardAnswer('${item.a.replace(/'/g, "\\'")}')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs py-2.5 px-4 rounded-xl cursor-pointer">Révéler la réponse</button>
                     </div>
                 `;
             }
@@ -2988,6 +3018,25 @@
                     explanation: "Calcul mental express"
                 }, "Rituel45");
             }
+
+            // Audit Flashcards
+            const flashcardAuditList = [
+                { q: "Identité remarquable (a+b)²", a: "a² + 2ab + b²" },
+                { q: "Identité remarquable (a-b)²", a: "a² - 2ab + b²" },
+                { q: "Factorisation a² - b²", a: "(a - b)(a + b)" },
+                { q: "Plus long côté d'un triangle rectangle", a: "L'hypoténuse" },
+                { q: "Somme des angles d'un triangle", a: "180°" },
+                { q: "Transformation agrandissement/réduction", a: "Une homothétie" }
+            ];
+            flashcardAuditList.forEach(fc => {
+                validateQuestion({
+                    title: "Rituel Flashcard (Mémorisation)",
+                    question: fc.q,
+                    options: [fc.a, "Opt B", "Opt C", "Opt D"],
+                    answer: fc.a,
+                    explanation: "Flashcard mémorisation"
+                }, "Rituel45");
+            });
 
             const durationMs = Math.round(performance.now() - startTime);
 
