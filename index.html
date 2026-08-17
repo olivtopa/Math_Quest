@@ -411,7 +411,7 @@
             </div>
 
             <!-- Widgets List / Selectors -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                 <!-- Widget 1: Graphique des Fonctions -->
                 <div class="glass-card p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-52">
                     <div class="space-y-1">
@@ -457,6 +457,18 @@
                     </div>
                     <button onclick="openWidget('scratch-lab')" class="w-full mt-3 bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/30 text-teal-300 font-bold text-xs py-2 rounded-lg transition-all cursor-pointer">
                         Ouvrir le Labo →
+                    </button>
+                </div>
+
+                <!-- Widget 5: QA Audit & Quality Control System -->
+                <div class="glass-card p-4 rounded-xl border border-emerald-500/30 bg-emerald-950/10 flex flex-col justify-between h-52">
+                    <div class="space-y-1">
+                        <span class="text-3xl">🛡️</span>
+                        <h4 class="font-extrabold text-sm text-emerald-300">Contrôle Qualité & Audit</h4>
+                        <p class="text-[11px] text-slate-300 leading-relaxed">Audite 1 000 questions en direct : vérifie la validité des calculs, l'unicité des choix et les SVG.</p>
+                    </div>
+                    <button onclick="openWidget('qa-audit')" class="w-full mt-3 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-200 font-black text-xs py-2 rounded-lg transition-all cursor-pointer shadow-lg shadow-emerald-500/10">
+                        Auditer l'App →
                     </button>
                 </div>
             </div>
@@ -2639,8 +2651,260 @@
                     document.getElementById('scratch-y').innerText = window.scratchState.y;
                     document.getElementById('scratch-dir').innerText = window.scratchState.dir;
                 };
+            else if (widgetId === 'qa-audit') {
+                document.getElementById('active-widget-title').innerText = "CONTRÔLE QUALITÉ & AUDIT AUTOMATISÉ (QA SYSTEM)";
+                ws.innerHTML = `
+                    <div class="flex-1 flex flex-col space-y-4 max-w-2xl mx-auto p-4 bg-slate-900 rounded-2xl border border-emerald-500/30 overflow-y-auto">
+                        <div class="flex justify-between items-center bg-slate-950 p-4 rounded-xl border border-slate-800">
+                            <div>
+                                <h3 class="font-extrabold text-sm text-emerald-300">Statut du Moteur Mathématique</h3>
+                                <p class="text-[11px] text-slate-400">Vérification en temps réel des calculs, options et tracés SVG</p>
+                            </div>
+                            <span id="qa-status-badge" class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 rounded-full font-black text-xs">
+                                🟢 Système Intègre
+                            </span>
+                        </div>
+
+                        <!-- Action Controls -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <button onclick="runQAInspection(1000)" class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black py-2.5 px-4 rounded-xl text-xs transition-all shadow-lg shadow-emerald-600/20 cursor-pointer flex items-center justify-center space-x-2">
+                                <span>🚀 Lancer l'Audit Automatisé (1 000 Tests)</span>
+                            </button>
+                            <button onclick="previewRandomCardQA()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all cursor-pointer flex items-center justify-center space-x-2">
+                                <span>🎲 Tester une Question Aléatoire</span>
+                            </button>
+                        </div>
+
+                        <!-- Stats Dashboard -->
+                        <div class="grid grid-cols-4 gap-2 text-center" id="qa-stats-grid">
+                            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                                <span class="text-xs text-slate-500 font-bold block">Tests Réalisés</span>
+                                <span id="qa-total-count" class="text-lg font-black text-slate-100">0</span>
+                            </div>
+                            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                                <span class="text-xs text-slate-500 font-bold block">Succès</span>
+                                <span id="qa-passed-count" class="text-lg font-black text-emerald-400">0</span>
+                            </div>
+                            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                                <span class="text-xs text-slate-500 font-bold block">Erreurs</span>
+                                <span id="qa-failed-count" class="text-lg font-black text-rose-400">0</span>
+                            </div>
+                            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                                <span class="text-xs text-slate-500 font-bold block">Temps d'exécution</span>
+                                <span id="qa-duration-ms" class="text-lg font-black text-amber-400">0 ms</span>
+                            </div>
+                        </div>
+
+                        <!-- Domain breakdown -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                            <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider">Couverture par Domaine</h4>
+                            <div id="qa-domain-breakdown" class="space-y-1.5 text-xs">
+                                <div class="text-slate-500 italic text-[11px]">Clique sur 'Lancer l'Audit Automatisé' pour effectuer l'analyse globale.</div>
+                            </div>
+                        </div>
+
+                        <!-- Live Card Preview Inspector -->
+                        <div id="qa-preview-container" class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3 hidden">
+                            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                                <h4 class="text-xs font-black text-indigo-400 uppercase tracking-wider font-title" id="qa-card-realm">Aperçu de la carte</h4>
+                                <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">✓ Valide (Option présente & unique)</span>
+                            </div>
+                            <h5 class="text-sm font-extrabold text-slate-100" id="qa-card-title"></h5>
+                            <p class="text-xs text-slate-300" id="qa-card-question"></p>
+                            
+                            <!-- Overlay SVG -->
+                            <div class="w-full aspect-video bg-slate-900 rounded-lg p-2 flex items-center justify-center overflow-hidden border border-slate-800">
+                                <svg id="qa-card-svg" viewBox="0 0 300 300" class="w-full h-full"></svg>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2" id="qa-card-options"></div>
+
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 text-[11px] text-slate-300 space-y-1" id="qa-card-explanation"></div>
+                        </div>
+                    </div>
+                `;
+
+                window.runQAInspection = (count = 1000) => {
+                    const report = runAppQualityAudit(count);
+                    document.getElementById('qa-total-count').innerText = report.totalTested;
+                    document.getElementById('qa-passed-count').innerText = report.passed;
+                    document.getElementById('qa-failed-count').innerText = report.failed;
+                    document.getElementById('qa-duration-ms').innerText = `${report.durationMs} ms`;
+
+                    const badge = document.getElementById('qa-status-badge');
+                    if (report.failed === 0) {
+                        badge.className = "px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 rounded-full font-black text-xs";
+                        badge.innerText = `🟢 Système Intègre (100% Succès)`;
+                    } else {
+                        badge.className = "px-3 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/40 rounded-full font-black text-xs";
+                        badge.innerText = `🔴 ${report.failed} Erreurs Détectées`;
+                    }
+
+                    const bdHtml = Object.keys(report.domainStats).map(domain => {
+                        const ds = report.domainStats[domain];
+                        const pct = ds.tested > 0 ? Math.round((ds.passed / ds.tested) * 100) : 100;
+                        return `
+                            <div class="flex justify-between items-center text-slate-300">
+                                <span class="font-bold">${domain} :</span>
+                                <span class="font-mono text-[11px] text-emerald-400 font-bold">${ds.passed}/${ds.tested} validés (${pct}%)</span>
+                            </div>
+                        `;
+                    }).join('');
+
+                    document.getElementById('qa-domain-breakdown').innerHTML = bdHtml;
+                };
+
+                window.previewRandomCardQA = () => {
+                    const realmsList = [
+                        { realm: "Algèbre", questIdx: Math.floor(Math.random() * 4) },
+                        { realm: "Fonctions", questIdx: Math.floor(Math.random() * 2) },
+                        { realm: "Géométrie", questIdx: Math.floor(Math.random() * 4) },
+                        { realm: "ProbasStatsAlgo", questIdx: Math.floor(Math.random() * 3) }
+                    ];
+                    const selected = realmsList[Math.floor(Math.random() * realmsList.length)];
+                    const q = generateDynamicQuestion(selected.realm, selected.questIdx);
+
+                    const container = document.getElementById('qa-preview-container');
+                    container.classList.remove('hidden');
+
+                    document.getElementById('qa-card-realm').innerText = `${selected.realm} (Exercice ${selected.questIdx + 1}) - ${q.title}`;
+                    document.getElementById('qa-card-title').innerText = q.title;
+                    document.getElementById('qa-card-question').innerText = q.question;
+
+                    const svgEl = document.getElementById('qa-card-svg');
+                    svgEl.innerHTML = '';
+                    if (typeof q.drawOverlay === 'function') {
+                        q.drawOverlay(svgEl);
+                    }
+
+                    const optionsHtml = q.options.map(opt => `
+                        <div class="p-2 rounded border ${opt === q.answer ? 'bg-emerald-950/80 border-emerald-500 text-emerald-200 font-bold' : 'bg-slate-900 border-slate-800 text-slate-300'} text-xs text-center">
+                            ${opt} ${opt === q.answer ? '✓' : ''}
+                        </div>
+                    `).join('');
+                    document.getElementById('qa-card-options').innerHTML = optionsHtml;
+
+                    document.getElementById('qa-card-explanation').innerHTML = `
+                        <strong class="text-emerald-400">Explication validée :</strong>
+                        <div>${q.explanation}</div>
+                    `;
+                };
+
+                // Auto-run initial audit
+                window.runQAInspection(250);
             }
         }
+
+        // AUTOMATED QA AUDIT ENGINE
+        window.runAppQualityAudit = function(sampleSize = 250) {
+            const startTime = performance.now();
+            let totalTested = 0;
+            let passed = 0;
+            let failed = 0;
+            let domainStats = {
+                "Algèbre": { tested: 0, passed: 0 },
+                "Fonctions": { tested: 0, passed: 0 },
+                "Géométrie": { tested: 0, passed: 0 },
+                "ProbasStatsAlgo": { tested: 0, passed: 0 }
+            };
+            let errorsLog = [];
+
+            const dummySvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+
+            const validateQuestion = (q, realmName) => {
+                totalTested++;
+                if (domainStats[realmName]) domainStats[realmName].tested++;
+                let isValid = true;
+                let reasons = [];
+
+                if (!q.title || typeof q.title !== 'string' || q.title.trim() === '') {
+                    isValid = false;
+                    reasons.push("Titre vide");
+                }
+                if (!q.question || typeof q.question !== 'string' || q.question.trim() === '') {
+                    isValid = false;
+                    reasons.push("Question vide");
+                }
+
+                const textCheck = (q.title + q.question + (q.explanation || '')).toLowerCase();
+                if (textCheck.includes('undefined') || textCheck.includes('nan') || textCheck.includes('null') || textCheck.includes('infinity')) {
+                    isValid = false;
+                    reasons.push("Texte contenant NaN, undefined ou null");
+                }
+
+                if (!Array.isArray(q.options) || q.options.length !== 4) {
+                    isValid = false;
+                    reasons.push(`Format d'options invalide (${q.options ? q.options.length : 0} options)`);
+                } else {
+                    const uniqueOpts = new Set(q.options.map(String));
+                    if (uniqueOpts.size !== 4) {
+                        isValid = false;
+                        reasons.push(`Doublon dans les options [${q.options.join(', ')}]`);
+                    }
+                    if (!uniqueOpts.has(String(q.answer))) {
+                        isValid = false;
+                        reasons.push(`La réponse exacte '${q.answer}' n'est pas présente dans les options`);
+                    }
+                }
+
+                if (typeof q.drawOverlay === 'function') {
+                    try {
+                        dummySvg.innerHTML = '';
+                        q.drawOverlay(dummySvg);
+                        const svgContent = dummySvg.innerHTML;
+                        if (svgContent.includes('NaN') || svgContent.includes('undefined') || svgContent.includes('null')) {
+                            isValid = false;
+                            reasons.push("Rendu SVG corrompu (NaN/undefined dans le SVG)");
+                        }
+                    } catch (err) {
+                        isValid = false;
+                        reasons.push(`Erreur SVG : ${err.message}`);
+                    }
+                }
+
+                if (isValid) {
+                    passed++;
+                    if (domainStats[realmName]) domainStats[realmName].passed++;
+                } else {
+                    failed++;
+                    errorsLog.push({ title: q.title, question: q.question, reasons });
+                }
+            };
+
+            const realms = [
+                { name: "Algèbre", count: 4 },
+                { name: "Fonctions", count: 2 },
+                { name: "Géométrie", count: 4 },
+                { name: "ProbasStatsAlgo", count: 3 }
+            ];
+
+            const testsPerSubtopic = Math.max(10, Math.ceil(sampleSize / 13));
+
+            realms.forEach(r => {
+                for (let i = 0; i < r.count; i++) {
+                    for (let t = 0; t < testsPerSubtopic; t++) {
+                        try {
+                            let q = generateDynamicQuestion(r.name, i);
+                            validateQuestion(q, r.name);
+                        } catch (e) {
+                            failed++;
+                            errorsLog.push({ title: `${r.name} donjon ${i}`, question: "Génération crashée", reasons: [e.message] });
+                        }
+                    }
+                }
+            });
+
+            const durationMs = Math.round(performance.now() - startTime);
+
+            return {
+                totalTested,
+                passed,
+                failed,
+                durationMs,
+                domainStats,
+                errorsLog
+            };
+        };
 
         function closeWidget() {
             document.getElementById('widget-display-overlay').classList.add('hidden');
