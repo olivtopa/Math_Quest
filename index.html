@@ -108,6 +108,13 @@
             50% { transform: translate(-8px, 2px); }
         }
 
+        html {
+            font-size: 16px;
+        }
+        body {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
         #damage-flash-overlay {
             position: fixed;
             inset: 0;
@@ -134,18 +141,18 @@
             <span class="text-2xl filter drop-shadow">⚔️</span>
             <div>
                 <h1 class="text-sm font-black tracking-widest text-emerald-400 font-title">MATH QUEST</h1>
-                <p class="text-[10px] text-slate-400 uppercase font-semibold">Niveau <span id="player-level">1</span></p>
+                <p class="text-xs text-slate-400 uppercase font-semibold">Niveau <span id="player-level">1</span></p>
             </div>
         </div>
         <div class="flex items-center space-x-4">
             <!-- Gold count -->
             <div class="flex items-center space-x-1.5 bg-slate-900 px-3 py-1.5 rounded-full border border-slate-800">
-                <span class="text-amber-400 text-xs">🪙</span>
-                <span id="header-gold" class="text-xs font-bold text-slate-200">0</span>
+                <span class="text-amber-400 text-sm">🪙</span>
+                <span id="header-gold" class="text-sm font-bold text-slate-200">0</span>
             </div>
             <!-- HP bar -->
             <div class="flex items-center space-x-2 bg-slate-900 px-3 py-1.5 rounded-full border border-slate-800">
-                <span id="hp-label" class="text-emerald-500 text-[10px] font-black tracking-wider uppercase">HP</span>
+                <span id="hp-label" class="text-emerald-500 text-xs font-black tracking-wider uppercase">HP</span>
                 <div class="w-16 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700">
                     <div id="hp-bar" class="bg-gradient-to-r from-emerald-500 to-emerald-400 h-full transition-all duration-300" style="width: 100%;"></div>
                 </div>
@@ -163,23 +170,23 @@
                     <img src="math_quest_banner.png" alt="Math Quest Banner" class="w-full h-full object-cover opacity-80">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#080c14] via-transparent to-transparent"></div>
                     <div class="absolute bottom-4 left-0 right-0">
-                        <span class="text-[10px] font-black tracking-widest text-emerald-400 bg-slate-950/80 px-3 py-1 rounded-full uppercase border border-emerald-500/10">Édition Spéciale Seconde</span>
+                        <span class="text-xs font-black tracking-widest text-emerald-400 bg-slate-950/80 px-3 py-1 rounded-full uppercase border border-emerald-500/10">Édition Spéciale Seconde</span>
                     </div>
                 </div>
 
                 <div class="space-y-3">
                     <h1 class="text-4xl font-black tracking-wider text-emerald-400 font-title drop-shadow-md">MATH QUEST</h1>
-                    <p class="text-slate-400 text-sm max-w-xs mx-auto leading-relaxed">
+                    <p class="text-slate-300 text-base max-w-xs mx-auto leading-relaxed">
                         Le jeu de rôle d'apprentissage ultime pour conquérir le programme de 3ème et briller en Seconde.
                     </p>
                 </div>
             </div>
 
             <div class="space-y-3 shrink-0 max-w-sm mx-auto w-full">
-                <button id="btn-start-game" onclick="startGame()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-base py-4 rounded-2xl shadow-lg shadow-emerald-500/10 active:scale-[0.98] transition-transform cursor-pointer">
+                <button id="btn-start-game" onclick="startGame()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-lg py-4 rounded-2xl shadow-lg shadow-emerald-500/10 active:scale-[0.98] transition-transform cursor-pointer">
                     COMMENCER L'AVENTURE ⚔️
                 </button>
-                <p class="text-[10px] text-slate-500 font-medium">Entrée en Seconde préparée • Révision active 2026</p>
+                <p class="text-xs text-slate-400 font-medium">Entrée en Seconde préparée • Révision active 2026</p>
             </div>
         </section>
 
@@ -561,22 +568,22 @@
     </main>
 
     <!-- Bottom Nav -->
-    <nav id="app-nav" class="hidden bg-slate-950 border-t border-slate-900 pt-3 px-6 justify-around items-center shrink-0 shadow-2xl z-30">
+    <nav id="app-nav" class="hidden bg-slate-950 border-t border-slate-900 py-3 px-6 justify-around items-center shrink-0 shadow-2xl z-30">
         <button onclick="switchView('home')" id="nav-home" class="flex flex-col items-center space-y-1 text-emerald-400 transition-all cursor-pointer">
             <span class="text-xl">🗺️</span>
-            <span class="text-[10px] font-bold tracking-wide">Aventure</span>
+            <span class="text-xs font-extrabold tracking-wide">Aventure</span>
         </button>
         <button onclick="switchView('rituel')" id="nav-rituel" class="flex flex-col items-center space-y-1 text-slate-500 hover:text-slate-300 transition-all cursor-pointer">
             <span class="text-xl">⏱️</span>
-            <span class="text-[10px] font-bold tracking-wide">Rituel 45'</span>
+            <span class="text-xs font-extrabold tracking-wide">Rituel 45'</span>
         </button>
         <button onclick="switchView('widgets')" id="nav-widgets" class="flex flex-col items-center space-y-1 text-slate-500 hover:text-slate-300 transition-all cursor-pointer">
             <span class="text-xl">🔧</span>
-            <span class="text-[10px] font-bold tracking-wide">Widgets</span>
+            <span class="text-xs font-extrabold tracking-wide">Widgets</span>
         </button>
         <button onclick="switchView('profile')" id="nav-profile" class="flex flex-col items-center space-y-1 text-slate-500 hover:text-slate-300 transition-all cursor-pointer">
             <span class="text-xl">🛡️</span>
-            <span class="text-[10px] font-bold tracking-wide">Profil</span>
+            <span class="text-xs font-extrabold tracking-wide">Profil</span>
         </button>
     </nav>
 
@@ -1394,9 +1401,9 @@
                     <path d="M 0 150 L 300 150 M 150 0 L 150 300" stroke="#475569" stroke-width="2"/>
                     <path d="M 0 30 L 300 30 M 0 60 L 300 60 M 0 90 L 300 90 M 0 120 L 300 120 M 0 180 L 300 180 M 0 210 L 300 210 M 0 240 L 300 240 M 0 270 L 300 270
                              M 30 0 L 30 300 M 60 0 L 60 300 M 90 0 L 90 300 M 120 0 L 120 300 M 180 0 L 180 300 M 210 0 L 210 300 M 240 0 L 240 300 M 270 0 L 270 300" stroke="#1e293b" stroke-width="1"/>
-                    <text x="180" y="165" fill="#64748b" font-size="9" font-weight="bold" text-anchor="middle">1</text>
-                    <text x="138" y="124" fill="#64748b" font-size="9" font-weight="bold">1</text>
-                    <text x="142" y="163" fill="#64748b" font-size="8" font-weight="bold">O</text>
+                    <text x="180" y="168" fill="#94a3b8" font-size="13" text-anchor="middle">1</text>
+                    <text x="134" y="124" fill="#94a3b8" font-size="13">1</text>
+                    <text x="138" y="166" fill="#94a3b8" font-size="12">O</text>
                 `;
 
                 const plotPolyline = (fn, xMin = -2.8, xMax = 2.8, step = 0.05) => {
@@ -1470,14 +1477,14 @@
                             svg.innerHTML = `
                                 ${drawGrid()}
                                 <polyline points="${plotPolyline(fn)}" fill="none" stroke="#ec4899" stroke-width="4"/>
-                                <text x="250" y="50" fill="#ec4899" font-weight="bold" font-size="12">C_f</text>
+                                <text x="250" y="50" fill="#ec4899" font-size="14">C_f</text>
 
                                 <!-- Dotted guides -->
                                 <path d="M ${targetX_svg} 150 L ${targetX_svg} ${targetY_svg} L 150 ${targetY_svg}" stroke="#fff" stroke-dasharray="3" stroke-width="1.5" fill="none"/>
                                 <circle cx="${targetX_svg}" cy="${targetY_svg}" r="5" fill="#fff"/>
                                 
-                                <text x="${targetX_svg}" y="${targetX_svg === 150 ? 165 : 165}" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${targetX}</text>
-                                <text x="${targetY_svg === 150 ? 135 : 135}" y="${targetY_svg + 4}" fill="#fff" font-size="10" font-weight="bold" text-anchor="end">${targetY}</text>
+                                <text x="${targetX_svg}" y="168" fill="#fff" font-size="13" text-anchor="middle">${targetX}</text>
+                                <text x="134" y="${targetY_svg + 4}" fill="#fff" font-size="13" text-anchor="end">${targetY}</text>
                             `;
                         };
                     } else {
@@ -1525,14 +1532,14 @@
                             svg.innerHTML = `
                                 ${drawGrid()}
                                 <polyline points="${plotPolyline(fn)}" fill="none" stroke="#ec4899" stroke-width="4"/>
-                                <text x="250" y="50" fill="#ec4899" font-weight="bold" font-size="12">C_f</text>
+                                <text x="250" y="50" fill="#ec4899" font-size="14">C_f</text>
 
                                 <!-- Dotted guides -->
                                 <path d="M ${targetX_svg} 150 L ${targetX_svg} ${targetY_svg} L 150 ${targetY_svg}" stroke="#fff" stroke-dasharray="3" stroke-width="1.5" fill="none"/>
                                 <circle cx="${targetX_svg}" cy="${targetY_svg}" r="5" fill="#fff"/>
                                 
-                                <text x="${targetX_svg}" y="165" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">${targetX}</text>
-                                <text x="135" y="${targetY_svg + 4}" fill="#fff" font-size="10" font-weight="bold" text-anchor="end">${targetY}</text>
+                                <text x="${targetX_svg}" y="168" fill="#fff" font-size="13" text-anchor="middle">${targetX}</text>
+                                <text x="134" y="${targetY_svg + 4}" fill="#fff" font-size="13" text-anchor="end">${targetY}</text>
                             `;
                         };
                     }
@@ -1590,16 +1597,16 @@
                                 ${drawGrid()}
                                 <!-- Line -->
                                 <line x1="${svgX1.toFixed(1)}" y1="${svgY1.toFixed(1)}" x2="${svgX2.toFixed(1)}" y2="${svgY2.toFixed(1)}" stroke="#ec4899" stroke-width="4"/>
-                                <text x="${svgX2 - 15}" y="${svgY2 + 15}" fill="#ec4899" font-weight="bold" font-size="12">D</text>
+                                <text x="${svgX2 - 15}" y="${svgY2 + 15}" fill="#ec4899" font-size="14">D</text>
 
                                 <!-- Y-intercept highlight -->
                                 <circle cx="150" cy="${yInt_svg}" r="5" fill="#fff"/>
-                                ${b !== 0 ? `<text x="135" y="${yInt_svg + 4}" fill="#fff" font-size="10" font-weight="bold" text-anchor="end">${b}</text>` : ''}
+                                ${b !== 0 ? `<text x="134" y="${yInt_svg + 4}" fill="#fff" font-size="13" text-anchor="end">${b}</text>` : ''}
 
                                 <!-- Slope triangle -->
                                 <path d="M ${trX0} ${trY0} L ${trX1} ${trY1} L ${trX2} ${trY2}" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3" fill="none"/>
-                                <text x="165" y="${trY0 + (a >= 0 ? 14 : -4)}" fill="#f59e0b" font-size="9" font-weight="bold" text-anchor="middle">+1</text>
-                                <text x="192" y="${(trY1 + trY2) / 2 + 3}" fill="#f59e0b" font-size="9" font-weight="bold">${a >= 0 ? '+' + a : a}</text>
+                                <text x="165" y="${trY0 + (a >= 0 ? 16 : -5)}" fill="#f59e0b" font-size="12" text-anchor="middle">+1</text>
+                                <text x="194" y="${(trY1 + trY2) / 2 + 4}" fill="#f59e0b" font-size="12">${a >= 0 ? '+' + a : a}</text>
                             `;
                         };
                     } else if (subType === 1) {
@@ -1661,7 +1668,7 @@
                             svg.innerHTML = `
                                 ${drawGrid()}
                                 <line x1="${svgX1.toFixed(1)}" y1="${svgY1.toFixed(1)}" x2="${svgX2.toFixed(1)}" y2="${svgY2.toFixed(1)}" stroke="#ec4899" stroke-width="4"/>
-                                <text x="150" y="45" fill="#10b981" font-size="13" font-weight="bold" text-anchor="middle">${fStr}</text>
+                                <text x="150" y="45" fill="#10b981" font-size="14" text-anchor="middle">${fStr}</text>
                             `;
                         };
                     } else {
@@ -1698,9 +1705,9 @@
                                 ${drawGrid()}
                                 <line x1="${150 + (-3)*30}" y1="${150 - (a*(-3)+b)*30}" x2="${150 + 4*30}" y2="${150 - (a*4+b)*30}" stroke="#ec4899" stroke-width="4"/>
                                 <circle cx="${svgX1}" cy="${svgY1}" r="5" fill="#fff"/>
-                                <text x="${svgX1 - 10}" y="${svgY1 - 10}" fill="#fff" font-size="10" font-weight="bold">A(${x1}, ${y1})</text>
+                                <text x="${svgX1 - 10}" y="${svgY1 - 10}" fill="#fff" font-size="13">A(${x1}, ${y1})</text>
                                 <circle cx="${svgX2}" cy="${svgY2}" r="5" fill="#fff"/>
-                                <text x="${svgX2 + 10}" y="${svgY2 - 10}" fill="#fff" font-size="10" font-weight="bold">B(${x2}, ${y2})</text>
+                                <text x="${svgX2 + 10}" y="${svgY2 - 10}" fill="#fff" font-size="13">B(${x2}, ${y2})</text>
                             `;
                         };
                     }
