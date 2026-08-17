@@ -176,7 +176,7 @@
             </div>
 
             <div class="space-y-3 shrink-0 max-w-sm mx-auto w-full">
-                <button onclick="startGame()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-base py-4 rounded-2xl shadow-lg shadow-emerald-500/10 active:scale-[0.98] transition-transform cursor-pointer">
+                <button id="btn-start-game" onclick="startGame()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-base py-4 rounded-2xl shadow-lg shadow-emerald-500/10 active:scale-[0.98] transition-transform cursor-pointer">
                     COMMENCER L'AVENTURE ⚔️
                 </button>
                 <p class="text-[10px] text-slate-500 font-medium">Entrée en Seconde préparée • Révision active 2026</p>
@@ -651,7 +651,10 @@
             const views = ['landing', 'home', 'game', 'rituel', 'widgets', 'profile'];
             views.forEach(v => {
                 const el = document.getElementById(`view-${v}`);
-                if (el) el.classList.add('hidden');
+                if (el) {
+                    el.classList.add('hidden');
+                    el.style.display = 'none';
+                }
             });
 
             // Reset nav colors
@@ -667,6 +670,11 @@
             const activeSection = document.getElementById(`view-${viewName}`);
             if (activeSection) {
                 activeSection.classList.remove('hidden');
+                if (viewName === 'landing' || viewName === 'game') {
+                    activeSection.style.display = 'flex';
+                } else {
+                    activeSection.style.display = 'block';
+                }
             }
             const activeNav = document.getElementById(`nav-${viewName}`);
             if (activeNav) {
@@ -680,11 +688,13 @@
                 if (header) {
                     header.classList.remove('hidden');
                     header.classList.add('flex');
+                    header.style.display = 'flex';
                 }
                 const nav = document.getElementById('app-nav');
                 if (nav) {
                     nav.classList.remove('hidden');
                     nav.classList.add('flex');
+                    nav.style.display = 'flex';
                 }
                 switchView('home');
                 saveGame();
@@ -2994,8 +3004,18 @@
             });
         }
 
-        // Initialize dashboard on load
+        // Initialize dashboard and button listener on load
         updateDashboard();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('btn-start-game');
+            if (btn) {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    startGame();
+                });
+            }
+        });
     </script>
 </body>
 </html>
