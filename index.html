@@ -594,7 +594,7 @@
     <!-- JavaScript Game Engine -->
     <script>
         // Global Game State
-        let gameState = {
+        const defaultGameState = {
             level: 1,
             hp: 100,
             gold: 0,
@@ -603,6 +603,8 @@
                 mental: 0
             }
         };
+
+        let gameState = { ...defaultGameState };
 
         // Active context variables
         let currentActiveDungeon = null;
@@ -618,28 +620,39 @@
         let activeGeomQuestion = null;
         let activeGeomChoices = [];
 
-        // Load Save State
+        // Load Save State with deep fallback
         if (localStorage.getItem('math_quest_save_2026')) {
             try {
-                gameState = { ...gameState, ...JSON.parse(localStorage.getItem('math_quest_save_2026')) };
+                const saved = JSON.parse(localStorage.getItem('math_quest_save_2026'));
+                gameState = {
+                    ...defaultGameState,
+                    ...saved,
+                    highScores: {
+                        ...defaultGameState.highScores,
+                        ...(saved && saved.highScores ? saved.highScores : {})
+                    }
+                };
             } catch(e) {
                 console.error("Impossible de charger la sauvegarde", e);
             }
         }
 
         function saveGame() {
-            localStorage.setItem('math_quest_save_2026', JSON.stringify(gameState));
+            try {
+                localStorage.setItem('math_quest_save_2026', JSON.stringify(gameState));
+            } catch(e) {
+                console.error("Impossible de sauvegarder", e);
+            }
             updateDashboard();
         }
 
         // NAVIGATION SWITCHER
         function switchView(viewName) {
-            document.getElementById('view-landing').classList.add('hidden');
-            document.getElementById('view-home').classList.add('hidden');
-            document.getElementById('view-game').classList.add('hidden');
-            document.getElementById('view-rituel').classList.add('hidden');
-            document.getElementById('view-widgets').classList.add('hidden');
-            document.getElementById('view-profile').classList.add('hidden');
+            const views = ['landing', 'home', 'game', 'rituel', 'widgets', 'profile'];
+            views.forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                if (el) el.classList.add('hidden');
+            });
 
             // Reset nav colors
             const navs = ['home', 'rituel', 'widgets', 'profile'];
@@ -662,57 +675,74 @@
         }
 
         function startGame() {
-            document.getElementById('app-header').classList.remove('hidden');
-            document.getElementById('app-header').classList.add('flex');
-            document.getElementById('app-nav').classList.remove('hidden');
-            document.getElementById('app-nav').classList.add('flex');
-            saveGame();
-            switchView('home');
+            try {
+                const header = document.getElementById('app-header');
+                if (header) {
+                    header.classList.remove('hidden');
+                    header.classList.add('flex');
+                }
+                const nav = document.getElementById('app-nav');
+                if (nav) {
+                    nav.classList.remove('hidden');
+                    nav.classList.add('flex');
+                }
+                switchView('home');
+                saveGame();
+            } catch(err) {
+                console.error("Erreur lors du démarrage du jeu:", err);
+                switchView('home');
+            }
         }
 
         // UPDATE DASHBOARD UI
         function updateDashboard() {
-            document.getElementById('player-level').innerText = gameState.level;
-            document.getElementById('header-gold').innerText = gameState.gold;
-            document.getElementById('profile-gold').innerText = gameState.gold;
-            document.getElementById('profile-level-badge').innerText = gameState.level;
+            try {
+                const level = gameState.level || 1;
+                const gold = gameState.gold || 0;
+                const hp = gameState.hp ?? 100;
+                const mentalScore = (gameState.highScores && gameState.highScores.mental) ? gameState.highScores.mental : 0;
 
-            // Health Bar
-            const hpBar = document.getElementById('hp-bar');
-            const hpLabel = document.getElementById('hp-label');
-            if (hpBar) {
-                hpBar.style.width = `${gameState.hp}%`;
-                if (gameState.hp <= 25) {
-                    hpBar.className = "bg-gradient-to-r from-red-600 to-rose-500 h-full transition-all duration-300";
-                    hpLabel.className = "text-rose-500 text-[10px] font-black tracking-wider";
-                } else {
-                    hpBar.className = "bg-gradient-to-r from-emerald-500 to-emerald-400 h-full transition-all duration-300";
-                    hpLabel.className = "text-emerald-500 text-[10px] font-black tracking-wider";
+                if (document.getElementById('player-level')) document.getElementById('player-level').innerText = level;
+                if (document.getElementById('header-gold')) document.getElementById('header-gold').innerText = gold;
+                if (document.getElementById('profile-gold')) document.getElementById('profile-gold').innerText = gold;
+                if (document.getElementById('profile-level-badge')) document.getElementById('profile-level-badge').innerText = level;
+
+                // Health Bar
+                const hpBar = document.getElementById('hp-bar');
+                const hpLabel = document.getElementById('hp-label');
+                if (hpBar) {
+                    hpBar.style.width = `${hp}%`;
+                    if (hp <= 25) {
+                        hpBar.className = "bg-gradient-to-r from-red-600 to-rose-500 h-full transition-all duration-300";
+                        if (hpLabel) hpLabel.className = "text-rose-500 text-[10px] font-black tracking-wider";
+                    } else {
+                        hpBar.className = "bg-gradient-to-r from-emerald-500 to-emerald-400 h-full transition-all duration-300";
+                        if (hpLabel) hpLabel.className = "text-emerald-500 text-[10px] font-black tracking-wider";
+                    }
                 }
-            }
 
-            // Seconde readiness computation
-            const readinessPct = Math.min(100, Math.max(20, (gameState.level - 1) * 20));
-            document.getElementById('readiness-bar').style.width = `${readinessPct}%`;
-            document.getElementById('readiness-percent').innerText = `Prêt à ${readinessPct}%`;
+                // Seconde readiness computation
+                const readinessPct = Math.min(100, Math.max(20, (level - 1) * 20));
+                if (document.getElementById('readiness-bar')) document.getElementById('readiness-bar').style.width = `${readinessPct}%`;
+                if (document.getElementById('readiness-percent')) document.getElementById('readiness-percent').innerText = `Prêt à ${readinessPct}%`;
 
-            // Trophies checks
-            if (gameState.level >= 2) {
-                document.getElementById('trophy-1').classList.remove('opacity-60');
-                document.getElementById('trophy-1').classList.add('border-emerald-500/30', 'bg-emerald-950/20');
-            }
-            if (gameState.highScores.mental >= 5) {
-                document.getElementById('trophy-2').classList.remove('opacity-60');
-                document.getElementById('trophy-2').classList.add('border-amber-500/30', 'bg-amber-950/20');
-            }
-            if (gameState.level >= 4) {
-                document.getElementById('trophy-3').classList.remove('opacity-60');
-                document.getElementById('trophy-3').classList.add('border-emerald-500/30', 'bg-emerald-950/20');
-            }
-            if (gameState.level >= 5) {
-                document.getElementById('trophy-4').classList.remove('opacity-60');
-                document.getElementById('trophy-4').classList.add('border-indigo-500/30', 'bg-indigo-950/20');
-            }
+                // Trophies checks
+                if (level >= 2 && document.getElementById('trophy-1')) {
+                    document.getElementById('trophy-1').classList.remove('opacity-60');
+                    document.getElementById('trophy-1').classList.add('border-emerald-500/30', 'bg-emerald-950/20');
+                }
+                if (mentalScore >= 5 && document.getElementById('trophy-2')) {
+                    document.getElementById('trophy-2').classList.remove('opacity-60');
+                    document.getElementById('trophy-2').classList.add('border-amber-500/30', 'bg-amber-950/20');
+                }
+                if (level >= 4 && document.getElementById('trophy-3')) {
+                    document.getElementById('trophy-3').classList.remove('opacity-60');
+                    document.getElementById('trophy-3').classList.add('border-emerald-500/30', 'bg-emerald-950/20');
+                }
+                if (level >= 5 && document.getElementById('trophy-4')) {
+                    document.getElementById('trophy-4').classList.remove('opacity-60');
+                    document.getElementById('trophy-4').classList.add('border-indigo-500/30', 'bg-indigo-950/20');
+                }
 
             // Semaine 2: Fonctions unlocking (requires Level >= 2)
             const r2Container = document.getElementById('dungeon-functions-container');
@@ -862,6 +892,9 @@
                         <span class="text-slate-600 text-xs font-bold">Verrouillé</span>
                     </div>
                 `;
+            }
+            } catch(e) {
+                console.error("Erreur lors de la mise à jour du tableau de bord:", e);
             }
         }
 
